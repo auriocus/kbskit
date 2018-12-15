@@ -1984,13 +1984,13 @@ Package __ {
     set my0 {}
 
     lappend my0\
-	bwidget1.9.10\
+	bwidget1.9.13\
 	gridplus2.11\
-	icons1.2 img1.4.6\
+	icons1.2 img1.4.7\
 	memchan2.3 mentry3.7\
 	nsf2.1.0\
 	pdf4tcl0.8.4\
-	ral0.11.7\
+	ral0.11.7 rl_json\
 	tcllib1.19 tclx8.4 tdom0.8.3\
 	tkcon tklib0.6 tkpath0.3.3 tktable2.10 tcltls trofs0.4.9\
 	udp1.0.11 ukaz0.2\
@@ -2032,15 +2032,15 @@ if 0 {;# Testfile
 #@endverbatim
 ## @defgroup bwidget
 #@verbatim
-Package bwidget1.9.10 {
-  Source {Wget http://prdownloads.sourceforge.net/tcllib/bwidget-1.9.10.tar.gz}
+Package bwidget1.9.13 {
+  Source {Wget http://prdownloads.sourceforge.net/tcllib/bwidget-1.9.13.tar.gz}
   Configure {}
   Install {
     file delete -force [Get builddir]/lib/[file tail [Get srcdir]]
     file copy -force [Get srcdir] [Get builddir]/lib
   }
   Test {
-    cd [Get builddir]/lib/bwidget1.9.10/demo
+    cd [Get builddir]/lib/bwidget1.9.13/demo
     Run [Get kitgui] demo.tcl
   }
 }
@@ -2812,6 +2812,20 @@ Package vectcltk0.3 {
    Clean {Run make clean}
    Test {Run make test}
 }
+
+#@verbatim
+Package rl_json {
+  Source {Wget https://github.com/RubyLane/rl_json/archive/master.zip}
+  Configure {
+    Config [Get srcdir-sys]
+  }
+  Make {Run make}
+  Install {Run make install}
+  Clean {Run make clean}
+  Test {Run make test}
+}
+#@endverbatim
+
 #@endverbatim
 ## @defgroup kkgkit
 #@verbatim
