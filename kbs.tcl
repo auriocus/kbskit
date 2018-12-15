@@ -1354,7 +1354,7 @@ proc ::kbs::config::Get {var} {
 # @param[in] patch      output of diff -ru
 
 proc ::kbs::config::PatchFile {dir striplevel patchfile} {
-	set fd [open $patchfile]
+	set fd [open [file join [Get basedir] $patchfile]]
 	fconfigure $fd -encoding binary
 	Patch $dir $striplevel [read $fd]
 	close $fd
@@ -1535,6 +1535,7 @@ proc ::kbs::config::_configure {args} {
   variable verbose
   variable _
 
+  set _(basedir) [file normalize [file dirname [info script]]]
   set myOpts {}
   # read configuration files
   foreach myFile [list [file join $::env(HOME) .kbsrc] [file join $maindir kbsrc]] {
