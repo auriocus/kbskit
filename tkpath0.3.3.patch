@@ -1,0 +1,21 @@
+Only in tkpath0.3.3-patched/macosx: .tkMacOSXPath.c.swp
+diff -ru tkpath0.3.3/macosx/tkMacOSXPath.c tkpath0.3.3-patched/macosx/tkMacOSXPath.c
+--- tkpath0.3.3/macosx/tkMacOSXPath.c	2016-09-20 13:53:14.000000000 +0200
++++ tkpath0.3.3-patched/macosx/tkMacOSXPath.c	2018-12-15 16:41:49.000000000 +0100
+@@ -168,13 +168,13 @@
+             drawRect.origin.y = [view bounds].size.height -
+                     (drawRect.origin.y + drawRect.size.height);
+             NSRectClip(NSRectFromCGRect(drawRect));
+-            macDraw->flags |= TK_FOCUSED_VIEW;
++            //macDraw->flags |= TK_FOCUSED_VIEW;
+         }
+     } else {
+-        if (view && (macDraw->flags & TK_FOCUSED_VIEW)) {
++      /*  if (view) {
+             [view unlockFocus];
+             macDraw->flags &= ~TK_FOCUSED_VIEW;
+-        }
++        } */
+     }
+ }
+ 

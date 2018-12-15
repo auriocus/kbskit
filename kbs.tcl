@@ -439,7 +439,7 @@ proc ::kbs::distclean {args} {
 
 ##	Contain internally used functions and variables.
 namespace eval ::kbs::config {
-  namespace export Run Get Patch Require Source Configure Make Install Clean Test
+  namespace export Run Get Patch PatchFile Require Source Configure Make Install Clean Test
 #-------------------------------------------------------------------------------
 
 ##	Internal variable containing top level script directory.
@@ -589,7 +589,7 @@ proc ::kbs::config::_init {used list} {
   array unset _ TK_*
 
   # create interpreter with commands
-  lappend used Run Get Patch
+  lappend used Run Get Patch PatchFile
   set interp [interp create]
   foreach myProc [namespace export] {
     if {$myProc in $used} {
@@ -1342,91 +1342,159 @@ proc ::kbs::config::Get {var} {
 }
 #-------------------------------------------------------------------------------
 
-##	Patch files.
-# @synopsis{Patch file lineoffste oldtext newtext}
+##	Apply a patch in unified diff format
+# @synopsis{Patch directory striplevel patch}
 #
 # @examples
-#	Patch [Get srcdir]/Makefile.in 139\
-#        {INCLUDES       = @PKG_INCLUDES@ @TCL_INCLUDES@}\
-#        {INCLUDES       = @TCL_INCLUDES@}
-# 
-# @param[in] mode	mode of patch operation, one of file,text,inline
-# @param[in] args	arguments depending on 'mode'
-#   - file patchfile patchargs
-#   - text patchtext patchargs
-#     - patchtext
-#     - patchargs
-#   - inline file lineoffset oldtext newtext
-#     - file		name of file to patch
-#     - lineoffset	start point of patch, first line is 1
-#     - oldtext		part of file to replace
-#     - newtext		replacement text
-proc ::kbs::config::Patch {file lineoffset oldtext newtext} {
-  variable verbose
+#	Patch [Get srcdir] 1 {
+#.... here comes the output from diff -ru ...
+# }
+# @param[in] dir        root directory of the patch, usually srcdir
+# @param[in] striplevel number of path elements to be removed from the diff header
+# @param[in] patch      output of diff -ru
 
-  set myFd [open $file r]
-  set myC [read $myFd]
-  close $myFd
-  # find oldtext
-  set myIndex 0
-  for {set myNr 1} {$myNr < $lineoffset} {incr myNr} {;# find line
-    set myIndex [string first \n $myC $myIndex]
-    if {$myIndex == -1} {
-      return -code error "failed Patch: '$file' at $lineoffset -> eof at line $myNr"
-    }
-    incr myIndex
-  }
-  # set begin and rest of string
-  set myTest [string range $myC $myIndex end]
-  set myC [string range $myC 0 [incr myIndex -1]]
-  # test for newtext; patch already applied
-  set myIndex [string length $newtext]
-  if {[string compare -length $myIndex $newtext $myTest] == 0} {
-    if {$verbose} {puts "patch line $lineoffset exists"}
-    return
-  }
-  # test for oldtext; patch todo
-  set myIndex [string length $oldtext]
-  if {[string compare -length $myIndex $oldtext $myTest] != 0} {
-    if {$verbose} {puts "---old version---:\n$oldtext\n---new version---:\n[string range $myTest 0 $myIndex]"}
-    return -code error "failed Patch: '$file' at $lineoffset"
-  }
-  # apply patch
-  append myC $newtext[string range $myTest $myIndex end]
-  set myFd [open $file w]
-  puts $myFd $myC
-  close $myFd
-  if {$verbose} {puts "applied Patch: '$file' at $lineoffset"}
+proc ::kbs::config::PatchFile {dir striplevel patchfile} {
+	set fd [open $patchfile]
+	fconfigure $fd -encoding binary
+	Patch $dir $striplevel [read $fd]
+	close $fd
 }
-#-------------------------------------------------------------------------------
 
-##	Patch files with external patch command.
-#	The patch will be applied in the source directory of the current package.
-# @synopsis{Patchexec patch options}
-#
-# @examples
-#	Patchexec {...} -p0
-#
-# @param[in] patch	contents of patchfile
-# @param[in] options	options for patch command
-proc ::kbs::config::Patchexec {patch args} {
-  variable _
-  variable verbose
+proc ::kbs::config::Patch {dir striplevel patch} {
+	set patchlines [split $patch \n]
+	set inhunk false
+	set oldcode {}
+	set newcode {}
+	
+	for {set lineidx 0} {$lineidx<[llength $patchlines]} {incr lineidx} {
+		set line [lindex $patchlines $lineidx]
+		if {[string match diff* $line]} {
+			# a diff block starts. Next two lines should be
+			# --- oldfile date time TZ
+			# +++ newfile date time TZ
+			incr lineidx
+			set in [lindex $patchlines $lineidx]
+			incr lineidx
+			set out [lindex $patchlines $lineidx]
 
-  set wd [pwd]
-  cd $_(srcdir)
-  set cmd [list $_(exec-patch) {*}$args -i $patchfile]
-  if {$::tcl_platform(platform) eq "windows"} {
-    exec {*}$cmd >__dev__null__ 2>@stderr
-  } else {
-    exec {*}$cmd >/dev/null 2>@stderr
-  }
-  cd $wd
-  if {$verbose} {
-    puts "applied patch: {*}$cmd"
-  }
+			if {![string match ---* $in] || ![string match +++* $out]} {
+				puts $in
+				puts $out
+				return -code error "Patch not in unified diff format, line $lineidx $in $out"
+			}
+
+			# the quoting is compatible with list
+			lassign $in -> oldfile
+			lassign $out -> newfile
+
+			set fntopatch [file join $dir {*}[lrange [file split $newfile] $striplevel end]]
+			set inhunk false
+			#puts "Found diffline for $fntopatch"
+			continue
+		}
+
+		# state machine for parsing the hunks
+		set typechar [string index $line 0]
+		set codeline [string range $line 1 end]
+		switch $typechar {
+			@ {
+				if {![regexp {@@\s+\-(\d+),(\d+)\s+\+(\d+),(\d+)\s+@@} $line \
+					-> oldstart oldlen newstart newlen]} {
+					return code -error "Erroneous hunk in line $lindeidx, $line"
+				}
+				# adjust line numbers for 0-based indexing
+				incr oldstart -1
+				incr newstart -1
+				#puts "New hunk"
+				set newcode {}
+				set oldcode {}
+				set inhunk true
+			}
+			- { # line only in old code
+				if {$inhunk} {
+					lappend oldcode $codeline
+				}
+			}
+			+ { # line only in new code
+				if {$inhunk} {
+					lappend newcode $codeline
+				}
+			}
+			" " { # common line
+				if {$inhunk} {
+					lappend oldcode $codeline
+					lappend newcode $codeline
+				}
+			}
+			default {
+				# puts "Junk: $codeline";
+				continue
+			}
+		}
+		# test if the hunk is complete
+		if {[llength $oldcode]==$oldlen && [llength $newcode]==$newlen} {
+			set hunk [dict create \
+				oldcode $oldcode \
+				newcode $newcode \
+				oldstart $oldstart \
+				newstart $newstart]
+			#puts "hunk complete: $hunk"
+			set inhunk false
+			dict lappend patchdict $fntopatch $hunk
+		}
+	}
+
+	# now we have parsed the patch. Apply
+	dict for {fn hunks} $patchdict {
+		puts "Patching file $fn"
+		if {[catch {open $fn} fd]} {
+			set orig {}
+		} else {
+			set orig [split [read $fd] \n]
+		}
+		close $fd
+
+		set patched $orig
+
+		set fail false
+		set already_applied false
+		set hunknr 1
+		foreach hunk $hunks {
+			dict with hunk {
+				set oldend [expr {$oldstart+[llength $oldcode]-1}]
+				set newend [expr {$newstart+[llength $newcode]-1}]
+				# check if the hunk matches
+				set origcode [lrange $orig $oldstart $oldend]
+				if {$origcode ne $oldcode} {
+					set fail true
+					puts "Hunk #$hunknr failed"
+					# check if the patch is already applied
+					set origcode_applied [lrange $orig $newstart $newend]
+					if {$origcode_applied eq $newcode} {
+						set already_applied true
+						puts "Patch already applied"
+					} else {
+						puts "Expected:\n[join $oldcode \n]"
+						puts "Seen:\n[join $origcode \n]"
+					}
+					break
+				}
+				# apply patch
+				set patched [list {*}[lrange $patched 0 $newstart-1] {*}$newcode {*}[lrange $patched $oldend+1 end]]
+			}
+			incr hunknr
+		}
+
+		if {!$fail} {
+			# success - write the result back
+			set fd [open $fn w]
+			puts -nonewline $fd [join $patched \n]
+			close $fd
+		}
+	}
 }
-#-------------------------------------------------------------------------------
+
+
 
 ##	The procedure call the args as external command with options.
 #	The procedure is available in all script arguments.
@@ -2147,37 +2215,6 @@ Package mentry3.7 {
   Install {Tcl}
 }
 #@endverbatim
-## @defgroup mk4tcl
-#@verbatim
-Package mk4tcl2.4.9.7 {
-  Source {
-    Wget https://github.com/jcw/metakit/tarball/2.4.9.7
-    Tgz [Get builddir-sys]/../sources/2.4.9.7
-    file delete -force [Get builddir-sys]/../sources/2.4.9.7
-  }
-}
-  #Source {Wget http://equi4.com/pub/mk/metakit-2.4.9.7.tar.gz}
-#@endverbatim
-## @defgroup mk4tcl
-# @bug Configure: CXXFLAGS wrong
-# @bug Configure: include SunOS cc with problems on wide int
-#@verbatim
-Package mk4tcl2.4.9.7-static {
-  Source {Link mk4tcl2.4.9.7}
-  Configure {
-    Patch [Get srcdir]/unix/Makefile.in 46 {CXXFLAGS = $(CXX_FLAGS)} {CXXFLAGS = -DSTATIC_BUILD $(CXX_FLAGS)}
-    if {$::tcl_platform(os) == "SunOS" && [Get CC] == "cc"} {
-      Patch [Get srcdir]/tcl/mk4tcl.h 9 "#include <tcl.h>\n\n" "#include <tcl.h>\n#undef TCL_WIDE_INT_TYPE\n"
-    }
-    Config [Get srcdir-sys]/unix --disable-shared --with-tcl=[Get builddir-sys]/include
-  }
-  Make {Run make tcl}
-  Install {
-    Run make install
-    Libdir Mk4tcl
-  }
-}
-#@endverbatim
 ## @defgroup nap
 #@verbatim
 Package nap7.0.0 {
@@ -2480,8 +2517,6 @@ Package tkdnd2.8 {
   Source {Wget http://prdownloads.sourceforge.net/tkdnd/TkDND/TkDND%202.8/tkdnd2.8-src.tar.gz}
   Configure {
     # fix bogus garbage collection flag
-    Patch [Get srcdir]/configure 6148 {    PKG_CFLAGS="$PKG_CFLAGS -DMAC_TK_COCOA -std=gnu99 -x objective-c -fobjc-gc"} {\
-    PKG_CFLAGS="$PKG_CFLAGS -DMAC_TK_COCOA -std=gnu99 -x objective-c"}
     Config [Get srcdir-sys]
   }
   Make {Run make}
@@ -2506,12 +2541,12 @@ Package tklib0.6 {
 ## @defgroup tksqlite
 #@verbatim
 Package tksqlite0.5.13 {
-  Require {Use kbskit8.6 sdx.kit tktable2.10 treectrl2.4.2 img1.4.6}
+  Require {Use kbskit8.6 sdx.kit tktable2.10 treectrl2.4.2 img1.4.7}
   Source {Wget http://reddog.s35.xrea.com/software/tksqlite-0.5.13.tar.gz}
   Configure {
     Kit {source $::starkit::topdir/tksqlite.tcl} Tk
   }
-  Make {Kit tksqlite sqlite3.25.3 tktable2.10 treectrl2.4.2 img1.4.6}
+  Make {Kit tksqlite sqlite3.25.3 tktable2.10 treectrl2.4.2 img1.4.7}
   Install {Kit tksqlite -vq-gui}
   Clean {file delete -force tksqlite.vfs}
   Test {Kit tksqlite}
@@ -2522,7 +2557,8 @@ Package tksqlite0.5.13 {
 Package tkpath0.3.3 {
   Source {Wget http://prdownloads.sourceforge.net/kbskit/kbs/0.4.9/tkpath0.3.3.tgz}
   Configure {
-    file copy -force [Get srcdir]/../tk8.6/win/tkWinDefault.h [Get builddir]/include
+	PatchFile [Get srcdir-sys] 1 tkpath0.3.3.patch
+	file copy -force [Get srcdir]/../tk8.6/win/tkWinDefault.h [Get builddir]/include
     file copy -force [Get srcdir]/../tk8.6/unix/tkUnixDefault.h [Get builddir]/include
     file copy -force [Get srcdir]/../tk8.6/macosx/tkMacOSXDefault.h [Get builddir]/include
     Config [Get srcdir-sys]
@@ -2537,7 +2573,6 @@ Package tkpath0.3.3 {
 Package tktable2.10 {
   Source {Cvs tktable.cvs.sourceforge.net:/cvsroot/tktable -r tktable-2-10-0 tktable}
   Configure {
-    Patch [Get srcdir]/generic/tkTable.h 21 {#include <tk.h>} {#include <tkInt.h>}
     Config [Get srcdir-sys]
   }
   Make {Run make binaries}
@@ -2589,12 +2624,8 @@ Package treectrl2.4.2 {
   Source {Wget https://github.com/apnadkarni/tktreectrl/archive/946f5b33b35ebf3c63338f4ec6466a0c082103fb.zip}
   Configure {
 	# fix bogus garbage collection flag
-    Patch [Get srcdir]/configure 6430 {    PKG_CFLAGS="$PKG_CFLAGS -DMAC_TK_COCOA -std=gnu99 -x objective-c -fobjc-gc"} {\
-    PKG_CFLAGS="$PKG_CFLAGS -DMAC_TK_COCOA -std=gnu99 -x objective-c"}
     file attributes [Get srcdir]/configure -permissions u+x
 	# fix wrong detection of Tk private headers
-    #Patch [Get srcdir]/configure 5492 {	-f "${ac_cv_c_tkh}/tkWinPort.h"; then} {""; then}
-    #Patch [Get srcdir]/configure 5495 {	-f "${ac_cv_c_tkh}/tkUnixPort.h"; then} {""; then}
     Config [Get srcdir-sys]
   }
   Make {Run make}
@@ -2604,18 +2635,6 @@ Package treectrl2.4.2 {
 #@endverbatim
 ## @defgroup trofs
 #@verbatim
-Package trofs0.4.6 {
-  Source {Wget http://math.nist.gov/~DPorter/tcltk/trofs/trofs0.4.6.tar.gz}
-  Configure {
-    Patch [Get srcdir]/Makefile.in 148 \
-{DEFS		= @DEFS@ $(PKG_CFLAGS)} \
-{DEFS		= @DEFS@ $(PKG_CFLAGS) -D_USE_32BIT_TIME_T}
-    Config [Get srcdir-sys]
-  }
-  Make {Run make binaries}
-  Install {Run make install-binaries}
-  Clean {Run make clean}
-}
 Package trofs0.4.9 {
   Source {Wget http://math.nist.gov/~DPorter/tcltk/trofs/trofs0.4.9.tar.gz}
   Configure {
