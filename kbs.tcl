@@ -68,10 +68,10 @@ esac ;\
 if test ! -d sources ; then mkdir sources; fi;\
 if test ! -x ${EXE} ; then \
   if test ! -d sources/tcl8.6 ; then \
-    ( cd sources && wget http://prdownloads.sourceforge.net/tcl/tcl8.6.8-src.tar.gz && gunzip -c tcl8.6.8-src.tar.gz | tar xf - && rm tcl8.6.8-src.tar.gz && mv tcl8.6.8 tcl8.6 ) ; \
+    ( cd sources && wget http://prdownloads.sourceforge.net/tcl/tcl8.6.9-src.tar.gz && gunzip -c tcl8.6.9-src.tar.gz | tar xf - && rm tcl8.6.9-src.tar.gz && mv tcl8.6.9 tcl8.6 ) ; \
   fi ;\
   if test ! -d sources/tk8.6 ; then \
-    ( cd sources && wget http://prdownloads.sourceforge.net/tcl/tk8.6.8-src.tar.gz && gunzip -c tk8.6.8-src.tar.gz | tar xf - && rm tk8.6.8-src.tar.gz && mv tk8.6.8 tk8.6 ) ; \
+    ( cd sources && wget http://prdownloads.sourceforge.net/tcl/tk8.6.9.1-src.tar.gz && gunzip -c tk8.6.9.1-src.tar.gz | tar xf - && rm tk8.6.9.1-src.tar.gz && mv tk8.6.9 tk8.6 ) ; \
   fi ;\
   mkdir -p ${PREFIX}/tcl ;\
   ( cd ${PREFIX}/tcl && ../../sources/tcl8.6/${DIR}/configure --disable-shared --prefix=${PREFIX} --exec-prefix=${PREFIX} && make install-binaries install-libraries ) ;\
@@ -1911,14 +1911,9 @@ Package __ {
     # Build all files for distribution on sourceforge.
     # do everything from the main directory
     cd ../..
-    if {$::tcl_platform(platform) == "windows"} {
-      set MYEXE "./[exec uname]/bin/tclsh86s.exe kbs.tcl"
-      set my0 {}
-    } else {
-      set MYEXE {./kbs.tcl}
-      set my0 expect5.45
-    }
-    #
+    set MYEXE [list [info nameofexecutable] kbs.tcl]
+    set my0 {}
+
     lappend my0\
 	bwidget1.9.10\
 	gridplus2.11\
@@ -1927,17 +1922,17 @@ Package __ {
 	nsf2.1.0\
 	pdf4tcl0.8.4\
 	ral0.11.7\
-	tcllib1.18 tclx8.4 tdom0.8.3\
+	tcllib1.19 tclx8.4 tdom0.8.3\
 	tkcon tklib0.6 tkpath0.3.3 tktable2.10 tcltls trofs0.4.9\
 	udp1.0.11 ukaz0.2\
-	vectcl0.2 vectcltk0.2\
+	vectcl0.3 vectcltk0.3\
 	wcb3.5\
 	xotcl1.6.8 \
 	tkdnd2.8 \
 	treectrl2.4.2
     if {$::tcl_platform(os) != "Darwin"} {lappend my0 rbc0.1}
     # 8.6 kbskit
-    Run {*}$MYEXE -builddir=sf86 -v -r -vq -mk install kbskit8.6
+    Run {*}$MYEXE -builddir=sf86 -v -r -vq install kbskit8.6
     # 8.6 tksqlite
     #Run {*}$MYEXE -builddir=sf86 -v -r install tksqlite0.5.13
     # 8.6 BI
@@ -1984,7 +1979,7 @@ Package bwidget1.9.10 {
 ## @defgroup expect
 #@verbatim
 Package expect5.45 {
-  Source {Cvs expect.cvs.sourceforge.net:/cvsroot/expect -r expect_5_45 expect}
+  Source {Cvs a.cvs.sourceforge.net:/cvsroot/expect -r expect_5_45 expect}
   Configure {Config [Get srcdir-sys]}
   Make {Run make}
   Install {Run make install}
@@ -2012,27 +2007,16 @@ Package icons1.2 {
 ## @defgroup img
 # @bug #76 at https://sourceforge.net/p/tkimg/bugs/
 #@verbatim
-Package img1.4.3 {
-  Source {Svn https://svn.code.sf.net/p/tkimg/code/trunk -r 374}
+
+Package img1.4.7 {
+  Source {Wget https://sourceforge.net/projects/tkimg/files/tkimg/1.4/tkimg%201.4.7/Img-Source-1.4.7.tar.gz}
   Configure {
     Config [Get srcdir-sys]
   }
   Make {Run make collate}
   Install {
     Run make install-libraries
-    Libdir Img1.4.3
-  }
-  Clean {Run make clean}
-}
-Package img1.4.6 {
-  Source {Svn https://svn.code.sf.net/p/tkimg/code/trunk -r 410}
-  Configure {
-    Config [Get srcdir-sys]
-  }
-  Make {Run make collate}
-  Install {
-    Run make install-libraries
-    Libdir Img1.4.6
+    Libdir Img1.4.7
   }
   Clean {Run make clean}
 }
@@ -2086,53 +2070,6 @@ Package kbskit0.4 {
 #@endverbatim
 ## @defgroup kbskit
 #@verbatim
-Package kbskit8.5 {
-  Require {
-    Use kbskit0.4 sdx.kit
-    Use tk8.5-static tk8.5 vfs1.4-static zlib1.2.8-static thread2.6.7 {*}[Get bi]
-    if {[lsearch -glob [Get kit] {vq*}] != -1} { Use vqtcl4.1-static }
-    if {[lsearch -glob [Get kit] {mk*}] != -1} { Use mk4tcl2.4.9.7-static itcl3.4 }
-  }
-  Source {Link kbskit0.4}
-  Configure {Config [Get srcdir-sys] --disable-shared}
-  Make {
-    set MYMK "[Get builddir-sys]/lib/mk4tcl2.4.9.7-static/Mk4tcl.a "
-    if {$::tcl_platform(os) == "Darwin"} {
-      append MYMK "-static-libgcc -lstdc++ -framework CoreFoundation"
-    } elseif {$::tcl_platform(os) == "SunOS" && [Get CC] == "cc"} {
-      append MYMK "-lCstd -lCrun"
-    } elseif {[Get staticstdcpp]} {
-      append MYMK "-Wl,-Bstatic -lstdc++ -Wl,-Bdynamic -lm"
-    }  else  {
-      append MYMK "-lstdc++"
-    }
-    if {$::tcl_platform(platform) == "windows"} {
-      set MYCLI "[Get builddir-sys]/lib/libtcl85s.a"
-      append MYCLI " [Get builddir-sys]/lib/libz.a"
-      append MYCLI " [Get builddir-sys]/lib/vfs1.4.1/vfs141.a"
-      set MYGUI "[Get builddir-sys]/lib/libtk85s.a"
-      set MYVQ "[Get builddir-sys]/lib/vqtcl4.1/vqtcl41.a"
-    } else {
-      set MYCLI "[Get builddir-sys]/lib/libtcl8.5.a"
-      append MYCLI " [Get builddir-sys]/lib/libz.a"
-      append MYCLI " [Get builddir-sys]/lib/vfs1.4.1/libvfs1.4.1.a"
-      set MYGUI "[Get builddir-sys]/lib/libtk8.5.a"
-      set MYVQ "[Get builddir-sys]/lib/vqtcl4.1/libvqtcl4.1.a"
-    }
-    if {[Get -threads] in {--enable-threads --enable-threads=yes {}}} {
-      set MYKITVQ "thread2.6.7"
-      set MYKITMK "thread2.6.7 itcl3.4"
-    } else {
-      set MYKITVQ ""
-      set MYKITMK "itcl3.4"
-    }
-    foreach my [Get kit] {
-      Run make MYCLI=$MYCLI MYGUI=$MYGUI MYVQ=$MYVQ MYKITVQ=$MYKITVQ MYMK=$MYMK MYKITMK=$MYKITMK MYKITBI=[Get bi] all-$my
-    }
-  }
-  Install {foreach my [Get kit] {Run make install-$my}}
-  Clean {Run make clean}
-}
 #@endverbatim
 ## @defgroup kbskit
 #@verbatim
@@ -2174,11 +2111,11 @@ Package kbskit8.6 {
       set MYVQ "[Get builddir-sys]/lib/vqtcl4.1/libvqtcl4.1.a [Get builddir-sys]/lib/libtclstub8.6.a"
     }
     if {[Get -threads] in {--enable-threads --enable-threads=yes {}}} {
-      set MYKITVQ "thread2.8.2 tdbc1.0.6 itcl4.1.1 sqlite3.21.0 tdbcmysql1.0.6 tdbcodbc1.0.6 tdbcpostgres1.0.6"
-      set MYKITMK "thread2.8.2 tdbc1.0.6 itcl4.1.1 sqlite3.21.0 tdbcmysql1.0.6 tdbcodbc1.0.6 tdbcpostgres1.0.6"
+      set MYKITVQ "thread2.8.4 tdbc1.1.0 itcl4.1.2 sqlite3.25.3 tdbcmysql1.1.0 tdbcodbc1.1.0 tdbcpostgres1.1.0"
+      set MYKITMK "thread2.8.4 tdbc1.1.0 itcl4.1.2 sqlite3.25.3 tdbcmysql1.1.0 tdbcodbc1.1.0 tdbcpostgres1.1.0"
     } else {
-      set MYKITVQ "tdbc1.0.6 itcl4.1.1 sqlite3.21.0 tdbcmysql1.0.6 tdbcodbc1.0.6 tdbcpostgres1.0.6"
-      set MYKITMK "tdbc1.0.6 itcl4.1.1 sqlite3.21.0 tdbcmysql1.0.6 tdbcodbc1.0.6 tdbcpostgres1.0.6"
+      set MYKITVQ "tdbc1.1.0 itcl4.1.2 sqlite3.25.3 tdbcmysql1.1.0 tdbcodbc1.1.0 tdbcpostgres1.1.0"
+      set MYKITMK "tdbc1.1.0 itcl4.1.2 sqlite3.25.3 tdbcmysql1.1.0 tdbcodbc1.1.0 tdbcpostgres1.1.0"
     }
     foreach my [Get kit] {
       Run make MYCLI=$MYCLI MYGUI=$MYGUI MYVQ=$MYVQ MYKITVQ=$MYKITVQ MYMK=$MYMK MYKITMK=$MYKITMK MYKITBI=[Get bi] all-$my
@@ -2366,7 +2303,7 @@ Package tcl8.5-static {
 ## @defgroup tcl
 #@verbatim
 Package tcl8.6 {
-  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.8/tcl8.6.8-src.tar.gz}
+  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.9/tcl8.6.9-src.tar.gz}
   Configure {Config [Get srcdir-sys]/[Get sys]}
   Make {Run make}
   Install {Run make install install-private-headers}
@@ -2394,7 +2331,7 @@ Package tcl8.6-static {
 #@endverbatim
 ## @defgroup tcllib
 #@verbatim
-Package tcllib1.18 {
+Package tcllib1.19 {
   Source {Wget https://github.com/tcltk/tcllib/archive/master.zip}
   Configure {Config [Get srcdir-sys]}
   Make {}
@@ -2489,7 +2426,7 @@ Package tk8.5-static {
 #@verbatim
 Package tk8.6 {
   Require {Use tcl8.6}
-  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.8/tk8.6.8-src.tar.gz}
+  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.9/tk8.6.9.1-src.tar.gz}
   
   Configure {
     if {$::tcl_platform(os) == "Darwin"} {
@@ -2574,7 +2511,7 @@ Package tksqlite0.5.13 {
   Configure {
     Kit {source $::starkit::topdir/tksqlite.tcl} Tk
   }
-  Make {Kit tksqlite sqlite3.20.0 tktable2.10 treectrl2.4.2 img1.4.6}
+  Make {Kit tksqlite sqlite3.25.3 tktable2.10 treectrl2.4.2 img1.4.6}
   Install {Kit tksqlite -vq-gui}
   Clean {file delete -force tksqlite.vfs}
   Test {Kit tksqlite}
@@ -2614,25 +2551,42 @@ Package tktable2.10 {
 ## @defgroup tls
 #@verbatim
 Package tcltls {
-  Source {Wget https://core.tcl.tk/tcltls/uv/tcltls-1.7.14.tar.gz}
+  Require {Use libressl-static}
+  Source {Wget https://core.tcl.tk/tcltls/uv/tcltls-1.7.16.tar.gz}
   Configure {
-	Config [Get srcdir-sys] --with-ssl=libressl --enable-static-ssl --disable-rpath
+	Config [Get srcdir-sys] --with-ssl=libressl --with-openssl-dir=[Get builddir] --enable-static-ssl --disable-rpath
 	
    }
   Make {Run make}
   Install {
 	Run make install
-	Libdir tcltls1.7.14
+	Libdir tcltls1.7.16
   }
   Clean {Run make clean}
   Test {Run make test}
 }
+
+Package libressl-static {
+  Source {Wget https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.8.2.tar.gz}
+  Configure {
+	Config [Get srcdir-sys] --enable-static
+	
+   }
+  Make {Run make}
+  Install {
+	Run make install
+	Libdir libressl
+  }
+  Clean {Run make clean}
+  Test {Run make test}
+}
+
 #@endverbatim
 ## @defgroup treectrl
 # @todo Error in configure: tk header default.h not found
 #@verbatim
 Package treectrl2.4.2 {
-  Source {Wget https://sourceforge.net/code-snapshots/git/t/tk/tktreectrl/tktreectrl.git/tktreectrl-tktreectrl-6ffe1739a64224386faaaf123e4e94c814983275.zip}
+  Source {Wget https://github.com/apnadkarni/tktreectrl/archive/946f5b33b35ebf3c63338f4ec6466a0c082103fb.zip}
   Configure {
 	# fix bogus garbage collection flag
     Patch [Get srcdir]/configure 6430 {    PKG_CFLAGS="$PKG_CFLAGS -DMAC_TK_COCOA -std=gnu99 -x objective-c -fobjc-gc"} {\
@@ -2807,9 +2761,9 @@ Package silkicons1.3 {
 }
 #@endverbatim
 ##@verbatim
-Package vectcl0.2 {
+Package vectcl0.3 {
    Require {Use tcl8.6}
-   Source {Wget https://github.com/auriocus/VecTcl/archive/v0.2.tar.gz}
+   Source {Wget https://github.com/auriocus/VecTcl/archive/v0.3.tar.gz}
    Configure {
      Config [Get srcdir-sys]
    }
@@ -2827,9 +2781,9 @@ Package ukaz0.2 {
 }
 #@endverbatim
 #@verbatim
-Package vectcltk0.2 {
-   Require {Use tk8.6 vectcl0.2}
-   Source {Link vectcl0.2}
+Package vectcltk0.3 {
+   Require {Use tk8.6 vectcl0.3}
+   Source {Link vectcl0.3}
    Configure {
      Config [Get srcdir-sys]/TkBridge
    }
@@ -2841,44 +2795,6 @@ Package vectcltk0.2 {
 #@endverbatim
 ## @defgroup kkgkit
 #@verbatim
-# kkgkit is a copy of kbskit0.4 with changed tcl.rc and tclkit.ico
-# rbc0.1 rbcGrAxis.c DEF_NUM_TICKS 10 (old=4)
-# tk8.6/generic/ttk/ttkProgress.c patched
-# tk8.6/library/ttk/vistaTheme.tcl patched
-Package kkgkit0.2 {
-  Require {
-    Use sdx.kit
-    Use tk8.6-static tk8.6 vfs1.4-static rbc0.1 tkpath0.3.3 pdf4tcl0.8.4 tkdnd2.8
-    if {[lsearch -glob [Get kit] {vq*}] != -1} { Use vqtcl4.1-static }
-  }
-  Source {Script {}}
-  Configure {Config [Get srcdir-sys] --disable-shared}
-  Make {
-    if {$::tcl_platform(platform) == "windows"} {
-      set MYCLI "[Get builddir-sys]/lib/libtcl86s.a"
-      append MYCLI " [Get builddir-sys]/lib/vfs1.4.1/vfs141.a"
-      set MYGUI "[Get builddir-sys]/lib/libtk86s.a"
-      set MYVQ "[Get builddir-sys]/lib/vqtcl4.1/vqtcl41.a [Get builddir-sys]/lib/libtclstub86s.a"
-    } else {
-      set MYCLI "[Get builddir-sys]/lib/libtcl8.6.a"
-      append MYCLI " [Get builddir-sys]/lib/vfs1.4.1/libvfs1.4.1.a"
-      set MYGUI "[Get builddir-sys]/lib/libtk8.6.a"
-      set MYVQ "[Get builddir-sys]/lib/vqtcl4.1/libvqtcl4.1.a [Get builddir-sys]/lib/libtclstub8.6.a"
-    }
-    if {[Get -threads] in {--enable-threads --enable-threads=yes {}}} {
-      set MYKITVQ "thread2.8.1 tdbc1.0.5 sqlite3.20.0 tdbcodbc1.0.5 rbc0.1 tkpath0.3.3 pdf4tcl0.8.4 tkdnd2.8"
-    } else {
-      set MYKITVQ "tdbc1.0.5 tdbc1.0.5 sqlite3.20.0 tdbcodbc1.0.5 rbc0.1 tkpath0.3.3 pdf4tcl0.8.4 tkdnd2.8"
-    }
-    file delete -force [Get builddir]/lib/tk8.6/demos
-    file delete -force [Get builddir]/lib/rbc0.1/demos
-    foreach my [Get kit] {
-      Run make MYCLI=$MYCLI MYGUI=$MYGUI MYVQ=$MYVQ MYKITVQ=$MYKITVQ all-$my
-    }
-  }
-  Install {foreach my [Get kit] {Run make install-$my}}
-  Clean {Run make clean}
-}
 #@endverbatim
 ## @}
 }
