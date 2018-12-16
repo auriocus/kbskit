@@ -1480,7 +1480,7 @@ proc ::kbs::config::Patch {dir striplevel patch} {
 					break
 				}
 				# apply patch
-				set patched [list {*}[lrange $patched 0 $newstart-1] {*}$newcode {*}[lrange $patched $oldend+1 end]]
+				set patched [list {*}[lrange $patched 0 $newstart-1] {*}$newcode {*}[lrange $orig $oldend+1 end]]
 			}
 			incr hunknr
 		}
