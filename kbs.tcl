@@ -1994,7 +1994,7 @@ Package __ {
 	tcllib1.19 tclx8.4 tdom0.8.3\
 	tkcon tklib0.6 tkpath0.3.3 tktable2.10 tcltls trofs0.4.9\
 	udp1.0.11 ukaz0.2\
-	vectcl0.3 vectcltk0.3\
+	vectcl0.3 vectcltk0.2\
 	wcb3.5\
 	xotcl1.6.8 \
 	tkdnd2.9 \
@@ -2802,7 +2802,7 @@ Package ukaz0.2 {
 }
 #@endverbatim
 #@verbatim
-Package vectcltk0.3 {
+Package vectcltk0.2 {
    Require {Use tk8.6 vectcl0.3}
    Source {Link vectcl0.3}
    Configure {
