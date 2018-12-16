@@ -1990,14 +1990,14 @@ Package __ {
 	memchan2.3 mentry3.7\
 	nsf2.1.0\
 	pdf4tcl0.8.4\
-	ral0.11.7 rl_json\
+	ral0.11.7 rl_json0.9.12\
 	tcllib1.19 tclx8.4 tdom0.8.3\
 	tkcon tklib0.6 tkpath0.3.3 tktable2.10 tcltls trofs0.4.9\
 	udp1.0.11 ukaz0.2\
 	vectcl0.3 vectcltk0.3\
 	wcb3.5\
 	xotcl1.6.8 \
-	tkdnd2.8 \
+	tkdnd2.9 \
 	treectrl2.4.2
     if {$::tcl_platform(os) != "Darwin"} {lappend my0 rbc0.1}
     # 8.6 kbskit
@@ -2514,8 +2514,8 @@ Package tkcon {
 #@endverbatim
 ## @defgroup tkdnd
 #@verbatim
-Package tkdnd2.8 {
-  Source {Wget http://prdownloads.sourceforge.net/tkdnd/TkDND/TkDND%202.8/tkdnd2.8-src.tar.gz}
+Package tkdnd2.9 {
+  Source {Wget https://github.com/petasis/tkdnd/archive/1e1362111c6fe875ff15d6eadebb56972f9f7ac6.zip}
   Configure {
     # fix bogus garbage collection flag
     Config [Get srcdir-sys]
@@ -2625,6 +2625,7 @@ Package treectrl2.4.2 {
   Source {Wget https://github.com/apnadkarni/tktreectrl/archive/946f5b33b35ebf3c63338f4ec6466a0c082103fb.zip}
   Configure {
 	# fix bogus garbage collection flag
+	PatchFile [Get srcdir-sys] 1 treectrl2.4.2.patch
     file attributes [Get srcdir]/configure -permissions u+x
 	# fix wrong detection of Tk private headers
     Config [Get srcdir-sys]
@@ -2814,7 +2815,7 @@ Package vectcltk0.3 {
 }
 
 #@verbatim
-Package rl_json {
+Package rl_json0.9.12 {
   Source {Wget https://github.com/RubyLane/rl_json/archive/master.zip}
   Configure {
     Config [Get srcdir-sys]
