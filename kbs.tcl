@@ -1990,6 +1990,7 @@ Package __ {
 	memchan2.3 mentry3.7\
 	nsf2.1.0\
 	pdf4tcl0.8.4\
+	photoresize0.1\
 	ral0.11.7 rl_json0.9.12\
 	tcllib1.19 tclx8.4 tdom0.8.3\
 	tkcon tklib0.6 tkpath0.3.3 tktable2.10 tcltls trofs0.4.9\
@@ -2817,6 +2818,20 @@ Package vectcltk0.2 {
 #@verbatim
 Package rl_json0.9.12 {
   Source {Wget https://github.com/RubyLane/rl_json/archive/master.zip}
+  Configure {
+    Config [Get srcdir-sys]
+  }
+  Make {Run make}
+  Install {Run make install}
+  Clean {Run make clean}
+  Test {Run make test}
+}
+#@endverbatim
+
+#@verbatim
+Package photoresize0.1 {
+  Require {Use tcl8.6 tk8.6}
+  Source {Wget https://github.com/auriocus/PhotoResize/archive/master.zip}
   Configure {
     Config [Get srcdir-sys]
   }

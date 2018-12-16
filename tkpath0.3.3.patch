@@ -1,8 +1,29 @@
+diff -ru tkpath0.3.3/demos/gradientsalpha.tcl tkpath0.3.3-patched/demos/gradientsalpha.tcl
+--- tkpath0.3.3/demos/gradientsalpha.tcl	2016-09-20 13:53:14.000000000 +0200
++++ tkpath0.3.3-patched/demos/gradientsalpha.tcl	2018-12-16 10:37:30.000000000 +0100
+@@ -54,7 +54,7 @@
+ $w create prect 10 $y 210 [expr $y + 50] -fill $g4 -fillopacity 0.5
+ set mrot    [::tkp::matrix rotate [expr 3.1415/4] 410 [expr $y + 25]]
+ $w create prect 310 $y 510 [expr $y + 50] -fill $g4 -matrix $mrot -fillopacity 0.5
+-$w create text 220 $y -anchor w -text "rainbow -fillopacity 0.5"
++$w create ptext 220 $y -textanchor w -text "rainbow -fillopacity 0.5"
+ $w create ptext 420 $y -textanchor w -text "rainbow" -fontsize 50 -fontweight bold -fill $g4
+ 
+ incr y 120
 Only in tkpath0.3.3-patched/macosx: .tkMacOSXPath.c.swp
 diff -ru tkpath0.3.3/macosx/tkMacOSXPath.c tkpath0.3.3-patched/macosx/tkMacOSXPath.c
 --- tkpath0.3.3/macosx/tkMacOSXPath.c	2016-09-20 13:53:14.000000000 +0200
-+++ tkpath0.3.3-patched/macosx/tkMacOSXPath.c	2018-12-15 16:41:49.000000000 +0100
-@@ -168,13 +168,13 @@
++++ tkpath0.3.3-patched/macosx/tkMacOSXPath.c	2018-12-16 11:32:19.000000000 +0100
+@@ -23,8 +23,6 @@
+ #import <Cocoa/Cocoa.h>
+ 
+ 
+-#define TINT_INT_CALCULATION
+-
+ /* Seems to work for both Endians. */
+ #define BlueFloatFromXColorPtr(xc)   ((float) ((xc)->blue >> 8) / 255.0)
+ #define GreenFloatFromXColorPtr(xc)  ((float) ((xc)->green >> 8) / 255.0)
+@@ -168,13 +166,13 @@
              drawRect.origin.y = [view bounds].size.height -
                      (drawRect.origin.y + drawRect.size.height);
              NSRectClip(NSRectFromCGRect(drawRect));
@@ -19,3 +40,164 @@ diff -ru tkpath0.3.3/macosx/tkMacOSXPath.c tkpath0.3.3-patched/macosx/tkMacOSXPa
      }
  }
  
+@@ -261,10 +259,6 @@
+ 
+     port = TkMacOSXGetDrawablePort(d);
+ 
+-#ifdef TKPATH_AQUA_USE_CACHED_CONTEXT
+-    // Seems that the CG context is cached in MacDrawable but don't know how it works!
+-    context = macDraw->context;
+-#else
+     dcPtr->focusLocked = 0;
+ 
+     dcPtr->clipRgn = TkMacOSXGetClipRgn(d);
+@@ -277,14 +271,7 @@
+ 
+     NSView *view = TkpMacOSXDrawableView(macDraw);
+     if (view) {
+-        NSView *fView = [NSView focusView];
+-        if (view != fView) {
+-            // printf("  view != [NSView focusView]\n");
+-            dcPtr->focusLocked = [view lockFocusIfCanDraw];
+-            dontDraw = !dcPtr->focusLocked;
+-        } else {
+-            dontDraw = ![view canDraw];
+-        }
++        dontDraw = ![view canDraw];
+         // printf("  focusLocked:%i view:%p, focusView:%p\n", dcPtr->focusLocked, view, fView);
+         if (dontDraw) {
+             goto end;
+@@ -302,7 +289,6 @@
+     }
+ 
+     // printf("  context:	%p\n", dcPtr->c);
+-#endif
+ 
+     /*
+      * Core Graphics defines the origin to be the bottom left
+@@ -312,7 +298,7 @@
+      */
+     CGContextSaveGState(dcPtr->c);
+     CGRect cgbounds = CGContextGetClipBoundingBox(dcPtr->c);
+-    dcPtr->portBounds = NSRectToCGRect([view bounds]);
++    dcPtr->portBounds = NSRectToCGRect([dcPtr->view bounds]);
+     // printf("  cgbounds: x=%f,y=%f,w=%f,h=%f\n",cgbounds.origin.x,cgbounds.origin.y,cgbounds.size.width,cgbounds.size.height);
+     dcPtr->portBounds.origin.x += macDraw->xOff;
+     dcPtr->portBounds.origin.y += macDraw->yOff;
+@@ -322,10 +308,8 @@
+     bounds.bottom = cgbounds.origin.y + cgbounds.size.height;
+     // printf("  macDraw Offs:%f,%f\n",(float)macDraw->xOff,(float)macDraw->yOff);
+     // printf("  bounds:l=%f,r=%f,t=%f,b=%f\n",(float)bounds.left,(float)bounds.right,(float)bounds.top,(float)bounds.bottom);
+-    if (!dcPtr->focusLocked) {
+-        CGContextSaveGState(dcPtr->c);
+-    }
+ 
++    CGContextSaveGState(dcPtr->c);
+     CGAffineTransform t = { .a=1.0, .b=0.0, .c=0.0, .d=-1.0, .tx=0.0, .ty=dcPtr->portBounds.size.height};
+     CGContextConcatCTM(dcPtr->c, t);
+ 
+@@ -359,12 +343,7 @@
+         CGContextSynchronize(dcPtr->c);
+         [[dcPtr->view window] setViewsNeedDisplay:YES];
+         [[dcPtr->view window] enableFlushWindow];
+-        if (dcPtr->focusLocked)
+-        {
+-	      [dcPtr->view unlockFocus];
+-        } else {
+-            CGContextRestoreGState(dcPtr->c);
+-        }
++         CGContextRestoreGState(dcPtr->c);
+     }
+     if (dcPtr->clipRgn) {
+         CFRelease(dcPtr->clipRgn);
+@@ -382,22 +361,6 @@
+     return deviceRGB;
+ }
+ 
+-#if 0	// 10.3
+-/* Cache some common colors to speed things up. */
+-typedef struct LookupColor {
+-    int from;
+-    CGColorRef colorRef;
+-} LookupTable;
+-static LookupColor ColorTable[] = {
+-
+-};
+-void
+-PreallocateColorRefs(void)
+-{
+-
+-}
+-#endif
+-
+ static LookupTable LineCapStyleLookupTable[] = {
+     {CapNotLast, 		kCGLineCapButt},
+     {CapButt, 	 		kCGLineCapButt},
+@@ -802,7 +765,6 @@
+             ptr = data;
+ 
+             if (tintColor && tintAmount > 0.0) {
+-#ifdef TINT_INT_CALCULATION
+                 uint32_t tintR, tintG, tintB, uAmount, uRemain, uOpacity;
+ 
+                 if (tintAmount > 1.0)
+@@ -844,45 +806,6 @@
+                         dstPtr += 4;
+                     }
+                 }
+-#else
+-                float tintR, tintG, tintB;
+-
+-                if (tintAmount > 1.0)
+-                    tintAmount = 1.0;
+-                tintR = RedFloatFromXColorPtr(tintColor);
+-                tintG = GreenFloatFromXColorPtr(tintColor);
+-                tintB = BlueFloatFromXColorPtr(tintColor);
+-                /* printf("tint:%g,%g,%g,%g amount=%g\n", tintR, tintG, tintB, tintAmount); */
+-                for (i = 0; i < iheight; i++) {
+-                    srcPtr = block.pixelPtr + i*pitch;
+-                    dstPtr = ptr + i*pitch;
+-                    for (j = 0; j < iwidth; j++) {
+-                        // extract
+-                        int r = *(srcPtr+srcR);
+-                        int g = *(srcPtr+srcG);
+-                        int b = *(srcPtr+srcB);
+-
+-                        // transform
+-                        int lum = (int)(0.2126*r + 0.7152*g + 0.0722*b);
+-                        r = (int)((1.0-tintAmount)*r + tintAmount*lum*tintR);
+-                        g = (int)((1.0-tintAmount)*g + tintAmount*lum*tintG);
+-                        b = (int)((1.0-tintAmount)*b + tintAmount*lum*tintB);
+-
+-                        // fix range
+-                        r = r<0 ? 0 : r>255 ? 255 : r;
+-                        g = g<0 ? 0 : g>255 ? 255 : g;
+-                        b = b<0 ? 0 : b>255 ? 255 : b;
+-
+-                        // and put back
+-                        *(dstPtr+dstR) = r;
+-                        *(dstPtr+dstG) = g;
+-                        *(dstPtr+dstB) = b;
+-                        *(dstPtr+dstA) = *(srcPtr+srcA) * fillOpacity;
+-                        srcPtr += 4;
+-                        dstPtr += 4;
+-                    }
+-                }
+-#endif
+             } else {
+                 for (i = 0; i < iheight; i++) {
+                     srcPtr = block.pixelPtr + i*pitch;
+@@ -1252,11 +1175,9 @@
+ TkPathFree(TkPathContext ctx)
+ {
+     TkPathContext_ *context = (TkPathContext_ *) ctx;
+-#ifdef TKPATH_AQUA_USE_DRAWABLE_CONTEXT
+-
+-#else
++    
+     PathReleaseCGContext(context);
+-#endif
++    
+     if (context->data) {
+         ckfree(context->data);
+     }
