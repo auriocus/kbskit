@@ -2543,12 +2543,12 @@ Package tklib0.6 {
 ## @defgroup tksqlite
 #@verbatim
 Package tksqlite0.5.13 {
-  Require {Use kbskit8.6 sdx.kit tktable2.10 treectrl2.4.2 img1.4.7}
+  Require {Use sdx.kit tktable2.10 treectrl2.4.2 img1.4.7}
   Source {Wget http://reddog.s35.xrea.com/software/tksqlite-0.5.13.tar.gz}
   Configure {
     Kit {source $::starkit::topdir/tksqlite.tcl} Tk
   }
-  Make {Kit tksqlite sqlite3.25.3 tktable2.10 treectrl2.4.2 img1.4.7}
+  Make {Kit tksqlite tktable2.10 treectrl2.4.2 img1.4.7}
   Install {Kit tksqlite -vq-gui}
   Clean {file delete -force tksqlite.vfs}
   Test {Kit tksqlite}
