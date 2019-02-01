@@ -1387,7 +1387,7 @@ proc ::kbs::config::Patch {dir striplevel patch} {
 			lassign $in -> oldfile
 			lassign $out -> newfile
 
-			set fntopatch [file join $dir {*}[lrange [file split $newfile] $striplevel end]]
+			set fntopatch [file join $dir {*}[lrange [file split $oldfile] $striplevel end]]
 			set inhunk false
 			#puts "Found diffline for $fntopatch"
 			continue
