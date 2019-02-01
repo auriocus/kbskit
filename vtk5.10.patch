@@ -1,0 +1,49 @@
+Only in vtk5.10/Common: .vtkTclUtil.cxx.swp
+diff -ru vtk5.10-orig/Common/vtkTclUtil.cxx vtk5.10/Common/vtkTclUtil.cxx
+--- vtk5.10-orig/Common/vtkTclUtil.cxx	2019-02-01 14:00:07.000000000 +0100
++++ vtk5.10/Common/vtkTclUtil.cxx	2019-02-01 14:18:45.000000000 +0100
+@@ -490,13 +490,13 @@
+       vtkGenericWarningMacro("Error returned from vtk/tcl callback:\n" <<
+                              arg2->command << endl <<
+                              Tcl_GetVar(arg2->interp,(char *)("errorInfo"),0) <<
+-                             " at line number " << arg2->interp->errorLine);
++                             " at line number " << Tcl_GetErrorLine(arg2->interp));
+       }
+     else
+       {
+       vtkGenericWarningMacro("Error returned from vtk/tcl callback:\n" <<
+                              arg2->command << endl <<
+-                             " at line number " << arg2->interp->errorLine);
++                             " at line number " << Tcl_GetErrorLine(arg2->interp));
+       }
+     }
+ }
+@@ -723,14 +723,14 @@
+       vtkGenericWarningMacro("Error returned from vtk/tcl callback:\n" <<
+                              this->StringCommand << endl <<
+                              Tcl_GetVar(this->Interp,(char *)("errorInfo"),0) <<
+-                             " at line number " << this->Interp->errorLine);
++                             " at line number " << Tcl_GetErrorLine(this->Interp));
+       }
+     else
+       {
+       vtkGenericWarningMacro("Error returned from vtk/tcl callback:\n" <<
+                              this->StringCommand << endl <<
+                              " at line number " << 
+-                             this->Interp->errorLine);
++                             Tcl_GetErrorLine(this->Interp));
+       }
+     }
+   else if (res == -1)
+diff -ru vtk5.10-orig/Wrapping/Tcl/pkgIndex.tcl.in vtk5.10/Wrapping/Tcl/pkgIndex.tcl.in
+--- vtk5.10-orig/Wrapping/Tcl/pkgIndex.tcl.in	2019-02-01 14:16:42.000000000 +0100
++++ vtk5.10/Wrapping/Tcl/pkgIndex.tcl.in	2019-02-01 14:04:00.000000000 +0100
+@@ -5,7 +5,7 @@
+     proc load_library_package {libName libPath {libPrefix {@VTK_TCL_LIBNAME_PREFIX@}}} {
+       set libExt [info sharedlibextension]
+       set currentDirectory [pwd]
+-      set libFile [file join $libPath "$libPrefix$libName$libExt"]
++      set libFile [file normalize [file join $libPath "$libPrefix$libName$libExt"]]
+       if {[catch "cd {$libPath}; load {$libFile}" errorMessage]} {
+         puts $errorMessage
+       }

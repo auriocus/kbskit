@@ -1,0 +1,12 @@
+diff --git a/Wrapping/Tcl/pkgIndex.tcl.in b/Wrapping/Tcl/pkgIndex.tcl.in
+--- a/Wrapping/Tcl/pkgIndex.tcl.in
++++ b/Wrapping/Tcl/pkgIndex.tcl.in
+@@ -7,7 +7,7 @@ package ifneeded vtkinit {@VTK_MAJOR_VERSION@.@VTK_MINOR_VERSION@} {
+       if {[catch "load {} $libName"]} {
+         set libExt [info sharedlibextension]
+         set currentDirectory [pwd]
+-        set libFile [file join $libPath "$libPrefix$libName-@VTK_MAJOR_VERSION@.@VTK_MINOR_VERSION@$libExt"]
++        set libFile [file normalize [file join $libPath "$libPrefix$libName-@VTK_MAJOR_VERSION@.@VTK_MINOR_VERSION@$libExt"]]
+         if {[catch "cd {$libPath}; load {$libFile}" errorMessage]} {
+           puts $errorMessage
+         }
