@@ -2866,7 +2866,7 @@ Package vtk5.10 {
 	Source {Wget https://gitlab.kitware.com/vtk/vtk/-/archive/v5.10.1/vtk-v5.10.1.tar.gz}
 	Configure {
 		PatchFile [Get srcdir-sys] 1 vtk5.10.patch
-		Run cmake [Get srcdir-sys] -G "Unix Makefiles" -DVTK_Group_Tk:BOOL=ON -DVTK_WRAP_TCL:BOOL=ON -DTCL_INCLUDE_PATH:PATH=[Get builddir-sys]/include -DTCL_LIBRARY:FILEPATH=[Get builddir-sys]/lib/libtcl8.6.dylib -DTK_LIBRARY:FILEPATH=[Get builddir-sys]/lib/libtk8.6.dylib -DTCL_TCLSH=[Get builddir-sys]/bin/tclsh8.6 -DCMAKE_INSTALL_PREFIX=[Get builddir-sys]
+		Run cmake [Get srcdir-sys] -G "Unix Makefiles" -DVTK_Group_Tk:BOOL=ON -DVTK_WRAP_TCL:BOOL=ON -DTCL_INCLUDE_PATH:PATH=[Get builddir-sys]/include -DTCL_LIBRARY:FILEPATH=[Get builddir-sys]/lib/libtcl8.6.dylib -DTK_LIBRARY:FILEPATH=[Get builddir-sys]/lib/libtk8.6.dylib -DTCL_TCLSH=[Get builddir-sys]/bin/tclsh8.6 -DCMAKE_INSTALL_PREFIX=[Get builddir-sys] -DBUILD_SHARED_LIBS:BOOL=ON
 	}
 	Make { Run make }
 	Install { Run make install }
