@@ -61,8 +61,8 @@ PREFIX=`pwd`/`uname` ;\
 fi ;\
 TKOPT="" ;\
 case `uname` in \
-  MINGW*) DIR="win"; EXE="${PREFIX}/bin/tclsh86s.exe" ;; \
-  Darwin*) DIR="unix"; EXE="${PREFIX}/bin/tclsh8.6" ; TKOPT="--enable-aqua" ;; \
+  MINGW*) DIR="win"; EXE="${PREFIX}/bin/tclsh86.exe" ; EXTRAMFLAGS="MAKEFLAGS=-j1" ;; \
+  Darwin*) DIR="unix"; EXE="${PREFIX}/bin/tclsh8.6" ;; \
   *) DIR="unix"; EXE="${PREFIX}/bin/tclsh8.6" ;; \
 esac ;\
 if test ! -d sources ; then mkdir sources; fi;\
@@ -74,10 +74,10 @@ if test ! -x ${EXE} ; then \
     ( cd sources && wget http://prdownloads.sourceforge.net/tcl/tk8.6.9.1-src.tar.gz && gunzip -c tk8.6.9.1-src.tar.gz | tar xf - && rm tk8.6.9.1-src.tar.gz && mv tk8.6.9 tk8.6 ) ; \
   fi ;\
   mkdir -p ${PREFIX}/tcl ;\
-  ( cd ${PREFIX}/tcl && ../../sources/tcl8.6/${DIR}/configure --disable-shared --prefix=${PREFIX} --exec-prefix=${PREFIX} && make install-binaries install-libraries ) ;\
+  ( cd ${PREFIX}/tcl && ../../sources/tcl8.6/${DIR}/configure --prefix=${PREFIX} --exec-prefix=${PREFIX} && eval $EXTRAMFLAGS make install ) ;\
   rm -rf ${PREFIX}/tcl ;\
   mkdir -p ${PREFIX}/tk ;\
-  ( cd ${PREFIX}/tk && ../../sources/tk8.6/${DIR}/configure --enable-shared --prefix=${PREFIX} --exec-prefix=${PREFIX} --with-tcl=${PREFIX}/lib $TKOPT && make install-binaries install-libraries ) ;\
+  ( cd ${PREFIX}/tk && ../../sources/tk8.6/${DIR}/configure --prefix=${PREFIX} --exec-prefix=${PREFIX} --with-tcl=${PREFIX}/lib && make install ) ;\
 fi ;\
 exec ${EXE} "$0" ${1+"$@"}
 #@endverbatim
@@ -991,7 +991,7 @@ proc ::kbs::config::Configure-Config {path args} {
     }
   }
   #TODO CFLAGS
-  Run env CC=[Get CC] TCLSH_PROG=[Get builddir-sys]/bin/tclsh85 WISH_PROG=[Get builddir-sys]/bin/wish $path/configure {*}$myOpts {*}$args
+  Run env CC=[Get CC] $path/configure {*}$myOpts {*}$args
 }
 ##	This function create a 'makedir'/main.tcl with:
 #	- common startup code
@@ -1516,7 +1516,7 @@ proc ::kbs::config::Run {args} {
   } else {
     ::kbs::gui::_state;# keep gui alive
     if {$::tcl_platform(platform) eq {windows}} {
-      exec {*}$args >__dev__null__ 2>@stderr
+      exec {*}$args >NUL: 2>@stderr
     } else {
       exec {*}$args >/dev/null 2>@stderr
     }
@@ -2819,6 +2819,7 @@ Package vectcltk0.2 {
 Package rl_json0.9.12 {
   Source {Wget https://github.com/RubyLane/rl_json/archive/master.zip}
   Configure {
+    PatchFile [Get srcdir-sys] 1 rl_json0.9.12.patch
     Config [Get srcdir-sys]
   }
   Make {Run make}
