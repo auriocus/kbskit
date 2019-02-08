@@ -2819,7 +2819,7 @@ Package vectcltk0.2 {
 Package rl_json0.9.12 {
   Source {Wget https://github.com/RubyLane/rl_json/archive/master.zip}
   Configure {
-    PatchFile [Get srcdir-sys] 1 rl_json0.9.12.patch
+    PatchFile [Get srcdir] 1 rl_json0.9.12.patch
     Config [Get srcdir-sys]
   }
   Make {Run make}
