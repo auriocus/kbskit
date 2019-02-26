@@ -1986,7 +1986,7 @@ Package __ {
     lappend my0\
 	bwidget1.9.13\
 	gridplus2.11\
-	icons1.2 img1.4.7\
+	icons1.2 img1.4.8\
 	memchan2.3 mentry3.7\
 	nsf2.1.0\
 	pdf4tcl0.8.4\
@@ -2078,15 +2078,15 @@ Package icons1.2 {
 # @bug #76 at https://sourceforge.net/p/tkimg/bugs/
 #@verbatim
 
-Package img1.4.7 {
-  Source {Wget https://sourceforge.net/projects/tkimg/files/tkimg/1.4/tkimg%201.4.7/Img-Source-1.4.7.tar.gz}
+Package img1.4.8 {
+  Source {Wget https://sourceforge.net/projects/tkimg/files/tkimg/1.4/tkimg%201.4.8/Img-Source-1.4.8.tar.gz}
   Configure {
     Config [Get srcdir-sys]
   }
   Make {Run make collate}
   Install {
     Run make install-libraries
-    Libdir Img1.4.7
+    Libdir Img1.4.8
   }
   Clean {Run make clean}
 }
@@ -2543,12 +2543,12 @@ Package tklib0.6 {
 ## @defgroup tksqlite
 #@verbatim
 Package tksqlite0.5.13 {
-  Require {Use sdx.kit tktable2.10 treectrl2.4.2 img1.4.7}
+  Require {Use sdx.kit tktable2.10 treectrl2.4.2 img1.4.8}
   Source {Wget http://reddog.s35.xrea.com/software/tksqlite-0.5.13.tar.gz}
   Configure {
     Kit {source $::starkit::topdir/tksqlite.tcl} Tk
   }
-  Make {Kit tksqlite tktable2.10 treectrl2.4.2 img1.4.7}
+  Make {Kit tksqlite tktable2.10 treectrl2.4.2 img1.4.8}
   Install {Kit tksqlite -vq-gui}
   Clean {file delete -force tksqlite.vfs}
   Test {Kit tksqlite}
