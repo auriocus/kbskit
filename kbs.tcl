@@ -2367,6 +2367,28 @@ Package tcl8.6-static {
   Clean {Run make clean}
   Test {Run make test}
 }
+
+Package tcl8.6-master {
+  Source {Git -b core-8-6-branch https://github.com/tcltk/tcl.git}
+  Configure {Config [Get srcdir-sys]/[Get sys]}
+  Make {Run make}
+  Install {Run make install install-private-headers}
+  Clean {Run make clean}
+  Test {Run make test}
+}
+
+Package tk8.6-master {
+  Require { Use tcl8.6-master }
+  Source {Git -b core-8-6-branch https://github.com/tcltk/tk.git}
+  Configure {Config [Get srcdir-sys]/[Get sys] --enable-aqua}
+  Make {Run make}
+  Install {Run make install install-private-headers}
+  Clean {Run make clean}
+  Test {Run make test}
+}
+
+
+
 #@endverbatim
 ## @defgroup tcllib
 #@verbatim
