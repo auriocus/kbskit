@@ -34,14 +34,13 @@ TEA_SETUP_COMPILER
 
 TEA_ADD_SOURCES([vfs.c])
 TEA_ADD_HEADERS([])
-TEA_ADD_INCLUDES([-I\"$(${CYGPATH} ${TCL_SRC_DIR}/generic)\"])
 TEA_ADD_LIBS([])
 TEA_ADD_CFLAGS([])
 TEA_ADD_STUB_SOURCES([])
 TEA_ADD_TCL_SOURCES([])
 
-#TEA_PUBLIC_TCL_HEADERS
-TEA_PRIVATE_TCL_HEADERS
+TEA_PUBLIC_TCL_HEADERS
+#TEA_PRIVATE_TCL_HEADERS
 
 #--------------------------------------------------------------------
 # A few miscellaneous platform-specific items:

@@ -2699,7 +2699,7 @@ Package udp1.0.11 {
 Package vfs1.4 {
   Source {Wget http://prdownloads.sourceforge.net/kbskit/kbs/0.4.9/vfs1.4.tgz}
   Configure {
-    Config [Get srcdir-sys] --with-tclinclude=[Get builddir-sys]/include
+    Config [Get srcdir-sys]
   }
   Make {Run make}
   Install {Run make install-binaries}
