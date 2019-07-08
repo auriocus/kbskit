@@ -2171,9 +2171,9 @@ Package kbskit8.6 {
     }
     if {$::tcl_platform(platform) == "windows"} {
       set MYCLI "[Get builddir-sys]/lib/libtcl86s.a"
-      append MYCLI " [Get builddir-sys]/lib/vfs1.4.1/vfs141.a"
+      append MYCLI " [Get builddir-sys]/lib/vfs1.4.1/libvfs1.4.1.a"
       set MYGUI "[Get builddir-sys]/lib/libtk86s.a"
-      set MYVQ "[Get builddir-sys]/lib/vqtcl4.1/vqtcl41.a [Get builddir-sys]/lib/libtclstub86s.a"
+      set MYVQ "[Get builddir-sys]/lib/vqtcl4.1/libvqtcl4.1.a [Get builddir-sys]/lib/libtclstub86s.a"
     } else {
       set MYCLI "[Get builddir-sys]/lib/libtcl8.6.a"
       append MYCLI " [Get builddir-sys]/lib/vfs1.4.1/libvfs1.4.1.a"

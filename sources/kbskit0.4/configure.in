@@ -81,6 +81,7 @@ TEA_ADD_TCL_SOURCES([])
 # TEA_ADD_* any platform specific compiler/build info here.
 #--------------------------------------------------------------------
 
+echo "Platform is: ${TEA_PLATFORM} version ${TEA_VERSION}"
 if test "${TEA_PLATFORM}" = "windows" ; then
     AC_DEFINE(BUILD_tclkit, 1, [Build windows export dll])
     CLEANFILES="*.lib *.dll *.exp *.ilk *.pdb vc*.pch"
