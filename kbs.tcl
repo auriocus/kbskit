@@ -2151,7 +2151,7 @@ Package kbskit8.6 {
     if {[lsearch -glob [Get kit] {mk*}] != -1} { Use mk4tcl2.4.9.7-static}
   }
   Source {Link kbskit0.4}
-  Configure {Config [Get srcdir-sys] --disable-shared}
+  Configure {Config [Get srcdir-sys] --disable-shared --disable-stubs}
   Make {
     set MYMK "[Get builddir-sys]/lib/mk4tcl2.4.9.7-static/Mk4tcl.a "
     if {$::tcl_platform(platform) == "windows"} {
