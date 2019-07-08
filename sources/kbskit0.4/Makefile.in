@@ -278,13 +278,15 @@ kitInitGui_vq.o: $(srcdir)/generic/kitInit.c
 	$(COMPILE) -DKIT_LITE -DKIT_INCLUDES_TK -c `@CYGPATH@ $(srcdir)/generic/kitInit.c` -o $@
 $(KBSVQ_CLI): setupvfs.tcl $(PKG_OBJECTS) kitInit_vq.o $(CLI_OBJ)
 	${CC} ${CFLAGS} ${LDFLAGS} $(PKG_OBJECTS) kitInit_vq.o $(CLI_OBJ)\
-	  $(MYCLI) $(MYVQ) -o $@ $(TCL_LIBS) 
+	  $(MYCLI) $(MYVQ) -o $@ $(TCL_LIBS)
+	strip $@	
 	cp $@ my$@
 	./my$@ -init- setupvfs.tcl $@ cli $(MYKITVQ)
 
 $(KBSVQ_DYN): setupvfs.tcl $(PKG_OBJECTS) kitInit_vq.o $(DYN_OBJ)
 	${CC} ${CFLAGS} ${LDFLAGS} $(PKG_OBJECTS) kitInit_vq.o $(DYN_OBJ)\
 	  $(MYCLI) $(MYVQ) -o $@ $(TCL_LIBS) 
+	strip $@	
 	cp $@ my$@
 	./my$@ -init- setupvfs.tcl $@ dyn $(MYKITVQ)
 
@@ -292,12 +294,14 @@ $(KBSVQ_DYN): setupvfs.tcl $(PKG_OBJECTS) kitInit_vq.o $(DYN_OBJ)
 $(KBSVQ_GUI): setupvfs.tcl $(PKG_OBJECTS) kitInitGui_vq.o $(GUI_OBJ)
 	${CC} ${CFLAGS} ${LDFLAGS} $(PKG_OBJECTS) kitInitGui_vq.o $(GUI_OBJ)\
 	  $(MYGUI) $(MYCLI) $(MYVQ) -o $@ $(TK_LIBS) $(MYXFT) $(GUI_FLAGS)
+	strip $@	
 	cp $@ my$@
 	./my$@ -init- setupvfs.tcl $@ gui $(MYKITVQ)
 
 $(KBSVQ_BI): setupvfs.tcl $(PKG_OBJECTS) kitInitGui_vq.o $(GUI_OBJ)
 	${CC} ${CFLAGS} ${LDFLAGS} $(PKG_OBJECTS) kitInitGui_vq.o $(GUI_OBJ)\
 	  $(MYGUI) $(MYCLI) $(MYVQ) -o $@ $(TK_LIBS) $(MYXFT) $(GUI_FLAGS)
+	strip $@	
 	cp $@ my$@
 	./my$@ -init- setupvfs.tcl $@ gui $(MYKITVQ) $(MYKITBI)
 
