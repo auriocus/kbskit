@@ -2369,7 +2369,7 @@ Package tcl8.6-static {
 }
 
 Package tcl8.6-master {
-  Source {Git -b core-8-6-branch https://github.com/tcltk/tcl.git}
+  Source {Git -b core-8-6-10-rc https://github.com/tcltk/tcl.git}
   Configure {Config [Get srcdir-sys]/[Get sys]}
   Make {Run make}
   Install {Run make install install-private-headers}
@@ -2379,7 +2379,7 @@ Package tcl8.6-master {
 
 Package tk8.6-master {
   Require { Use tcl8.6-master }
-  Source {Git -b core-8-6-branch https://github.com/tcltk/tk.git}
+  Source {Git -b core-8-6-10-rc https://github.com/tcltk/tk.git}
   Configure {Config [Get srcdir-sys]/[Get sys] --enable-aqua}
   Make {Run make}
   Install {Run make install install-private-headers}
