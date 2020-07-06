@@ -1,0 +1,14 @@
+A D/TCL-REQUIRED-PATCHES////
+A D/compat////
+A D/doc////
+A D/generic////
+A D/library////
+A D/tcl////
+A D/tclconfig////
+A D/tests////
+A D/tk////
+A D/unix////
+A D/win////
+R D/tk////
+R D/tcl////
+R D/TCL-REQUIRED-PATCHES////
