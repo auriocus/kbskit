@@ -68,10 +68,10 @@ esac ;\
 if test ! -d sources ; then mkdir sources; fi;\
 if test ! -x ${EXE} ; then \
   if test ! -d sources/tcl8.6 ; then \
-    ( cd sources && wget http://prdownloads.sourceforge.net/tcl/tcl8.6.9-src.tar.gz && gunzip -c tcl8.6.9-src.tar.gz | tar xf - && rm tcl8.6.9-src.tar.gz && mv tcl8.6.9 tcl8.6 ) ; \
+    ( cd sources && wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.10/tcl8.6.10-src.tar.gz && gunzip -c tcl8.6.10-src.tar.gz | tar xf - && rm tcl8.6.10-src.tar.gz && mv tcl8.6.10 tcl8.6 ) ; \
   fi ;\
   if test ! -d sources/tk8.6 ; then \
-    ( cd sources && wget http://prdownloads.sourceforge.net/tcl/tk8.6.9.1-src.tar.gz && gunzip -c tk8.6.9.1-src.tar.gz | tar xf - && rm tk8.6.9.1-src.tar.gz && mv tk8.6.9 tk8.6 ) ; \
+    ( cd sources && wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.10/tk8.6.10-src.tar.gz && gunzip -c tk8.6.10-src.tar.gz | tar xf - && rm tk8.6.10-src.tar.gz && mv tk8.6.10 tk8.6 ) ; \
   fi ;\
   mkdir -p ${PREFIX}/tcl ;\
   ( cd ${PREFIX}/tcl && ../../sources/tcl8.6/${DIR}/configure --prefix=${PREFIX} --exec-prefix=${PREFIX} && eval $EXTRAMFLAGS make install ) ;\
@@ -2181,11 +2181,11 @@ Package kbskit8.6 {
       set MYVQ "[Get builddir-sys]/lib/vqtcl4.1/libvqtcl4.1.a [Get builddir-sys]/lib/libtclstub8.6.a"
     }
     if {[Get -threads] in {--enable-threads --enable-threads=yes {}}} {
-      set MYKITVQ "thread2.8.4 tdbc1.1.0 itcl4.1.2 sqlite3.25.3 tdbcmysql1.1.0 tdbcodbc1.1.0 tdbcpostgres1.1.0"
-      set MYKITMK "thread2.8.4 tdbc1.1.0 itcl4.1.2 sqlite3.25.3 tdbcmysql1.1.0 tdbcodbc1.1.0 tdbcpostgres1.1.0"
+      set MYKITVQ "thread2.8.5 tdbc1.1.1 itcl4.2.0 sqlite3.30.1.2 tdbcmysql1.1.1 tdbcodbc1.1.1 tdbcpostgres1.1.1"
+      set MYKITMK "thread2.8.5 tdbc1.1.1 itcl4.2.0 sqlite3.30.1.2 tdbcmysql1.1.1 tdbcodbc1.1.1 tdbcpostgres1.1.1"
     } else {
-      set MYKITVQ "tdbc1.1.0 itcl4.1.2 sqlite3.25.3 tdbcmysql1.1.0 tdbcodbc1.1.0 tdbcpostgres1.1.0"
-      set MYKITMK "tdbc1.1.0 itcl4.1.2 sqlite3.25.3 tdbcmysql1.1.0 tdbcodbc1.1.0 tdbcpostgres1.1.0"
+      set MYKITVQ "tdbc1.1.1 itcl4.2.0 sqlite3.30.1.2 tdbcmysql1.1.1 tdbcodbc1.1.1 tdbcpostgres1.1.1"
+      set MYKITMK "tdbc1.1.1 itcl4.2.0 sqlite3.30.1.2 tdbcmysql1.1.1 tdbcodbc1.1.1 tdbcpostgres1.1.1"
     }
     foreach my [Get kit] {
       Run make MYCLI=$MYCLI MYGUI=$MYGUI MYVQ=$MYVQ MYKITVQ=$MYKITVQ MYMK=$MYMK MYKITMK=$MYKITMK MYKITBI=[Get bi] all-$my
@@ -2342,7 +2342,7 @@ Package tcl8.5-static {
 ## @defgroup tcl
 #@verbatim
 Package tcl8.6 {
-  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.9/tcl8.6.9-src.tar.gz}
+  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.10/tcl8.6.10-src.tar.gz}
   Configure {Config [Get srcdir-sys]/[Get sys]}
   Make {Run make}
   Install {Run make install install-private-headers}
@@ -2486,7 +2486,7 @@ Package tk8.5-static {
 #@verbatim
 Package tk8.6 {
   Require {Use tcl8.6}
-  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.9/tk8.6.9.1-src.tar.gz}
+  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.10/tk8.6.10-src.tar.gz}
   
   Configure {
     if {$::tcl_platform(os) == "Darwin"} {
