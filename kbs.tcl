@@ -1987,13 +1987,13 @@ Package __ {
 	bwidget1.9.13\
 	gridplus2.11\
 	icons1.2 img1.4.8\
-	memchan2.3 mentry3.7\
+	memchan2.3 mentry3.10\
 	nsf2.1.0\
 	pdf4tcl0.8.4\
 	photoresize0.1\
-	ral0.11.7 rl_json0.9.12\
-	tcllib1.19 tclx8.4 tdom0.8.3\
-	tkcon tklib0.6 tkpath0.3.3 tktable2.10 tcltls trofs0.4.9\
+	ral0.11.7 rl_json0.11.0\
+	tcllib1.20 tclx8.4 tdom0.8.3\
+	tkcon tklib0.7 tkpath0.3.3 tktable2.10 tcltls trofs0.4.9\
 	udp1.0.11 ukaz0.2\
 	vectcl0.3 vectcltk0.2\
 	wcb3.5\
@@ -2210,9 +2210,9 @@ Package memchan2.3 {
 #@endverbatim
 ## @defgroup mentry
 #@verbatim
-Package mentry3.7 {
+Package mentry3.10 {
   Require {Use wcb3.5}
-  Source {Wget http://www.nemethi.de/mentry/mentry3.7.tar.gz}
+  Source {Wget http://www.nemethi.de/mentry/mentry3.10.tar.gz}
   Configure {}
   Install {Tcl}
 }
@@ -2392,7 +2392,7 @@ Package tk8.6-master {
 #@endverbatim
 ## @defgroup tcllib
 #@verbatim
-Package tcllib1.19 {
+Package tcllib1.20 {
   Source {Wget https://github.com/tcltk/tcllib/archive/master.zip}
   Configure {Config [Get srcdir-sys]}
   Make {}
@@ -2429,9 +2429,8 @@ Package tclx8.4 {
 #@verbatim
 Package tdom0.8.3 {
   Source {#Wget https://github.com/downloads/tDOM/tdom/tDOM-0.8.3.tgz
-    Wget https://github.com/tDOM/tdom/tarball/8667ce5
-    Tgz [glob -nocomplain [Get builddir-sys]/../sources/8667ce5*]
-    file delete -force [glob -nocomplain [Get builddir-sys]/../sources/8667ce5*]
+    Wget https://github.com/tDOM/tdom/archive/master.zip
+    #Tgz [glob -nocomplain [Get builddir-sys]/../sources/8667ce5*]
   }
   Configure {Config [Get srcdir-sys]}
   Make {Run make binaries}
@@ -2553,7 +2552,7 @@ Package tkdnd2.9 {
 # @todo  Source {Wget http://core.tcl.tk/tklib/tarball/tklib-0.6.tar.gz?uuid=tklib-0-6}
 #@verbatim
 #TODO  Source {Wget https://github.com/tcltk/tklib/archive/841659f114803b4c9dc186704af6a7f64515c45c.zip}
-Package tklib0.6 {
+Package tklib0.7 {
   Source {Wget https://github.com/tcltk/tklib/archive/master.zip}
   Configure {Config [Get srcdir-sys]}
   Make {}
@@ -2613,7 +2612,7 @@ Package tcltls {
   Require {Use libressl-static}
   Source {Wget https://core.tcl.tk/tcltls/uv/tcltls-1.7.16.tar.gz}
   Configure {
-	Config [Get srcdir-sys] --with-ssl=libressl --with-openssl-dir=[Get builddir] --enable-static-ssl --disable-rpath
+	Config [Get srcdir-sys] --with-ssl=libressl --with-openssl-dir=[Get builddir] --enable-static-ssl --disable-rpath --enable-threads
 	
    }
   Make {Run make}
@@ -2838,10 +2837,10 @@ Package vectcltk0.2 {
 }
 
 #@verbatim
-Package rl_json0.9.12 {
+Package rl_json0.11.0 {
   Source {Wget https://github.com/RubyLane/rl_json/archive/master.zip}
   Configure {
-    PatchFile [Get srcdir] 1 rl_json0.9.12.patch
+    #PatchFile [Get srcdir] 1 rl_json0.9.12.patch
     Config [Get srcdir-sys]
   }
   Make {Run make}
