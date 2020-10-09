@@ -1999,7 +1999,7 @@ Package __ {
 	wcb3.5\
 	xotcl1.6.8 \
 	tkdnd2.9 \
-	treectrl2.4.2
+	treectrl2.4.3
     if {$::tcl_platform(os) != "Darwin"} {lappend my0 rbc0.1}
     # 8.6 kbskit
     Run {*}$MYEXE -builddir=sf86 -v -r -vq install kbskit8.6
@@ -2564,12 +2564,12 @@ Package tklib0.7 {
 ## @defgroup tksqlite
 #@verbatim
 Package tksqlite0.5.13 {
-  Require {Use sdx.kit tktable2.10 treectrl2.4.2 img1.4.8}
+  Require {Use sdx.kit tktable2.10 treectrl2.4.3 img1.4.8}
   Source {Wget http://reddog.s35.xrea.com/software/tksqlite-0.5.13.tar.gz}
   Configure {
     Kit {source $::starkit::topdir/tksqlite.tcl} Tk
   }
-  Make {Kit tksqlite tktable2.10 treectrl2.4.2 img1.4.8}
+  Make {Kit tksqlite tktable2.10 treectrl2.4.3 img1.4.8}
   Install {Kit tksqlite -vq-gui}
   Clean {file delete -force tksqlite.vfs}
   Test {Kit tksqlite}
@@ -2643,7 +2643,7 @@ Package libressl-static {
 ## @defgroup treectrl
 # @todo Error in configure: tk header default.h not found
 #@verbatim
-Package treectrl2.4.2 {
+Package treectrl2.4.3 {
   Source {Wget https://github.com/apnadkarni/tktreectrl/archive/946f5b33b35ebf3c63338f4ec6466a0c082103fb.zip}
   Configure {
 	# fix bogus garbage collection flag
