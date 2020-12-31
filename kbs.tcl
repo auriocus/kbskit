@@ -2135,7 +2135,6 @@ Wget https://chiselapp.com/user/rene/repository/iwidgets/iwidgets.tgz?uuid=66a05
 ## @defgroup kbskit
 #@verbatim
 Package kbskit0.4 {
-  Source {Cvs kbskit.cvs.sourceforge.net:/cvsroot/kbskit -r kbskit_0_4 kbskit}
 }
 #@endverbatim
 ## @defgroup kbskit
@@ -2180,13 +2179,20 @@ Package kbskit8.6 {
       set MYGUI "[Get builddir-sys]/lib/libtk8.6.a"
       set MYVQ "[Get builddir-sys]/lib/vqtcl4.1/libvqtcl4.1.a [Get builddir-sys]/lib/libtclstub8.6.a"
     }
+	
+
+
     if {[Get -threads] in {--enable-threads --enable-threads=yes {}}} {
-      set MYKITVQ "thread2.8.5 tdbc1.1.1 itcl4.2.0 sqlite3.30.1.2 tdbcmysql1.1.1 tdbcodbc1.1.1 tdbcpostgres1.1.1"
-      set MYKITMK "thread2.8.5 tdbc1.1.1 itcl4.2.0 sqlite3.30.1.2 tdbcmysql1.1.1 tdbcodbc1.1.1 tdbcpostgres1.1.1"
+	  set bundledpkgs thread2.8.6
     } else {
-      set MYKITVQ "tdbc1.1.1 itcl4.2.0 sqlite3.30.1.2 tdbcmysql1.1.1 tdbcodbc1.1.1 tdbcpostgres1.1.1"
-      set MYKITMK "tdbc1.1.1 itcl4.2.0 sqlite3.30.1.2 tdbcmysql1.1.1 tdbcodbc1.1.1 tdbcpostgres1.1.1"
+      set bundledpkgs ""
     }
+
+	lappend bundledpkgs itcl4.2.1 sqlite3.34.0 tdbc1.1.2 tdbcmysql1.1.2 tdbcodbc1.1.2 tdbcpostgres1.1.2
+	
+	set MYKITVQ $bundledpkgs
+	set MYKITMK $bundledpkgs
+	
     foreach my [Get kit] {
       Run make MYCLI=$MYCLI MYGUI=$MYGUI MYVQ=$MYVQ MYKITVQ=$MYKITVQ MYMK=$MYMK MYKITMK=$MYKITMK MYKITBI=[Get bi] all-$my
     }
@@ -2342,7 +2348,7 @@ Package tcl8.5-static {
 ## @defgroup tcl
 #@verbatim
 Package tcl8.6 {
-  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.10/tcl8.6.10-src.tar.gz}
+  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.11/tcl8.6.11rc2-src.tar.gz}
   Configure {Config [Get srcdir-sys]/[Get sys]}
   Make {Run make}
   Install {Run make install install-private-headers}
@@ -2369,7 +2375,7 @@ Package tcl8.6-static {
 }
 
 Package tcl8.6-master {
-  Source {Git -b core-8-6-10-rc https://github.com/tcltk/tcl.git}
+  Source {Git -b core-8-6-11-rc https://github.com/tcltk/tcl.git}
   Configure {Config [Get srcdir-sys]/[Get sys]}
   Make {Run make}
   Install {Run make install install-private-headers}
@@ -2379,7 +2385,7 @@ Package tcl8.6-master {
 
 Package tk8.6-master {
   Require { Use tcl8.6-master }
-  Source {Git -b core-8-6-10-rc https://github.com/tcltk/tk.git}
+  Source {Git -b core-8-6-11-rc https://github.com/tcltk/tk.git}
   Configure {Config [Get srcdir-sys]/[Get sys] --enable-aqua}
   Make {Run make}
   Install {Run make install install-private-headers}
@@ -2486,7 +2492,7 @@ Package tk8.5-static {
 #@verbatim
 Package tk8.6 {
   Require {Use tcl8.6}
-  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.10/tk8.6.10-src.tar.gz}
+  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.11/tk8.6.11rc2-src.tar.gz}
   
   Configure {
     if {$::tcl_platform(os) == "Darwin"} {
@@ -2696,7 +2702,7 @@ Package udp1.0.11 {
 ## @defgroup vfs
 #@verbatim
 Package vfs1.4 {
-  Source {Wget http://prdownloads.sourceforge.net/kbskit/kbs/0.4.9/vfs1.4.tgz}
+  Source {}
   Configure {
     Config [Get srcdir-sys]
   }
