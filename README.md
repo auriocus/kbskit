@@ -9,7 +9,7 @@ How to run
 
 After cloning, execute kbs.tcl:
 
-	./kbs.tcl -r install tk8.6
+	./kbs.tcl -r install kbskit8.6
 
 If you want a full kbskit (single file executable with many packages), run:
 

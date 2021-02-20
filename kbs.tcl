@@ -55,7 +55,7 @@ if test ! -r ./kbs.tcl ; then \
 fi;
 # bootstrap for building tcl.. \
 TCLSRC="tcl-core8.6.11-src.tar.gz" ;\
-TCLURL="https://sourceforge.net/projects/tcl/files/Tcl/8.6.11/$TCLSRC" ;\
+TCLURL="https://sourceforge.net/projects/tcl/files/Tcl/8.6.11/$TCLSRC/download" ;\
 SRCROOT="tcl8.6.11" ;\
 if test "`pwd`" = "/" ; then \
 PREFIX=/`uname` ;\
