@@ -53,7 +53,10 @@
 if test ! -r ./kbs.tcl ; then \
   echo "Please start from directory containing the file 'kbs.tcl'"; exit 1 ;\
 fi;
-# bootstrap for building wish.. \
+# bootstrap for building tcl.. \
+TCLSRC="tcl-core8.6.11-src.tar.gz" ;\
+TCLURL="https://sourceforge.net/projects/tcl/files/Tcl/8.6.11/$TCLSRC" ;\
+SRCROOT="tcl8.6.11" ;\
 if test "`pwd`" = "/" ; then \
 PREFIX=/`uname` ;\
 else \
@@ -67,17 +70,12 @@ case `uname` in \
 esac ;\
 if test ! -d sources ; then mkdir sources; fi;\
 if test ! -x ${EXE} ; then \
-  if test ! -d sources/tcl8.6 ; then \
-    ( cd sources && wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.10/tcl8.6.10-src.tar.gz && gunzip -c tcl8.6.10-src.tar.gz | tar xf - && rm tcl8.6.10-src.tar.gz && mv tcl8.6.10 tcl8.6 ) ; \
-  fi ;\
-  if test ! -d sources/tk8.6 ; then \
-    ( cd sources && wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.10/tk8.6.10-src.tar.gz && gunzip -c tk8.6.10-src.tar.gz | tar xf - && rm tk8.6.10-src.tar.gz && mv tk8.6.10 tk8.6 ) ; \
+  if test ! -d sources/bootstraptcl ; then \
+    ( cd sources && wget "$TCLURL" -O "$TCLSRC" && tar xvf "$TCLSRC" && rm "$TCLSRC" && mv "$SRCROOT" bootstraptcl ) ; \
   fi ;\
   mkdir -p ${PREFIX}/tcl ;\
-  ( cd ${PREFIX}/tcl && ../../sources/tcl8.6/${DIR}/configure --prefix=${PREFIX} --exec-prefix=${PREFIX} && eval $EXTRAMFLAGS make install ) ;\
+  ( cd ${PREFIX}/tcl && ../../sources/bootstraptcl/${DIR}/configure --prefix=${PREFIX} --exec-prefix=${PREFIX} && eval $EXTRAMFLAGS make install ) ;\
   rm -rf ${PREFIX}/tcl ;\
-  mkdir -p ${PREFIX}/tk ;\
-  ( cd ${PREFIX}/tk && ../../sources/tk8.6/${DIR}/configure --prefix=${PREFIX} --exec-prefix=${PREFIX} --with-tcl=${PREFIX}/lib && make install ) ;\
 fi ;\
 exec ${EXE} "$0" ${1+"$@"}
 #@endverbatim
@@ -2348,7 +2346,7 @@ Package tcl8.5-static {
 ## @defgroup tcl
 #@verbatim
 Package tcl8.6 {
-  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.11/tcl8.6.11rc2-src.tar.gz}
+  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.11/tcl8.6.11-src.tar.gz}
   Configure {Config [Get srcdir-sys]/[Get sys]}
   Make {Run make}
   Install {Run make install install-private-headers}
@@ -2492,7 +2490,7 @@ Package tk8.5-static {
 #@verbatim
 Package tk8.6 {
   Require {Use tcl8.6}
-  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.11/tk8.6.11rc2-src.tar.gz}
+  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.11/tk8.6.11.1-src.tar.gz}
   
   Configure {
     if {$::tcl_platform(os) == "Darwin"} {
