@@ -15,6 +15,13 @@
 #ifndef _TKTABLE_H_
 #define _TKTABLE_H_
 
+#ifdef MAC_OSX_TK
+ #ifndef MAC_OSX_TCL
+ #define MAC_OSX_TCL
+ #endif
+#endif
+#define panic Tcl_Panic
+
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>

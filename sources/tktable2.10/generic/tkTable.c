@@ -1680,7 +1680,7 @@ TableUndisplay(register Table *tablePtr)
  * rectangles.  Thus turn it off for all cases until clip rectangles
  * are known to be respected. [Bug 1805350]
  */
-#if 1 || defined(MAC_TCL) || defined(UNDER_CE) || (defined(WIN32) && defined(TCL_THREADS)) || defined(MAC_OSX_TK)
+#if !defined(MAC_OSX_TK)
 #define NO_XSETCLIP
 #endif
 /*

@@ -2600,6 +2600,7 @@ Package tkpath0.3.3 {
 Package tktable2.10 {
   Source {Cvs tktable.cvs.sourceforge.net:/cvsroot/tktable -r tktable-2-10-0 tktable}
   Configure {
+	PatchFile [Get srcdir-sys] 1 tktable2.10.patch
     Config [Get srcdir-sys]
   }
   Make {Run make binaries}
@@ -2833,6 +2834,18 @@ Package vectcltk0.2 {
    Source {Link vectcl0.3}
    Configure {
      Config [Get srcdir-sys]/TkBridge
+   }
+   Make {Run make}
+   Install {Run make install}
+   Clean {Run make clean}
+   Test {Run make test}
+}
+
+Package tclyaml0.4 {
+   Require {Use tcl8.6}
+   Source {Wget https://github.com/andreas-kupries/tclyaml/archive/v0.4.tar.gz}
+   Configure {
+     Config [Get srcdir-sys]
    }
    Make {Run make}
    Install {Run make install}
