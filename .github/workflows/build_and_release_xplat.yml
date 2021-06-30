@@ -1,0 +1,64 @@
+name: build-and-release
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+
+defaults:
+    run:
+        shell: bash
+
+jobs:
+    build:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os: [macos-latest, ubuntu-latest, windows-latest]
+        steps:
+            - name: checkout repo
+              uses: actions/checkout@v2
+            - name: Install git sdk
+              if: ${{ matrix.os == 'windows-latest' }}
+              uses: git-for-windows/setup-git-for-windows-sdk@v1
+              with:
+                flavor: full
+
+            - name: build application
+              run: ./make-ci.sh
+
+            - name: upload result
+              uses: actions/upload-artifact@v2
+              with:
+                name: build-${{ matrix.os }}
+                path: dist/*.tar.bz2
+
+    deploy:
+        runs-on: ubuntu-latest
+        needs: [build]
+        steps:
+            - name: Download build artifacts
+              uses: actions/download-artifact@v2
+              id: download
+              with:
+                path: ~/downloads
+
+            - name: Create tarball dir
+              run: mkdir tarballs
+
+            - name: Collect all artifacts
+              run: find ${{steps.download.outputs.download-path}} -type f -exec mv {} tarballs \;
+
+            - name: Display structure of downloaded files
+              run: ls -R
+
+            - name: Release result
+              uses: marvinpinto/action-automatic-releases@v1.2.1
+              with:
+                  repo_token: "${{ secrets.GITHUB_TOKEN }}"
+                  automatic_release_tag: "latest"
+                  prerelease: true
+                  title: "Development Build"
+                  files: |
+                    tarballs/*.tar.bz2
