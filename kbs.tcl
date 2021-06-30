@@ -1185,6 +1185,13 @@ proc ::kbs::config::Install-Kit {name args} {
     if {$myExe ne $myRun} break
   }
   if {$myExe eq {}} { return -code error "no interpreter in '$myTmp'" }
+
+  # if the input is already a kit, unwrap first to get vfs
+  if {[regexp {^(.*)\.kit$} $name -> basename]} {
+    Run $myExe [file join [Get builddir] bin sdx.kit] unwrap $name
+	set name $basename
+  }
+
   if {$myRun eq {}} {
     Run $myExe [file join [Get builddir] bin sdx.kit] wrap $name
     file rename -force $name [file join [Get builddir] bin $name.kit]
@@ -2195,7 +2202,9 @@ Package kbskit8.6 {
       Run make MYCLI=$MYCLI MYGUI=$MYGUI MYVQ=$MYVQ MYKITVQ=$MYKITVQ MYMK=$MYMK MYKITMK=$MYKITMK MYKITBI=[Get bi] all-$my
     }
   }
-  Install {foreach my [Get kit] {Run make install-$my}}
+  Install {
+	foreach my [Get kit] {Run make install-$my}
+  }
   Clean {Run make clean}
 }
 #@endverbatim
@@ -2302,6 +2311,19 @@ Package sdx.kit {
   Configure {}
   Install {file copy -force [Get srcdir]/sdx-20110317.kit [Get builddir]/bin/sdx.kit}
 }
+
+#sdx tool command
+Package sdx {
+  Require {Use sdx.kit}
+  Source {Link sdx.kit}
+  Configure {
+	file copy -force [Get srcdir]/sdx-20110317.kit [Get builddir]/sdx/sdx.kit
+  }
+  Install {
+	Kit sdx.kit -vq-cli
+  }
+}
+
 #@endverbatim
 ## @defgroup snack
 #@verbatim
