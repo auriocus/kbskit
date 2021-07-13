@@ -1111,12 +1111,12 @@ proc ::kbs::config::Install {script} {
   }
   puts "=== Install $myDir"
   if {$verbose} {puts $script}
-  foreach my {Kit Tcl Libdir} {
+  foreach my {Kit Tcl Libdir License} {
     interp alias $interp $my {} ::kbs::config::Install-$my
   }
   $interp eval [list cd $myDir]
   $interp eval $script
-  foreach my {Kit Tcl Libdir} {interp alias $interp $my}
+  foreach my {Kit Tcl Libdir License} {interp alias $interp $my}
 }
 #-------------------------------------------------------------------------------
 
@@ -1235,6 +1235,20 @@ proc ::kbs::config::Install-Tcl {{pkgname {}} {subdir {}}} {
     close $myFd
   }
 }
+#-------------------------------------------------------------------------------
+
+##	Command to install license file
+proc ::kbs::config::Install-License {path {name {}}} {
+	if {$name eq {}} {
+		set name [file tail [Get makedir]]
+	}
+	set srcfn [file join [Get srcdir] $path]
+	set destdir [file join [Get builddir] licenses]
+	set destfn [file join $destdir license.terms.$name]
+	file mkdir $destdir
+	file copy -force $srcfn $destfn
+}
+
 #-------------------------------------------------------------------------------
 
 ##	Eval script in 'makedir'.
@@ -2371,7 +2385,18 @@ Package tcl8.6 {
   Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.11/tcl8.6.11-src.tar.gz}
   Configure {Config [Get srcdir-sys]/[Get sys]}
   Make {Run make}
-  Install {Run make install install-private-headers}
+  Install {Run make install install-private-headers
+  License license.terms Tcl8.6
+  License pkgs/itcl4.2.1/license.terms itcl4
+  License pkgs/itcl4.2.1/doc/license.terms itcl4-orig
+  License pkgs/tdbc1.1.2/license.terms tdbc
+  License pkgs/tdbcpostgres1.1.2/license.terms tdbc-postgres
+  License pkgs/thread2.8.6/license.terms Thread
+  License pkgs/tdbcmysql1.1.2/license.terms tdbc-mysql
+  License pkgs/tdbcsqlite3-1.1.2/license.terms tdbc-sqlite3
+  License pkgs/tdbcodbc1.1.2/license.terms tdbc-odbc
+  License pkgs/sqlite3.34.0/license.terms SQLite3
+  }
   Clean {Run make clean}
   Test {Run make test}
 }
@@ -2389,6 +2414,16 @@ Package tcl8.6-static {
       file copy -force [Get builddir]/tcl8.6-static/libtclstub86.a [Get builddir]/lib/libtclstub86s.a
       file copy -force [Get builddir]/tcl8.6-static/libtcl86.a [Get builddir]/lib/libtcl86s.a
     }
+	License license.terms Tcl8.6
+    License pkgs/itcl4.2.1/license.terms itcl4
+    License pkgs/itcl4.2.1/doc/license.terms itcl4-orig
+    License pkgs/tdbc1.1.2/license.terms tdbc
+    License pkgs/tdbcpostgres1.1.2/license.terms tdbc-postgres
+    License pkgs/thread2.8.6/license.terms Thread
+    License pkgs/tdbcmysql1.1.2/license.terms tdbc-mysql
+    License pkgs/tdbcsqlite3-1.1.2/license.terms tdbc-sqlite3
+    License pkgs/tdbcodbc1.1.2/license.terms tdbc-odbc
+    License pkgs/sqlite3.34.0/license.terms SQLite3
   }
   Clean {Run make clean}
   Test {Run make test}
@@ -2422,7 +2457,8 @@ Package tcllib1.20 {
   Source {Wget https://github.com/tcltk/tcllib/archive/master.zip}
   Configure {Config [Get srcdir-sys]}
   Make {}
-  Install {Run make install-libraries}
+  Install {Run make install-libraries
+  License license.terms}
   Clean {Run make clean}
   Test {Run make test}
 }
@@ -2523,7 +2559,8 @@ Package tk8.6 {
     Config [Get srcdir-sys]/[Get sys] {*}$tkopt
   }
   Make {Run make}
-  Install {Run make install install-private-headers}
+  Install {Run make install install-private-headers
+  License license.terms Tk8.6}
   Clean {Run make clean}
   Test {Run make test}
 }
@@ -2547,6 +2584,7 @@ Package tk8.6-static {
       file copy -force [Get builddir]/tk8.6-static/libtkstub86.a [Get builddir]/lib/libtkstub86s.a
       file copy -force [Get builddir]/tk8.6-static/libtk86.a [Get builddir]/lib/libtk86s.a
     }
+	License license.terms Tk8.6
   }
   Clean {Run make clean}
   Test {Run make test}
@@ -2582,7 +2620,8 @@ Package tklib0.7 {
   Source {Wget https://github.com/tcltk/tklib/archive/master.zip}
   Configure {Config [Get srcdir-sys]}
   Make {}
-  Install {Run make install-libraries}
+  Install {Run make install-libraries
+  License license.terms }
   Clean {Run make clean}
   Test {Run make test}
 }
@@ -2728,7 +2767,8 @@ Package vfs1.4 {
     Config [Get srcdir-sys]
   }
   Make {Run make}
-  Install {Run make install-binaries}
+  Install {Run make install-binaries
+  License license.terms }
   Clean {Run make clean}
 }
 #@endverbatim
@@ -2739,7 +2779,8 @@ Package vfs1.4-static {
   Configure {
     Config [Get srcdir-sys] --disable-shared --with-tclinclude=[Get builddir-sys]/include}
   Make {Run make}
-  Install {Run make install-binaries}
+  Install {Run make install-binaries
+  License license.terms }
   Clean {Run make clean}
 }
 #@endverbatim
@@ -2759,7 +2800,8 @@ Package vqtcl4.1-static {
     set MYFLAGS "-D__[exec uname -p]__"
     Run make PKG_CFLAGS=$MYFLAGS
   }
-  Install {Run make install-binaries}
+  Install {Run make install-binaries
+  License license.terms}
   Clean {Run make clean}
 }
 #@endverbatim

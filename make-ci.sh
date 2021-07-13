@@ -11,5 +11,5 @@ MAKEFLAGS=-j4 ./kbs.tcl -r -v -builddir="$(pwd)/$builddir" -make=make install kb
 
 mkdir -p dist
 TARBALL=kbskit_$machine.tar.bz2
-tar cvjf "dist/$TARBALL" "$builddir/bin" "$builddir/include" "$builddir/lib"
+tar cvjf "dist/$TARBALL" "$builddir/bin" "$builddir/include" "$builddir/lib" "$builddir/licenses"
 
