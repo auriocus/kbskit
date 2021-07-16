@@ -19,11 +19,16 @@ jobs:
         steps:
             - name: checkout repo
               uses: actions/checkout@v2
+
             - name: Install git sdk
               if: ${{ matrix.os == 'windows-latest' }}
               uses: git-for-windows/setup-git-for-windows-sdk@v1
               with:
                 flavor: full
+
+            - name: Set CFLAGS for macOS compatibility
+              if: ${{ matrix.os == 'macos-latest' }}
+              run: echo "CFLAGS=-mmacosx-version-min=10.13" >> $GITHUB_ENV
 
             - name: build application
               run: ./make-ci.sh
