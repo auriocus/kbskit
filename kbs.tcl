@@ -54,9 +54,9 @@ if test ! -r ./kbs.tcl ; then \
   echo "Please start from directory containing the file 'kbs.tcl'"; exit 1 ;\
 fi;
 # bootstrap for building tcl.. \
-TCLSRC="tcl-core8.6.11-src.tar.gz" ;\
-TCLURL="https://sourceforge.net/projects/tcl/files/Tcl/8.6.11/$TCLSRC/download" ;\
-SRCROOT="tcl8.6.11" ;\
+TCLSRC="tcl-core8.6.12-src.tar.gz" ;\
+TCLURL="https://sourceforge.net/projects/tcl/files/Tcl/8.6.12/$TCLSRC/download" ;\
+SRCROOT="tcl8.6.12" ;\
 if test "`pwd`" = "/" ; then \
 PREFIX=/`uname` ;\
 else \
@@ -2005,7 +2005,7 @@ Package __ {
     lappend my0\
 	bwidget1.9.13\
 	gridplus2.11\
-	icons1.2 img1.4.8\
+	icons1.2 img1.4.13\
 	memchan2.3 mentry3.10\
 	nsf2.1.0\
 	pdf4tcl0.8.4\
@@ -2097,15 +2097,16 @@ Package icons1.2 {
 # @bug #76 at https://sourceforge.net/p/tkimg/bugs/
 #@verbatim
 
-Package img1.4.8 {
-  Source {Wget https://sourceforge.net/projects/tkimg/files/tkimg/1.4/tkimg%201.4.8/Img-Source-1.4.8.tar.gz}
+Package img1.4.13 {
+  Source {Wget https://sourceforge.net/projects/tkimg/files/tkimg/1.4/tkimg%201.4.13/Img-Source-1.4.13.tar.gz}
   Configure {
     Config [Get srcdir-sys]
   }
   Make {Run make collate}
   Install {
     Run make install-libraries
-    Libdir Img1.4.8
+    Libdir Img1.4.13
+	License license.terms }
   }
   Clean {Run make clean}
 }
@@ -2207,7 +2208,7 @@ Package kbskit8.6 {
       set bundledpkgs ""
     }
 
-	lappend bundledpkgs itcl4.2.1 sqlite3.34.0 tdbc1.1.2 tdbcmysql1.1.2 tdbcodbc1.1.2 tdbcpostgres1.1.2
+	lappend bundledpkgs itcl4.2.2 sqlite3.37.0 tdbc1.1.3 tdbcmysql1.1.3 tdbcodbc1.1.3 tdbcpostgres1.1.3
 	
 	set MYKITVQ $bundledpkgs
 	set MYKITMK $bundledpkgs
@@ -2279,6 +2280,13 @@ Package pdf4tcl0.8.4 {
   Install {Tcl}
 }
 #@endverbatim
+
+
+
+
+
+
+
 ## @defgroup ral
 #@verbatim
 Package ral0.11.7 {
@@ -2351,8 +2359,8 @@ Package snack2.2 {
 #@endverbatim
 ## @defgroup tablelist
 #@verbatim
-Package tablelist5.17 {
-  Source {Wget http://www.nemethi.de/tablelist/tablelist5.17.tar.gz}
+Package tablelist6.16 {
+  Source {Wget http://www.nemethi.de/tablelist/tablelist6.16.tar.gz}
   Configure {}
   Install {Tcl}
 }
@@ -2382,7 +2390,7 @@ Package tcl8.5-static {
 ## @defgroup tcl
 #@verbatim
 Package tcl8.6 {
-  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.11/tcl8.6.11-src.tar.gz}
+  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.12/tcl8.6.12-src.tar.gz}
   Configure {Config [Get srcdir-sys]/[Get sys]}
   Make {Run make}
   Install {Run make install install-private-headers
@@ -2428,26 +2436,6 @@ Package tcl8.6-static {
   Clean {Run make clean}
   Test {Run make test}
 }
-
-Package tcl8.6-master {
-  Source {Git -b core-8-6-11-rc https://github.com/tcltk/tcl.git}
-  Configure {Config [Get srcdir-sys]/[Get sys]}
-  Make {Run make}
-  Install {Run make install install-private-headers}
-  Clean {Run make clean}
-  Test {Run make test}
-}
-
-Package tk8.6-master {
-  Require { Use tcl8.6-master }
-  Source {Git -b core-8-6-11-rc https://github.com/tcltk/tk.git}
-  Configure {Config [Get srcdir-sys]/[Get sys] --enable-aqua}
-  Make {Run make}
-  Install {Run make install install-private-headers}
-  Clean {Run make clean}
-  Test {Run make test}
-}
-
 
 
 #@endverbatim
@@ -2548,7 +2536,7 @@ Package tk8.5-static {
 #@verbatim
 Package tk8.6 {
   Require {Use tcl8.6}
-  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.11/tk8.6.11.1-src.tar.gz}
+  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.12/tk8.6.12-src.tar.gz}
   
   Configure {
     if {$::tcl_platform(os) == "Darwin"} {
@@ -2601,7 +2589,7 @@ Package tkcon {
 ## @defgroup tkdnd
 #@verbatim
 Package tkdnd2.9 {
-  Source {Wget https://github.com/petasis/tkdnd/archive/1e1362111c6fe875ff15d6eadebb56972f9f7ac6.zip}
+  Source {Wget https://github.com/petasis/tkdnd/archive/refs/tags/tkdnd-release-test-v2.9.2.tar.gz}
   Configure {
     # fix bogus garbage collection flag
     Config [Get srcdir-sys]
@@ -2629,12 +2617,12 @@ Package tklib0.7 {
 ## @defgroup tksqlite
 #@verbatim
 Package tksqlite0.5.13 {
-  Require {Use sdx.kit tktable2.10 treectrl2.4.3 img1.4.8}
+  Require {Use sdx.kit tktable2.10 treectrl2.4.3 img1.4.13}
   Source {Wget http://reddog.s35.xrea.com/software/tksqlite-0.5.13.tar.gz}
   Configure {
     Kit {source $::starkit::topdir/tksqlite.tcl} Tk
   }
-  Make {Kit tksqlite tktable2.10 treectrl2.4.3 img1.4.8}
+  Make {Kit tksqlite tktable2.10 treectrl2.4.3 img1.4.13}
   Install {Kit tksqlite -vq-gui}
   Clean {file delete -force tksqlite.vfs}
   Test {Kit tksqlite}
@@ -2932,9 +2920,8 @@ Package rl_json0.11.0 {
 #@endverbatim
 
 #@verbatim
-Package photoresize0.1 {
-  Require {Use tcl8.6 tk8.6}
-  Source {Wget https://github.com/auriocus/PhotoResize/archive/master.zip}
+Package photoresize0.2 {
+  Source {Wget https://github.com/auriocus/PhotoResize/archive/refs/tags/latest.tar.gz}
   Configure {
     Config [Get srcdir-sys]
   }
