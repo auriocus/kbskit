@@ -26,11 +26,6 @@ jobs:
               with:
                 flavor: full
 
-            - name: Install Windows dependencies
-              if: ${{ matrix.os == 'windows-2019' }}
-              run: |
-                pacman -S --noconfirm autoconf
-
             - name: Set CFLAGS for macOS compatibility
               if: ${{ matrix.os == 'macos-10.15' }}
               run: |
