@@ -909,8 +909,8 @@ proc ::kbs::config::Source- {type args} {
           file delete -force $myDir.tmp
           file mkdir $myDir.tmp
           cd $myDir.tmp
-          if {$type eq {Tgz}} {Run $_(exec-gzip) -dc $args | $_(exec-tar) xvf -}
-          if {$type eq {Tbz2}} {Run $_(exec-bzip2) -dc $args | $_(exec-tar) xvf -}
+          if {$type eq {Tgz}} {Run $_(exec-tar) xvf $args }
+          if {$type eq {Tbz2}} {Run $_(exec-tar) xvf $args }
           if {$type eq {Zip}} {Run $_(exec-unzip) $args}
           cd [file join $maindir sources]
           set myList [glob $myDir.tmp/*]
@@ -985,7 +985,7 @@ proc ::kbs::config::Configure-Config {path args} {
   if {! [file exists $npath/configure] } {
      set oldpwd [pwd]
 	 cd $npath
-     Run autoconf
+     Run $_(exec-autoconf)
 	 cd $oldpwd
   }
   # collect available options
