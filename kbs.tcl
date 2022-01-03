@@ -71,7 +71,7 @@ esac ;\
 if test ! -d sources ; then mkdir sources; fi;\
 if test ! -x ${EXE} ; then \
   if test ! -d sources/bootstraptcl ; then \
-    ( cd sources && wget "$TCLURL" -O "$TCLSRC" && tar xvf "$TCLSRC" && rm "$TCLSRC" && mv "$SRCROOT" bootstraptcl ) ; \
+    ( cd sources && curl "$TCLURL" -LJo "$TCLSRC" && tar xvf "$TCLSRC" && rm "$TCLSRC" && mv "$SRCROOT" bootstraptcl ) ; \
   fi ;\
   mkdir -p ${PREFIX}/tcl ;\
   ( cd ${PREFIX}/tcl && ../../sources/bootstraptcl/${DIR}/configure --prefix=${PREFIX} --exec-prefix=${PREFIX} && eval $EXTRAMFLAGS make install ) ;\
@@ -161,7 +161,7 @@ options (configuration variables are available with \[Get ..\]):
   -bzip2=?command?  set configuration variable 'exec-bzip2' (default is 'bzip2')
   -git=?command?    set configuration variable 'exec-git' (default is 'git')
   -unzip=?command?  set configuration variable 'exec-unzip' (default is 'unzip')
-  -wget=?command?   set configuration variable 'exec-wget' (default is 'wget')
+  -curl=?command?   set configuration variable 'exec-curl' (default is 'curl')
   -patch=?command?  set configuration variable 'exec-patch' (default is 'patch')
   -doxygen=?command? set configuration variable 'exec-doxygen'
                     (default is 'doxygen') you need at least version 1.7.5
@@ -225,8 +225,8 @@ Startup configuration:
 The following external programs are needed:
   * C-compiler, C++ compiler for metakit based programs (see -CC=)
   * make with handling of VPATH variables (gmake) (see -make=)
-  * cvs, svn, tar, gzip, unzip, wget to get and extract sources
-    (see -cvs= -svn= -tar= -gzip= -unzip= -wget= options)
+  * cvs, svn, tar, gzip, unzip, curl to get and extract sources
+    (see -cvs= -svn= -tar= -gzip= -unzip= -curl= options)
   * msys (http://sourceforge.net/project/showfiles.php?group_id=10894) is
     used to build under Windows. You need to put the kbs-sources inside
     the msys tree (/home/..).
@@ -537,7 +537,7 @@ namespace eval ::kbs::config {
   set _(exec-bzip2)	[lindex "[auto_execok bzip2] bzip2" 0]
   set _(exec-git)	[lindex "[auto_execok git] git" 0]
   set _(exec-unzip)	[lindex "[auto_execok unzip] unzip" 0]
-  set _(exec-wget)	[lindex "[auto_execok wget] wget" 0]
+  set _(exec-curl)	[lindex "[auto_execok curl] curl" 0]
   set _(exec-patch)	[lindex "[auto_execok patch] patch" 0]
   set _(exec-doxygen)	[lindex "[auto_execok doxygen] doxygen" 0]
   set _(kitcli)		{}
@@ -744,7 +744,7 @@ proc ::kbs::config::Require-Use {args} {
 #	'Svn path'     - call 'svn co path 'srcdir''
 #	'Http path'    - call 'http get path', unpack *.tar.gz, *.tar.bz2,
 #			 *.tgz or *.tbz2 files
-#	'Wget file'    - call 'wget file', unpack *.tar.gz *.tar.bz2,
+#	'Wget file'    - call 'curl file', unpack *.tar.gz *.tar.bz2,
 #			  *.tgz  or *.tbz2 files
 #	'Tgz file'     - call 'tar xzf file'
 #	'Tbz2 file'    - call 'tar xjf file'
@@ -873,7 +873,7 @@ proc ::kbs::config::Source- {type args} {
         set myFile [file normalize ./[file tail $args]]
         puts "=== Source $type $package"
         if {[catch {
-          Run $_(exec-wget) --no-check-certificate $args
+          Run $_(exec-curl) -LO $args
           # unpack if necessary
           switch -glob $myFile {
             *.tgz - *.tar.gz - *.tgz?uuid=* - *.tar.gz?uuid=* {
@@ -1623,8 +1623,8 @@ proc ::kbs::config::_configure {args} {
         set _(exec-bzip2) [string range $myCmd 7 end]
       } -unzip=* {
         set _(exec-unzip) [string range $myCmd 7 end]
-      } -wget=* {
-        set _(exec-wget) [string range $myCmd 6 end]
+      } -curl=* {
+        set _(exec-curl) [string range $myCmd 6 end]
       } -doxygen=* {
         set _(exec-doxygen) [string range $myCmd 9 end]
       } -kitcli=* {
@@ -2116,6 +2116,9 @@ Package img1.4.13 {
     Run make install-libraries
     Libdir Img1.4.13
 	License license.terms tkImg
+	License compat/libjpeg/README libjpeg
+	License compat/libpng/LICENSE libpng
+	LIcense compat/libtiff/COPYRIGHT libtiff
   }
   Clean {Run make clean}
 }
