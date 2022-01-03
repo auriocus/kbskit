@@ -966,6 +966,15 @@ proc ::kbs::config::Configure {script} {
 proc ::kbs::config::Configure-Config {path args} {
   variable _
 
+  # check if the configure script is available,
+  # else execute autoconf
+
+  if {! [file exists $path/configure] } {
+     set oldpwd [pwd]
+	 cd $path
+     Run autoconf
+	 cd $oldpwd
+  }
   # collect available options
   set myOpts ""
   foreach l [split [exec env $path/configure --help] \n] {
@@ -2011,7 +2020,7 @@ Package __ {
 	pdf4tcl0.8.4\
 	photoresize0.1\
 	ral0.11.7 rl_json0.11.0\
-	tcllib1.20 tclx8.4 tdom0.8.3\
+	tcllib1.20 tclx8.4 tdom0.9.2\
 	tkcon tklib0.7 tkpath0.3.3 tktable2.10 tcltls trofs0.4.9\
 	udp1.0.11 ukaz0.2\
 	vectcl0.3 vectcltk0.2\
@@ -2098,7 +2107,7 @@ Package icons1.2 {
 #@verbatim
 
 Package img1.4.13 {
-  Source {Wget https://sourceforge.net/projects/tkimg/files/tkimg/1.4/tkimg%201.4.13/Img-Source-1.4.13.tar.gz}
+  Source {Wget https://sourceforge.net/projects/tkimg/files/tkimg/1.4/tkimg%201.4.13/Img-1.4.13-Source.tar.gz}
   Configure {
     Config [Get srcdir-sys]
   }
@@ -2106,7 +2115,7 @@ Package img1.4.13 {
   Install {
     Run make install-libraries
     Libdir Img1.4.13
-	License license.terms
+	License license.terms tkImg
   }
   Clean {Run make clean}
 }
@@ -2203,12 +2212,12 @@ Package kbskit8.6 {
 
 
     if {[Get -threads] in {--enable-threads --enable-threads=yes {}}} {
-	  set bundledpkgs thread2.8.6
+	  set bundledpkgs thread2.8.7
     } else {
       set bundledpkgs ""
     }
 
-	lappend bundledpkgs itcl4.2.2 sqlite3.37.0 tdbc1.1.3 tdbcmysql1.1.3 tdbcodbc1.1.3 tdbcpostgres1.1.3
+	lappend bundledpkgs itcl4.2.2 sqlite3.36.0 tdbc1.1.3 tdbcmysql1.1.3 tdbcodbc1.1.3 tdbcpostgres1.1.3
 	
 	set MYKITVQ $bundledpkgs
 	set MYKITMK $bundledpkgs
@@ -2388,15 +2397,15 @@ Package tcl8.6 {
   Make {Run make}
   Install {Run make install install-private-headers
   License license.terms Tcl8.6
-  License pkgs/itcl4.2.1/license.terms itcl4
-  License pkgs/itcl4.2.1/doc/license.terms itcl4-orig
-  License pkgs/tdbc1.1.2/license.terms tdbc
-  License pkgs/tdbcpostgres1.1.2/license.terms tdbc-postgres
-  License pkgs/thread2.8.6/license.terms Thread
-  License pkgs/tdbcmysql1.1.2/license.terms tdbc-mysql
-  License pkgs/tdbcsqlite3-1.1.2/license.terms tdbc-sqlite3
-  License pkgs/tdbcodbc1.1.2/license.terms tdbc-odbc
-  License pkgs/sqlite3.34.0/license.terms SQLite3
+  License pkgs/itcl4.2.2/license.terms itcl4
+  License pkgs/itcl4.2.2/doc/license.terms itcl4-orig
+  License pkgs/tdbc1.1.3/license.terms tdbc
+  License pkgs/tdbcpostgres1.1.3/license.terms tdbc-postgres
+  License pkgs/thread2.8.7/license.terms Thread
+  License pkgs/tdbcmysql1.1.3/license.terms tdbc-mysql
+  License pkgs/tdbcsqlite3-1.1.3/license.terms tdbc-sqlite3
+  License pkgs/tdbcodbc1.1.3/license.terms tdbc-odbc
+  License pkgs/sqlite3.36.0/license.terms SQLite3
   }
   Clean {Run make clean}
   Test {Run make test}
@@ -2416,15 +2425,15 @@ Package tcl8.6-static {
       file copy -force [Get builddir]/tcl8.6-static/libtcl86.a [Get builddir]/lib/libtcl86s.a
     }
 	License license.terms Tcl8.6
-    License pkgs/itcl4.2.1/license.terms itcl4
-    License pkgs/itcl4.2.1/doc/license.terms itcl4-orig
-    License pkgs/tdbc1.1.2/license.terms tdbc
-    License pkgs/tdbcpostgres1.1.2/license.terms tdbc-postgres
-    License pkgs/thread2.8.6/license.terms Thread
-    License pkgs/tdbcmysql1.1.2/license.terms tdbc-mysql
-    License pkgs/tdbcsqlite3-1.1.2/license.terms tdbc-sqlite3
-    License pkgs/tdbcodbc1.1.2/license.terms tdbc-odbc
-    License pkgs/sqlite3.34.0/license.terms SQLite3
+    License pkgs/itcl4.2.2/license.terms itcl4
+    License pkgs/itcl4.2.2/doc/license.terms itcl4-orig
+    License pkgs/tdbc1.1.3/license.terms tdbc
+    License pkgs/tdbcpostgres1.1.3/license.terms tdbc-postgres
+    License pkgs/thread2.8.7/license.terms Thread
+    License pkgs/tdbcmysql1.1.3/license.terms tdbc-mysql
+    License pkgs/tdbcsqlite3-1.1.3/license.terms tdbc-sqlite3
+    License pkgs/tdbcodbc1.1.3/license.terms tdbc-odbc
+    License pkgs/sqlite3.36.0/license.terms SQLite3
   }
   Clean {Run make clean}
   Test {Run make test}
@@ -2470,34 +2479,17 @@ Package tclx8.4 {
 #@endverbatim
 ## @defgroup tdom
 #@verbatim
-Package tdom0.8.3 {
-  Source {#Wget https://github.com/downloads/tDOM/tdom/tDOM-0.8.3.tgz
-    Wget https://github.com/tDOM/tdom/archive/master.zip
-    #Tgz [glob -nocomplain [Get builddir-sys]/../sources/8667ce5*]
+Package tdom0.9.2 {
+  Source {
+    Wget http://tdom.org/downloads/tdom-0.9.2-src.tgz
   }
   Configure {Config [Get srcdir-sys]}
   Make {Run make binaries}
-  Install {Run make install-binaries}
-  Clean {Run make clean}
-}
-#@endverbatim
-## @defgroup thread
-#@verbatim
-Package thread2.6.7 {
-  Source {Wget http://prdownloads.sourceforge.net/tcl/thread2.6.7.tar.gz}
-  Configure {Config [Get srcdir-sys]}
-  Make {Run make}
-  Install {Run make install-binaries}
-  Clean {Run make clean}
-}
-#@endverbatim
-## @defgroup thread
-#@verbatim
-Package thread2.6.7-static {
-  Source {Link thread2.6.7}
-  Configure {Config [Get srcdir-sys] --disable-shared}
-  Make {Run make}
-  Install {Run make install-binaries}
+  Install {
+	Run make install-binaries
+	License LICENSE tDOM
+	License expat/COPYING Expat
+  }
   Clean {Run make clean}
 }
 #@endverbatim
@@ -2906,7 +2898,10 @@ Package rl_json0.11.1 {
     Config [Get srcdir-sys]
   }
   Make {Run make}
-  Install {Run make install}
+  Install {
+	Run make install
+	License LICENSE rl_json
+  }
   Clean {Run make clean}
   Test {Run make test}
 }
