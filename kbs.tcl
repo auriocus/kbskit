@@ -2106,7 +2106,7 @@ Package img1.4.13 {
   Install {
     Run make install-libraries
     Libdir Img1.4.13
-	License license.terms }
+	License license.terms
   }
   Clean {Run make clean}
 }
@@ -2280,13 +2280,6 @@ Package pdf4tcl0.8.4 {
   Install {Tcl}
 }
 #@endverbatim
-
-
-
-
-
-
-
 ## @defgroup ral
 #@verbatim
 Package ral0.11.7 {
@@ -2531,6 +2524,7 @@ Package tk8.5-static {
   Clean {Run make clean}
   Test {Run make test}
 }
+
 #@endverbatim
 ## @defgroup tk
 #@verbatim
@@ -2642,7 +2636,7 @@ Package tkpath0.3.3 {
   Make {Run make binaries libraries}
   Install {Run make install-binaries install-libraries}
   Clean {Run make clean}
-}
+} 
 #@endverbatim
 ## @defgroup tktable
 #@verbatim
@@ -2721,7 +2715,7 @@ Package trofs0.4.9 {
   Make {Run make binaries}
   Install {Run make install-binaries}
   Clean {Run make clean}
-}
+}  
 #@endverbatim
 ## @defgroup udp
 #@verbatim
@@ -2906,10 +2900,9 @@ Package tclyaml0.4 {
 }
 
 #@verbatim
-Package rl_json0.11.0 {
-  Source {Wget https://github.com/RubyLane/rl_json/archive/master.zip}
+Package rl_json0.11.1 {
+  Source {Wget https://github.com/RubyLane/rl_json/archive/refs/tags/0.11.1.tar.gz}
   Configure {
-    #PatchFile [Get srcdir] 1 rl_json0.9.12.patch
     Config [Get srcdir-sys]
   }
   Make {Run make}
