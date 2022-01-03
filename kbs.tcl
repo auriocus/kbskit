@@ -957,6 +957,16 @@ proc ::kbs::config::Configure {script} {
   $interp eval $script
   foreach my {Config Kit} {interp alias $interp $my}
 }
+
+proc kbs::config::nativepath {p} {
+	variable _
+	if {$_(sys) eq "win"} {
+		return [exec cygpath -w $p]
+	} else {
+		return $p
+	}
+}
+
 #-------------------------------------------------------------------------------
 ##	Call 'configure' with options.
 # @examples
@@ -969,9 +979,11 @@ proc ::kbs::config::Configure-Config {path args} {
   # check if the configure script is available,
   # else execute autoconf
 
-  if {! [file exists $path/configure] } {
+  set npath [nativepath $path]
+
+  if {! [file exists $npath/configure] } {
      set oldpwd [pwd]
-	 cd $path
+	 cd $npath
      Run autoconf
 	 cd $oldpwd
   }
