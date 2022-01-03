@@ -908,8 +908,8 @@ proc ::kbs::config::Source- {type args} {
           file delete -force $myDir.tmp
           file mkdir $myDir.tmp
           cd $myDir.tmp
-          if {$type eq {Tgz}} {Run $_(exec-gzip) -dc $args | $_(exec-tar) xf -}
-          if {$type eq {Tbz2}} {Run $_(exec-bzip2) -dc $args | $_(exec-tar) xf -}
+          if {$type eq {Tgz}} {Run $_(exec-gzip) -dc $args | $_(exec-tar) xvf -}
+          if {$type eq {Tbz2}} {Run $_(exec-bzip2) -dc $args | $_(exec-tar) xvf -}
           if {$type eq {Zip}} {Run $_(exec-unzip) $args}
           cd [file join $maindir sources]
           set myList [glob $myDir.tmp/*]
