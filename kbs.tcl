@@ -1197,6 +1197,8 @@ proc ::kbs::config::Install-Kit {name args} {
 
   # if the input is already a kit, unwrap first to get vfs
   if {[regexp {^(.*)\.kit$} $name -> basename]} {
+	# sdx refuses to overwrite the .vfs dir, so first remove it
+	file delete -force $basename.vfs
     Run $myExe [file join [Get builddir] bin sdx.kit] unwrap $name
 	set name $basename
   }
@@ -2118,7 +2120,7 @@ Package img1.4.13 {
 	License license.terms tkImg
 	License compat/libjpeg/README libjpeg
 	License compat/libpng/LICENSE libpng
-	LIcense compat/libtiff/COPYRIGHT libtiff
+	License compat/libtiff/COPYRIGHT libtiff
   }
   Clean {Run make clean}
 }
