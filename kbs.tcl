@@ -2668,7 +2668,7 @@ Package tktable2.10 {
 #@verbatim
 Package tcltls {
   Require {Use libressl-static}
-  Source {Wget https://core.tcl.tk/tcltls/uv/tcltls-1.7.16.tar.gz}
+  Source {Wget https://core.tcl.tk/tcltls/uv/tcltls-1.7.22.tar.gz}
   Configure {
 	Config [Get srcdir-sys] --with-ssl=libressl --with-openssl-dir=[Get builddir] --enable-static-ssl --disable-rpath --enable-threads
 	
@@ -2676,14 +2676,14 @@ Package tcltls {
   Make {Run make}
   Install {
 	Run make install
-	Libdir tcltls1.7.16
+	Libdir tcltls1.7.22
   }
   Clean {Run make clean}
   Test {Run make test}
 }
 
 Package libressl-static {
-  Source {Wget https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.8.2.tar.gz}
+  Source {Wget https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.4.2.tar.gz}
   Configure {
 	Config [Get srcdir-sys] --enable-static
 	
@@ -2729,18 +2729,6 @@ Package trofs0.4.9 {
 #@endverbatim
 ## @defgroup udp
 #@verbatim
-Package udp1.0.8 {
-  Source {Cvs tcludp.cvs.sourceforge.net:/cvsroot/tcludp -r tcludp-1_0_8 tcludp}
-  Configure {
-    if {[Get sys] eq {unix}} {
-      file attributes [Get srcdir]/tclconfig/install-sh -permissions u+x
-    }
-    Config [Get srcdir-sys]
-  }
-  Make {Run make binaries}
-  Install {Run make install-binaries}
-  Clean {Run make clean}
-}
 Package udp1.0.11 {
   Source {Wget http://prdownloads.sourceforge.net/sourceforge/tcludp/1.0.11/tcludp-1.0.11.tar.gz}
   Configure {

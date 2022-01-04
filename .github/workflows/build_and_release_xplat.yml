@@ -3,9 +3,8 @@ name: build-and-release
 on:
     push:
         branches: [master]
-    pull_request:
-        branches: [master]
-
+        tags:
+             - "v*"
 defaults:
     run:
         shell: bash
@@ -60,12 +59,22 @@ jobs:
             - name: Display structure of downloaded files
               run: ls -R
 
-            - name: Release result
+            - name: Release nightly
+              if: ${{ ! startsWith(github.ref, 'refs/tags/v') }}
               uses: marvinpinto/action-automatic-releases@v1.2.1
               with:
                   repo_token: "${{ secrets.GITHUB_TOKEN }}"
                   automatic_release_tag: "latest"
                   prerelease: true
                   title: "Development Build"
+                  files: |
+                    tarballs/*.tar.bz2
+
+            - name: Release tagged version
+              if:  ${{ startsWith(github.ref, 'refs/tags/v') }}
+              uses: marvinpinto/action-automatic-releases@v1.2.1
+              with:
+                  repo_token: "${{ secrets.GITHUB_TOKEN }}"
+                  prerelease: false
                   files: |
                     tarballs/*.tar.bz2
