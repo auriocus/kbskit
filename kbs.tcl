@@ -2855,7 +2855,7 @@ Package silkicons1.3 {
 ##@verbatim
 Package vectcl0.3 {
    Require {Use tcl8.6}
-   Source {Wget https://github.com/auriocus/VecTcl/archive/v0.3.tar.gz}
+   Source {Wget https://github.com/auriocus/VecTcl/archive/8cce67a4f4d54bcb67b601af6569d13407943d4d.zip}
    Configure {
      Config [Get srcdir-sys]
    }
