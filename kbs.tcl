@@ -2670,7 +2670,13 @@ Package tcltls {
   Require {Use libressl-static}
   Source {Wget https://core.tcl.tk/tcltls/uv/tcltls-1.7.22.tar.gz}
   Configure {
-	Config [Get srcdir-sys] --with-ssl=libressl --with-openssl-dir=[Get builddir] --enable-static-ssl --disable-rpath --enable-threads
+    if {[Get sys] eq {unix}} {
+		# on Linux, -lpthread is required in the link step
+		set extralibs {LIBS=-lpthread}
+	} else {
+		set extralibs {}
+	}
+	Config [Get srcdir-sys] {*}$extralibs --with-ssl=libressl --with-openssl-dir=[Get builddir] --enable-static-ssl --disable-rpath --enable-threads
 	
    }
   Make {Run make}
