@@ -2230,12 +2230,12 @@ Package kbskit8.6 {
 
 
     if {[Get -threads] in {--enable-threads --enable-threads=yes {}}} {
-	  set bundledpkgs thread2.8.6
+	  set bundledpkgs thread2.8.7
     } else {
       set bundledpkgs ""
     }
 
-	lappend bundledpkgs itcl4.2.1 sqlite3.34.0 tdbc1.1.2 tdbcmysql1.1.2 tdbcodbc1.1.2 tdbcpostgres1.1.2
+	lappend bundledpkgs itcl4.2.2 sqlite3.36.0 tdbc1.1.3 tdbcmysql1.1.3 tdbcodbc1.1.3 tdbcpostgres1.1.3
 	
 	set MYKITVQ $bundledpkgs
 	set MYKITMK $bundledpkgs
@@ -2410,20 +2410,20 @@ Package tcl8.5-static {
 ## @defgroup tcl
 #@verbatim
 Package tcl8.6 {
-  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.11/tcl8.6.11-src.tar.gz}
+  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.12/tcl8.6.12-src.tar.gz}
   Configure {Config [Get srcdir-sys]/[Get sys]}
   Make {Run make}
   Install {Run make install install-private-headers
   License license.terms Tcl8.6
-  License pkgs/itcl4.2.1/license.terms itcl4
-  License pkgs/itcl4.2.1/doc/license.terms itcl4-orig
-  License pkgs/tdbc1.1.2/license.terms tdbc
-  License pkgs/tdbcpostgres1.1.2/license.terms tdbc-postgres
-  License pkgs/thread2.8.6/license.terms Thread
-  License pkgs/tdbcmysql1.1.2/license.terms tdbc-mysql
-  License pkgs/tdbcsqlite3-1.1.2/license.terms tdbc-sqlite3
-  License pkgs/tdbcodbc1.1.2/license.terms tdbc-odbc
-  License pkgs/sqlite3.34.0/license.terms SQLite3
+  License pkgs/itcl4.2.2/license.terms itcl4
+  License pkgs/itcl4.2.2/doc/license.terms itcl4-orig
+  License pkgs/tdbc1.1.3/license.terms tdbc
+  License pkgs/tdbcpostgres1.1.3/license.terms tdbc-postgres
+  License pkgs/thread2.8.7/license.terms Thread
+  License pkgs/tdbcmysql1.1.3/license.terms tdbc-mysql
+  License pkgs/tdbcsqlite3-1.1.3/license.terms tdbc-sqlite3
+  License pkgs/tdbcodbc1.1.3/license.terms tdbc-odbc
+  License pkgs/sqlite3.36.0/license.terms SQLite3
   }
   Clean {Run make clean}
   Test {Run make test}
@@ -2443,15 +2443,15 @@ Package tcl8.6-static {
       file copy -force [Get builddir]/tcl8.6-static/libtcl86.a [Get builddir]/lib/libtcl86s.a
     }
 	License license.terms Tcl8.6
-    License pkgs/itcl4.2.1/license.terms itcl4
-    License pkgs/itcl4.2.1/doc/license.terms itcl4-orig
-    License pkgs/tdbc1.1.2/license.terms tdbc
-    License pkgs/tdbcpostgres1.1.2/license.terms tdbc-postgres
-    License pkgs/thread2.8.6/license.terms Thread
-    License pkgs/tdbcmysql1.1.2/license.terms tdbc-mysql
-    License pkgs/tdbcsqlite3-1.1.2/license.terms tdbc-sqlite3
-    License pkgs/tdbcodbc1.1.2/license.terms tdbc-odbc
-    License pkgs/sqlite3.34.0/license.terms SQLite3
+    License pkgs/itcl4.2.2/license.terms itcl4
+    License pkgs/itcl4.2.2/doc/license.terms itcl4-orig
+    License pkgs/tdbc1.1.3/license.terms tdbc
+    License pkgs/tdbcpostgres1.1.3/license.terms tdbc-postgres
+    License pkgs/thread2.8.7/license.terms Thread
+    License pkgs/tdbcmysql1.1.3/license.terms tdbc-mysql
+    License pkgs/tdbcsqlite3-1.1.3/license.terms tdbc-sqlite3
+    License pkgs/tdbcodbc1.1.3/license.terms tdbc-odbc
+    License pkgs/sqlite3.36.0/license.terms SQLite3
   }
   Clean {Run make clean}
   Test {Run make test}
@@ -2540,7 +2540,7 @@ Package tk8.5-static {
 #@verbatim
 Package tk8.6 {
   Require {Use tcl8.6}
-  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.11/tk8.6.11-src.tar.gz}
+  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.12/tk8.6.12-src.tar.gz}
   
   Configure {
     if {$::tcl_platform(os) == "Darwin"} {
@@ -2670,6 +2670,7 @@ Package tcltls {
   Require {Use libressl-static}
   Source {Wget https://core.tcl.tk/tcltls/uv/tcltls-1.7.22.tar.gz}
   Configure {
+	PatchFile [Get srcdir-sys] 1 tcltls1.7.22.patch
     if {[Get sys] eq {unix}} {
 		# on Linux, -lpthread is required in the link step
 		set extralibs {LIBS=-lpthread}
@@ -2689,7 +2690,7 @@ Package tcltls {
 }
 
 Package libressl-static {
-  Source {Wget https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.4.2.tar.gz}
+  Source {Wget https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.5.2.tar.gz}
   Configure {
 	Config [Get srcdir-sys] --enable-static --with-pic
 	
