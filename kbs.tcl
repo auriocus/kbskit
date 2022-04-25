@@ -2692,6 +2692,7 @@ Package tcltls {
 Package libressl-static {
   Source {Wget https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.5.2.tar.gz}
   Configure {
+	PatchFile [Get srcdir-sys] 1 libressl.3.5.2.patch
 	Config [Get srcdir-sys] --enable-static --with-pic
 	
    }
