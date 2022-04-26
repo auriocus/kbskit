@@ -561,6 +561,7 @@ namespace eval ::kbs::config {
 #
 # @param[in] file	file name to convert
 proc ::kbs::config::_sys {file} {
+  return $file
   if {$::tcl_platform(platform) eq {windows} && [string index $file 1] eq {:}} {
     return "/[string tolower [string index $file 0]][string range $file 2 end]"
   } else {
