@@ -561,7 +561,6 @@ namespace eval ::kbs::config {
 #
 # @param[in] file	file name to convert
 proc ::kbs::config::_sys {file} {
-  return $file
   if {$::tcl_platform(platform) eq {windows} && [string index $file 1] eq {:}} {
     return "/[string tolower [string index $file 0]][string range $file 2 end]"
   } else {
@@ -1397,7 +1396,8 @@ proc ::kbs::config::Get {var} {
 # @param[in] striplevel number of path elements to be removed from the diff header
 # @param[in] patch      output of diff -ru
 
-proc ::kbs::config::PatchFile {dir striplevel patchfile} {
+proc ::kbs::config::PatchFile {striplevel patchfile} {
+	set dir [Get srcdir]
 	set fd [open [file join [Get basedir] $patchfile]]
 	fconfigure $fd -encoding binary
 	Patch $dir $striplevel [read $fd]
@@ -2638,7 +2638,7 @@ Package tksqlite0.5.13 {
 Package tkpath0.3.3 {
   Source {Wget http://prdownloads.sourceforge.net/kbskit/kbs/0.4.9/tkpath0.3.3.tgz}
   Configure {
-	PatchFile [Get srcdir-sys] 1 tkpath0.3.3.patch
+	PatchFile 1 tkpath0.3.3.patch
 	file copy -force [Get srcdir]/../tk8.6/win/tkWinDefault.h [Get builddir]/include
     file copy -force [Get srcdir]/../tk8.6/unix/tkUnixDefault.h [Get builddir]/include
     file copy -force [Get srcdir]/../tk8.6/macosx/tkMacOSXDefault.h [Get builddir]/include
@@ -2654,7 +2654,7 @@ Package tkpath0.3.3 {
 Package tktable2.10 {
   Source {Cvs tktable.cvs.sourceforge.net:/cvsroot/tktable -r tktable-2-10-0 tktable}
   Configure {
-	PatchFile [Get srcdir-sys] 1 tktable2.10.patch
+	PatchFile 1 tktable2.10.patch
     Config [Get srcdir-sys]
   }
   Make {Run make binaries}
@@ -2671,7 +2671,7 @@ Package tcltls {
   Require {Use libressl-static}
   Source {Wget https://core.tcl.tk/tcltls/uv/tcltls-1.7.22.tar.gz}
   Configure {
-	PatchFile [Get srcdir-sys] 1 tcltls1.7.22.patch
+	PatchFile 1 tcltls1.7.22.patch
     if {[Get sys] eq {unix}} {
 		# on Linux, -lpthread is required in the link step
 		set extralibs {LIBS=-lpthread}
@@ -2693,7 +2693,7 @@ Package tcltls {
 Package libressl-static {
   Source {Wget https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.5.2.tar.gz}
   Configure {
-	PatchFile [Get srcdir-sys] 1 libressl.3.5.2.patch
+	PatchFile 1 libressl.3.5.2.patch
 	Config [Get srcdir-sys] --enable-static --with-pic
 	
    }
@@ -2714,7 +2714,7 @@ Package treectrl2.4.3 {
   Source {Wget https://github.com/apnadkarni/tktreectrl/archive/946f5b33b35ebf3c63338f4ec6466a0c082103fb.zip}
   Configure {
 	# fix bogus garbage collection flag
-	PatchFile [Get srcdir-sys] 1 treectrl2.4.2.patch
+	PatchFile 1 treectrl2.4.2.patch
     file attributes [Get srcdir]/configure -permissions u+x
 	# fix wrong detection of Tk private headers
     Config [Get srcdir-sys]
@@ -2939,7 +2939,7 @@ Package photoresize0.2 {
 Package vtk7.1 {
 	Source {Wget https://www.vtk.org/files/release/7.1/VTK-7.1.1.tar.gz}
 	Configure {
-		PatchFile [Get srcdir-sys] 1 vtk7.1.patch
+		PatchFile 1 vtk7.1.patch
 		Run cmake [Get srcdir-sys] -G "Unix Makefiles" -DVTK_Group_Tk:BOOL=ON -DVTK_WRAP_TCL:BOOL=ON -DTCL_INCLUDE_PATH:PATH=[Get builddir-sys]/include -DTCL_LIBRARY:FILEPATH=[Get builddir-sys]/lib/libtcl8.6.dylib -DTK_LIBRARY:FILEPATH=[Get builddir-sys]/lib/libtk8.6.dylib -DTCL_TCLSH=[Get builddir-sys]/bin/tclsh8.6 -DCMAKE_INSTALL_PREFIX=[Get builddir-sys]
 	}
 	Make { Run make }
@@ -2958,7 +2958,7 @@ Package vtk6.3 {
 Package vtk5.10 {
 	Source {Wget https://gitlab.kitware.com/vtk/vtk/-/archive/v5.10.1/vtk-v5.10.1.tar.gz}
 	Configure {
-		PatchFile [Get srcdir-sys] 1 vtk5.10.patch
+		PatchFile 1 vtk5.10.patch
 		Run cmake [Get srcdir-sys] -G "Unix Makefiles" -DVTK_Group_Tk:BOOL=ON -DVTK_WRAP_TCL:BOOL=ON -DTCL_INCLUDE_PATH:PATH=[Get builddir-sys]/include -DTCL_LIBRARY:FILEPATH=[Get builddir-sys]/lib/libtcl8.6.dylib -DTK_LIBRARY:FILEPATH=[Get builddir-sys]/lib/libtk8.6.dylib -DTCL_TCLSH=[Get builddir-sys]/bin/tclsh8.6 -DCMAKE_INSTALL_PREFIX=[Get builddir-sys] -DBUILD_SHARED_LIBS:BOOL=ON
 	}
 	Make { Run make }
