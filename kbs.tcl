@@ -2690,11 +2690,26 @@ Package tcltls {
   Test {Run make test}
 }
 
+Package libcurl {
+  Require {Use libressl-static}
+  Source {Wget https://curl.se/download/curl-7.82.0.tar.bz2}
+  Configure {
+	Config [Get srcdir-sys] --with-openssl=[Get builddir] --enable-static --disable-shared --with-pic
+   }
+  Make {Run make}
+  Install {
+	Run make install
+	Libdir curl-7.82.0
+  }
+  Clean {Run make clean}
+  Test {Run make test}
+}
+
 Package libressl-static {
   Source {Wget https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.5.2.tar.gz}
   Configure {
 	PatchFile 1 libressl.3.5.2.patch
-	Config [Get srcdir-sys] --enable-static --with-pic
+	Config [Get srcdir-sys] --enable-static --disable-shared --with-pic
 	
    }
   Make {Run make}
@@ -2705,6 +2720,22 @@ Package libressl-static {
   Clean {Run make clean}
   Test {Run make test}
 }
+
+Package tclcurl {
+  Require {Use libcurl}
+  Source {Wget https://github.com/flightaware/tclcurl-fa/archive/refs/heads/master.zip}
+  Configure {
+	PatchFile 1 tclcurl.patch
+	Config [Get srcdir-sys] --with-libcurl=[Get builddir]/lib  --with-curlinclude=[Get builddir]/include --with-curlprefix=[Get builddir]
+   }
+  Make {Run make}
+  Install {
+	Run make install
+  }
+  Clean {Run make clean}
+  Test {Run make test}
+}
+
 
 #@endverbatim
 ## @defgroup treectrl
