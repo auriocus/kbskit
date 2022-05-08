@@ -2036,7 +2036,7 @@ Package __ {
 	pdf4tcl0.8.4\
 	photoresize0.1\
 	ral0.11.7 rl_json0.11.0\
-	tcllib1.20 tclx8.4 tdom0.9.2\
+	tcllib1.20 tclx8.4 tdom0.9.3\
 	tkcon tklib0.7 tkpath0.3.3 tktable2.10 tcltls trofs0.4.9\
 	udp1.0.11 ukaz0.2\
 	vectcl0.3 vectcltk0.2\
@@ -2498,9 +2498,9 @@ Package tclx8.4 {
 #@endverbatim
 ## @defgroup tdom
 #@verbatim
-Package tdom0.9.2 {
+Package tdom0.9.3 {
   Source {
-    Wget http://tdom.org/downloads/tdom-0.9.2-src.tgz
+    Wget https://core.tcl-lang.org/tdom/tarball/e5e9feb0a8/tDOM-e5e9feb0a8.tar.gz
   }
   Configure {Config [Get srcdir-sys]}
   Make {Run make binaries}
