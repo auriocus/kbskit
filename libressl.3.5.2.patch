@@ -1,6 +1,6 @@
 diff -ru libressl-static/man/Makefile.am libressl-static-patched/man/Makefile.am
 --- libressl-static/man/Makefile.am	2022-04-20 19:52:17.000000000 +0200
-+++ libressl-static-patched/man/Makefile.am	2022-04-25 23:55:58.000000000 +0200
++++ libressl-static-patched/man/Makefile.am	2022-05-09 08:53:59.000000000 +0200
 @@ -3332,14 +3332,6 @@
  	ln -sf "lh_new.3" "$(DESTDIR)$(mandir)/man3/LHASH_DOALL_ARG_FN_TYPE.3"
  	ln -sf "lh_new.3" "$(DESTDIR)$(mandir)/man3/LHASH_DOALL_FN_TYPE.3"
@@ -33,7 +33,16 @@ diff -ru libressl-static/man/Makefile.am libressl-static-patched/man/Makefile.am
  	-rm -f "$(DESTDIR)$(mandir)/man3/lh_doall_arg.3"
 diff -ru libressl-static/man/Makefile.in libressl-static-patched/man/Makefile.in
 --- libressl-static/man/Makefile.in	2022-04-20 19:52:28.000000000 +0200
-+++ libressl-static-patched/man/Makefile.in	2022-04-25 23:55:30.000000000 +0200
++++ libressl-static-patched/man/Makefile.in	2022-05-09 09:27:01.000000000 +0200
+@@ -910,7 +910,7 @@
+ 
+ install-data-am: install-man
+ 	@$(NORMAL_INSTALL)
+-	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
++
+ install-dvi: install-dvi-am
+ 
+ install-dvi-am:
 @@ -3745,14 +3745,6 @@
  @ENABLE_LIBTLS_ONLY_FALSE@	ln -sf "lh_new.3" "$(DESTDIR)$(mandir)/man3/LHASH_DOALL_ARG_FN_TYPE.3"
  @ENABLE_LIBTLS_ONLY_FALSE@	ln -sf "lh_new.3" "$(DESTDIR)$(mandir)/man3/LHASH_DOALL_FN_TYPE.3"
