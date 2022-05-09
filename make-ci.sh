@@ -2,7 +2,7 @@
 # 
 
 machine=$(uname -sm | tr ' ' -)
-PKGS="sdx tablelist6.16 img1.4.13 tkdnd2.9 photoresize0.2 tdom0.9.3 vectcl0.3 vectcltk0.2 tclcurl"
+PKGS="sdx tclcurl tablelist6.16 img1.4.13 tkdnd2.9 photoresize0.2 tdom0.9.3 vectcl0.3 vectcltk0.2"
 
 
 # compile kbskit + sdx into build dir

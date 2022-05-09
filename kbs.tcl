@@ -2699,7 +2699,7 @@ Package libcurl {
   Make {Run make}
   Install {
 	Run make install
-	Libdir curl-7.82.0
+	Libdir curl-7.83.0
   }
   Clean {Run make clean}
   Test {Run make test}
@@ -2726,12 +2726,7 @@ Package tclcurl {
   Source {Wget https://github.com/flightaware/tclcurl-fa/archive/refs/heads/master.zip}
   Configure {
 	PatchFile 1 tclcurl.patch
-	set LIBS {}
-	if {$tcl_platform(os) eq "Darwin"} {
-		set LIBS [list "LIBS=-framework CoreFoundation -framework SystemConfiguration"]
-	}
-
-	Config [Get srcdir-sys] --with-libcurl=[Get builddir]/lib  --with-curlinclude=[Get builddir]/include --with-curlprefix=[Get builddir] {*}$LIBS }
+	Config [Get srcdir-sys] --with-libcurl=[Get builddir]/lib  --with-curlinclude=[Get builddir]/include --with-curlprefix=[Get builddir] }
   Make {Run make}
   Install {
 	Run make install

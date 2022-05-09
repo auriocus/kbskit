@@ -1,6 +1,7 @@
+Only in tclcurl-patched: .configure.in.swp
 diff -ru tclcurl/Makefile.in tclcurl-patched/Makefile.in
---- tclcurl/Makefile.in	2021-03-18 18:28:21.000000000 +0100
-+++ tclcurl-patched/Makefile.in	2022-04-26 16:07:48.383456736 +0200
+--- tclcurl/Makefile.in	2022-05-09 20:45:52.000000000 +0200
++++ tclcurl-patched/Makefile.in	2022-04-26 21:30:05.000000000 +0200
 @@ -395,7 +395,7 @@
  	done
  	@if test "x$(SHARED_BUILD)" = "x1"; then \
@@ -10,3 +11,58 @@ diff -ru tclcurl/Makefile.in tclcurl-patched/Makefile.in
  	fi
  
  #========================================================================
+Only in tclcurl: Makefile.in.orig
+Only in tclcurl-patched: autom4te.cache
+diff -ru tclcurl/configure tclcurl-patched/configure
+--- tclcurl/configure	2021-03-18 18:28:21.000000000 +0100
++++ tclcurl-patched/configure	2022-05-09 20:43:20.000000000 +0200
+@@ -5130,12 +5130,7 @@
+ # See: http://lists.debian.org/debian-devel-announce/2006/09/msg00018.html
+ 
+ 
+-    vars="`$curlpath/curl-config --libs|sed \
+-    -e 's/\-lkrb5\>//g' \
+-    -e 's/\-lgssapi_krb5//g' \
+-    -e 's/\-lk5crypto//g' \
+-    -e 's/\-lkrb5support//g' \
+- `"
++    vars="`$curlpath/curl-config --static-libs`"
+     for i in $vars; do
+ 	if test "${TEA_PLATFORM}" = "windows" -a "$GCC" = "yes" ; then
+ 	    # Convert foo.lib to -lfoo for GCC.  No-op if not *.lib
+@@ -5145,6 +5140,12 @@
+     done
+ 
+ 
++#TEA_ADD_LIBS([`$curlpath/curl-config --libs|sed \
++#    -e 's/\-lkrb5\>//g' \
++#    -e 's/\-lgssapi_krb5//g' \
++#    -e 's/\-lk5crypto//g' \
++#    -e 's/\-lkrb5support//g' \
++# `])
+ 
+ 
+ #--------------------------------------------------------------------
+diff -ru tclcurl/configure.in tclcurl-patched/configure.in
+--- tclcurl/configure.in	2021-03-18 18:28:21.000000000 +0100
++++ tclcurl-patched/configure.in	2022-05-09 20:43:05.000000000 +0200
+@@ -137,12 +137,13 @@
+ # We need to modify this original line to strip a few things
+ # See: http://lists.debian.org/debian-devel-announce/2006/09/msg00018.html
+ 
+-TEA_ADD_LIBS([`$curlpath/curl-config --libs|sed \
+-    -e 's/\-lkrb5\>//g' \
+-    -e 's/\-lgssapi_krb5//g' \
+-    -e 's/\-lk5crypto//g' \
+-    -e 's/\-lkrb5support//g' \
+- `])
++TEA_ADD_LIBS([`$curlpath/curl-config --static-libs`])
++#TEA_ADD_LIBS([`$curlpath/curl-config --libs|sed \
++#    -e 's/\-lkrb5\>//g' \
++#    -e 's/\-lgssapi_krb5//g' \
++#    -e 's/\-lk5crypto//g' \
++#    -e 's/\-lkrb5support//g' \
++# `])
+ 
+ 
+ #--------------------------------------------------------------------
