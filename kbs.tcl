@@ -2692,7 +2692,7 @@ Package tcltls {
 
 Package libcurl {
   Require {Use libressl-static}
-  Source {Wget https://curl.se/download/curl-7.82.0.tar.bz2}
+  Source {Wget https://curl.se/download/curl-7.83.0.zip}
   Configure {
 	Config [Get srcdir-sys] --with-openssl=[Get builddir] --enable-static --disable-shared --with-pic --without-zstd --without-brotli --without-nghttp2 --without-nghttp3  --without-librtmp
    }
