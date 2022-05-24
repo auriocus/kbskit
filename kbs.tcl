@@ -2694,7 +2694,9 @@ Package libcurl {
   Require {Use libressl-static}
   Source {Wget https://curl.se/download/curl-7.83.0.zip}
   Configure {
-	Config [Get srcdir-sys] --with-openssl=[Get builddir] --enable-static --disable-shared --with-pic --without-zstd --without-brotli --without-nghttp2 --without-nghttp3  --without-librtmp
+	set ::env(PKG_CONFIG_PATH) [Get builddir-sys]/lib/pkgconfig
+	parray env
+	Config [Get srcdir-sys] --with-openssl=[Get builddir-sys] --enable-static --disable-shared --with-pic --without-zstd --without-brotli --without-nghttp2 --without-nghttp3  --without-librtmp --without-libidn2 --without-quiche --without-msh3 --without-schannel
    }
   Make {Run make}
   Install {
@@ -2726,7 +2728,7 @@ Package tclcurl {
   Source {Wget https://github.com/flightaware/tclcurl-fa/archive/refs/heads/master.zip}
   Configure {
 	PatchFile 1 tclcurl.patch
-	Config [Get srcdir-sys] --with-libcurl=[Get builddir]/lib  --with-curlinclude=[Get builddir]/include --with-curlprefix=[Get builddir] }
+	Config [Get srcdir-sys] --with-libcurl=[Get builddir-sys]/lib  --with-curlinclude=[Get builddir-sys]/include --with-curlprefix=[Get builddir-sys] }
   Make {Run make}
   Install {
 	Run make install
