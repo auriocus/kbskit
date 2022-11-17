@@ -30,6 +30,7 @@ jobs:
               run: |
                 echo "CFLAGS=-mmacosx-version-min=10.13" >> $GITHUB_ENV
                 echo "MACOSX_DEPLOYMENT_TARGET=10.13" >> $GITHUB_ENV
+                echo 'FORCE_ARCH="-arch x86_64"' >> $GITHUB_ENV
 
             - name: build application
               run: ./make-ci.sh
