@@ -2036,7 +2036,7 @@ Package __ {
 	pdf4tcl0.8.4\
 	photoresize0.1\
 	ral0.11.7 rl_json0.11.0\
-	tcllib1.20 tclx8.4 tdom0.9.3\
+	tcllib1.21 tclx8.4 tdom0.9.3\
 	tkcon tklib0.7 tkpath0.3.3 tktable2.10 tcltls trofs0.4.9\
 	udp1.0.11 ukaz0.2\
 	vectcl0.3 vectcltk0.2\
@@ -2231,12 +2231,12 @@ Package kbskit8.6 {
 
 
     if {[Get -threads] in {--enable-threads --enable-threads=yes {}}} {
-	  set bundledpkgs thread2.8.7
+	  set bundledpkgs thread2.8.8
     } else {
       set bundledpkgs ""
     }
 
-	lappend bundledpkgs itcl4.2.2 sqlite3.36.0 tdbc1.1.3 tdbcmysql1.1.3 tdbcodbc1.1.3 tdbcpostgres1.1.3
+	lappend bundledpkgs itcl4.2.3 sqlite3.39.4 tdbc1.1.5 tdbcmysql1.1.5 tdbcodbc1.1.5 tdbcpostgres1.1.5
 	
 	set MYKITVQ $bundledpkgs
 	set MYKITMK $bundledpkgs
@@ -2380,51 +2380,29 @@ Package snack2.2 {
 #@endverbatim
 ## @defgroup tablelist
 #@verbatim
-Package tablelist6.16 {
-  Source {Wget http://www.nemethi.de/tablelist/tablelist6.16.tar.gz}
+Package tablelist6.20 {
+  Source {Wget http://www.nemethi.de/tablelist/tablelist6.20.tar.gz}
   Configure {}
   Install {Tcl}
 }
 #@endverbatim
 ## @defgroup tcl
 #@verbatim
-Package tcl8.5 {
-  Source {Wget http://prdownloads.sourceforge.net/tcl/tcl8.5.19-src.tar.gz}
-  Configure {Config [Get srcdir-sys]/[Get sys]}
-  Make {Run make}
-  Install {Run make install-binaries install-libraries install-private-headers}
-  Clean {Run make clean}
-  Test {Run make test}
-}
-#@endverbatim
-## @defgroup tcl
-#@verbatim
-Package tcl8.5-static {
-  Source {Link tcl8.5}
-  Configure {Config [Get srcdir-sys]/[Get sys] --disable-shared}
-  Make {Run make}
-  Install {Run make install-binaries install-libraries install-private-headers}
-  Clean {Run make clean}
-  Test {Run make test}
-}
-#@endverbatim
-## @defgroup tcl
-#@verbatim
 Package tcl8.6 {
-  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.12/tcl8.6.12-src.tar.gz}
+  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.13/tcl8.6.13rc2-src.tar.gz}
   Configure {Config [Get srcdir-sys]/[Get sys]}
   Make {Run make}
   Install {Run make install install-private-headers
   License license.terms Tcl8.6
-  License pkgs/itcl4.2.2/license.terms itcl4
-  License pkgs/itcl4.2.2/doc/license.terms itcl4-orig
-  License pkgs/tdbc1.1.3/license.terms tdbc
-  License pkgs/tdbcpostgres1.1.3/license.terms tdbc-postgres
-  License pkgs/thread2.8.7/license.terms Thread
-  License pkgs/tdbcmysql1.1.3/license.terms tdbc-mysql
-  License pkgs/tdbcsqlite3-1.1.3/license.terms tdbc-sqlite3
-  License pkgs/tdbcodbc1.1.3/license.terms tdbc-odbc
-  License pkgs/sqlite3.36.0/license.terms SQLite3
+  License pkgs/itcl4.2.3/license.terms itcl4
+  License pkgs/itcl4.2.3/doc/license.terms itcl4-orig
+  License pkgs/tdbc1.1.5/license.terms tdbc
+  License pkgs/tdbcpostgres1.1.5/license.terms tdbc-postgres
+  License pkgs/thread2.8.8/license.terms Thread
+  License pkgs/tdbcmysql1.1.5/license.terms tdbc-mysql
+  License pkgs/tdbcsqlite3-1.1.5/license.terms tdbc-sqlite3
+  License pkgs/tdbcodbc1.1.5/license.terms tdbc-odbc
+  License pkgs/sqlite3.39.4/license.terms SQLite3
   }
   Clean {Run make clean}
   Test {Run make test}
@@ -2444,15 +2422,15 @@ Package tcl8.6-static {
       file copy -force [Get builddir]/tcl8.6-static/libtcl86.a [Get builddir]/lib/libtcl86s.a
     }
 	License license.terms Tcl8.6
-    License pkgs/itcl4.2.2/license.terms itcl4
-    License pkgs/itcl4.2.2/doc/license.terms itcl4-orig
-    License pkgs/tdbc1.1.3/license.terms tdbc
-    License pkgs/tdbcpostgres1.1.3/license.terms tdbc-postgres
-    License pkgs/thread2.8.7/license.terms Thread
-    License pkgs/tdbcmysql1.1.3/license.terms tdbc-mysql
-    License pkgs/tdbcsqlite3-1.1.3/license.terms tdbc-sqlite3
-    License pkgs/tdbcodbc1.1.3/license.terms tdbc-odbc
-    License pkgs/sqlite3.36.0/license.terms SQLite3
+    License pkgs/itcl4.2.3/license.terms itcl4
+    License pkgs/itcl4.2.3/doc/license.terms itcl4-orig
+    License pkgs/tdbc1.1.5/license.terms tdbc
+    License pkgs/tdbcpostgres1.1.5/license.terms tdbc-postgres
+    License pkgs/thread2.8.8/license.terms Thread
+    License pkgs/tdbcmysql1.1.5/license.terms tdbc-mysql
+    License pkgs/tdbcsqlite3-1.1.5/license.terms tdbc-sqlite3
+    License pkgs/tdbcodbc1.1.5/license.terms tdbc-odbc
+    License pkgs/sqlite3.39.4/license.terms SQLite3
   }
   Clean {Run make clean}
   Test {Run make test}
@@ -2462,8 +2440,8 @@ Package tcl8.6-static {
 #@endverbatim
 ## @defgroup tcllib
 #@verbatim
-Package tcllib1.20 {
-  Source {Wget https://github.com/tcltk/tcllib/archive/master.zip}
+Package tcllib1.21 {
+  Source {Wget https://core.tcl-lang.org/tcllib/uv/tcllib-1.21.tar.gz}
   Configure {Config [Get srcdir-sys]}
   Make {}
   Install {Run make install-libraries
@@ -2541,7 +2519,7 @@ Package tk8.5-static {
 #@verbatim
 Package tk8.6 {
   Require {Use tcl8.6}
-  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.12/tk8.6.12-src.tar.gz}
+  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.13/tk8.6.13rc2-src.tar.gz}
   
   Configure {
     if {$::tcl_platform(os) == "Darwin"} {
