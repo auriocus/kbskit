@@ -2796,8 +2796,7 @@ Package vqtcl4.1-static {
   Source {Link vqtcl4.1}
   Configure {Config [Get srcdir-sys] --disable-shared}
   Make {
-    set MYFLAGS "-D__[exec uname -p]__"
-    Run make PKG_CFLAGS=$MYFLAGS
+    Run make
   }
   Install {Run make install-binaries
   License license.terms}
