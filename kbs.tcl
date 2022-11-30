@@ -2236,7 +2236,7 @@ Package kbskit8.6 {
       set bundledpkgs ""
     }
 
-	lappend bundledpkgs itcl4.2.3 sqlite3.39.4 tdbc1.1.5 tdbcmysql1.1.5 tdbcodbc1.1.5 tdbcpostgres1.1.5
+	lappend bundledpkgs itcl4.2.3 sqlite3.40.0 tdbc1.1.5 tdbcmysql1.1.5 tdbcodbc1.1.5 tdbcpostgres1.1.5
 	
 	set MYKITVQ $bundledpkgs
 	set MYKITMK $bundledpkgs
@@ -2402,7 +2402,7 @@ Package tcl8.6 {
   License pkgs/tdbcmysql1.1.5/license.terms tdbc-mysql
   License pkgs/tdbcsqlite3-1.1.5/license.terms tdbc-sqlite3
   License pkgs/tdbcodbc1.1.5/license.terms tdbc-odbc
-  License pkgs/sqlite3.39.4/license.terms SQLite3
+  License pkgs/sqlite3.40.0/license.terms SQLite3
   }
   Clean {Run make clean}
   Test {Run make test}
@@ -2430,7 +2430,7 @@ Package tcl8.6-static {
     License pkgs/tdbcmysql1.1.5/license.terms tdbc-mysql
     License pkgs/tdbcsqlite3-1.1.5/license.terms tdbc-sqlite3
     License pkgs/tdbcodbc1.1.5/license.terms tdbc-odbc
-    License pkgs/sqlite3.39.4/license.terms SQLite3
+    License pkgs/sqlite3.40.0/license.terms SQLite3
   }
   Clean {Run make clean}
   Test {Run make test}
@@ -2670,7 +2670,7 @@ Package tcltls {
 
 Package libcurl {
   Require {Use libressl-static}
-  Source {Wget https://curl.se/download/curl-7.83.0.zip}
+  Source {Wget https://curl.se/download/curl-7.86.0.zip}
   Configure {
 	set ::env(PKG_CONFIG_PATH) [Get builddir-sys]/lib/pkgconfig
 	parray env
@@ -2679,16 +2679,16 @@ Package libcurl {
   Make {Run make}
   Install {
 	Run make install
-	Libdir curl-7.83.0
+	Libdir curl-7.86.0
   }
   Clean {Run make clean}
   Test {Run make test}
 }
 
 Package libressl-static {
-  Source {Wget https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.5.2.tar.gz}
+  Source {Wget https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.6.1.tar.gz}
   Configure {
-	PatchFile 1 libressl.3.5.2.patch
+	PatchFile 1 libressl.3.6.1.patch
 	Config [Get srcdir-sys] --enable-static --disable-shared --with-pic
 	
    }
