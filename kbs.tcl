@@ -54,9 +54,9 @@ if test ! -r ./kbs.tcl ; then \
   echo "Please start from directory containing the file 'kbs.tcl'"; exit 1 ;\
 fi;
 # bootstrap for building tcl.. \
-TCLSRC="tcl-core8.6.12-src.tar.gz" ;\
-TCLURL="https://sourceforge.net/projects/tcl/files/Tcl/8.6.12/$TCLSRC/download" ;\
-SRCROOT="tcl8.6.12" ;\
+TCLSRC="tcl-core8.6.13-src.tar.gz" ;\
+TCLURL="https://sourceforge.net/projects/tcl/files/Tcl/8.6.13/$TCLSRC/download" ;\
+SRCROOT="tcl8.6.13" ;\
 if test "`pwd`" = "/" ; then \
 PREFIX=/`uname` ;\
 else \
@@ -2389,7 +2389,7 @@ Package tablelist6.20 {
 ## @defgroup tcl
 #@verbatim
 Package tcl8.6 {
-  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.13/tcl8.6.13rc2-src.tar.gz}
+  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.13/tcl8.6.13-src.tar.gz}
   Configure {Config [Get srcdir-sys]/[Get sys]}
   Make {Run make}
   Install {Run make install install-private-headers
@@ -2519,7 +2519,7 @@ Package tk8.5-static {
 #@verbatim
 Package tk8.6 {
   Require {Use tcl8.6}
-  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.13/tk8.6.13rc2-src.tar.gz}
+  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.13/tk8.6.13-src.tar.gz}
   
   Configure {
     if {$::tcl_platform(os) == "Darwin"} {
