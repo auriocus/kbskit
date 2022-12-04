@@ -2706,7 +2706,16 @@ Package tclcurl {
   Source {Wget https://github.com/flightaware/tclcurl-fa/archive/refs/heads/master.zip}
   Configure {
 	PatchFile 1 tclcurl.patch
-	Config [Get srcdir-sys] --with-libcurl=[Get builddir-sys]/lib  --with-curlinclude=[Get builddir-sys]/include --with-curlprefix=[Get builddir-sys] }
+    if {$::tcl_platform(platform) eq {windows}} {
+		# linking to static lib on Windows requires an extra define
+		# from https://curl.se/docs/install.html
+		set EXTRAFLAG {CFLAGS=-DCURL_STATICLIB}
+	} else {
+		set EXTRAFLAG {}
+	}
+
+	Config {*}$EXTRAFLAG [Get srcdir-sys] --with-libcurl=[Get builddir-sys]/lib  --with-curlinclude=[Get builddir-sys]/include --with-curlprefix=[Get builddir-sys] }
+
   Make {Run make}
   Install {
 	Run make install
