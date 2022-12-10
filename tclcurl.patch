@@ -1,7 +1,7 @@
-Only in tclcurl-patched: .configure.in.swp
-diff -ru tclcurl/Makefile.in tclcurl-patched/Makefile.in
---- tclcurl/Makefile.in	2022-05-09 20:45:52.000000000 +0200
-+++ tclcurl-patched/Makefile.in	2022-04-26 21:30:05.000000000 +0200
+Only in tcp: .configure.in.swp
+diff -ru tclcurl/Makefile.in tcp/Makefile.in
+--- tclcurl/Makefile.in	2021-03-18 18:28:21.000000000 +0100
++++ tcp/Makefile.in	2022-11-30 23:36:31.000000000 +0100
 @@ -395,7 +395,7 @@
  	done
  	@if test "x$(SHARED_BUILD)" = "x1"; then \
@@ -11,12 +11,158 @@ diff -ru tclcurl/Makefile.in tclcurl-patched/Makefile.in
  	fi
  
  #========================================================================
-Only in tclcurl: Makefile.in.orig
-Only in tclcurl-patched: autom4te.cache
-diff -ru tclcurl/configure tclcurl-patched/configure
+Only in tcp: autom4te.cache
+diff -ru tclcurl/configure tcp/configure
 --- tclcurl/configure	2021-03-18 18:28:21.000000000 +0100
-+++ tclcurl-patched/configure	2022-05-09 20:43:20.000000000 +0200
-@@ -5130,12 +5130,7 @@
++++ tcp/configure	2022-12-10 22:35:17.000000000 +0100
+@@ -1624,6 +1624,52 @@
+ 
+ } # ac_fn_c_check_header_compile
+ 
++# ac_fn_c_try_link LINENO
++# -----------------------
++# Try to link conftest.$ac_ext, and return whether this succeeded.
++ac_fn_c_try_link ()
++{
++  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
++  rm -f conftest.$ac_objext conftest$ac_exeext
++  if { { ac_try="$ac_link"
++case "(($ac_try" in
++  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
++  *) ac_try_echo=$ac_try;;
++esac
++eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
++$as_echo "$ac_try_echo"; } >&5
++  (eval "$ac_link") 2>conftest.err
++  ac_status=$?
++  if test -s conftest.err; then
++    grep -v '^ *+' conftest.err >conftest.er1
++    cat conftest.er1 >&5
++    mv -f conftest.er1 conftest.err
++  fi
++  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
++  test $ac_status = 0; } && {
++	 test -z "$ac_c_werror_flag" ||
++	 test ! -s conftest.err
++       } && test -s conftest$ac_exeext && {
++	 test "$cross_compiling" = yes ||
++	 test -x conftest$ac_exeext
++       }; then :
++  ac_retval=0
++else
++  $as_echo "$as_me: failed program was:" >&5
++sed 's/^/| /' conftest.$ac_ext >&5
++
++	ac_retval=1
++fi
++  # Delete the IPA/IPO (Inter Procedural Analysis/Optimization) information
++  # created by the PGI compiler (conftest_ipa8_conftest.oo), as it would
++  # interfere with the next link command; also delete a directory that is
++  # left behind by Apple's compiler.  We do this before executing the actions.
++  rm -rf conftest.dSYM conftest_ipa8_conftest.oo
++  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
++  as_fn_set_status $ac_retval
++
++} # ac_fn_c_try_link
++
+ # ac_fn_c_check_header_mongrel LINENO HEADER VAR INCLUDES
+ # -------------------------------------------------------
+ # Tests whether HEADER exists, giving a warning if it cannot be compiled using
+@@ -1711,52 +1757,6 @@
+ 
+ } # ac_fn_c_check_header_mongrel
+ 
+-# ac_fn_c_try_link LINENO
+-# -----------------------
+-# Try to link conftest.$ac_ext, and return whether this succeeded.
+-ac_fn_c_try_link ()
+-{
+-  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
+-  rm -f conftest.$ac_objext conftest$ac_exeext
+-  if { { ac_try="$ac_link"
+-case "(($ac_try" in
+-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+-  *) ac_try_echo=$ac_try;;
+-esac
+-eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+-$as_echo "$ac_try_echo"; } >&5
+-  (eval "$ac_link") 2>conftest.err
+-  ac_status=$?
+-  if test -s conftest.err; then
+-    grep -v '^ *+' conftest.err >conftest.er1
+-    cat conftest.er1 >&5
+-    mv -f conftest.er1 conftest.err
+-  fi
+-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; } && {
+-	 test -z "$ac_c_werror_flag" ||
+-	 test ! -s conftest.err
+-       } && test -s conftest$ac_exeext && {
+-	 test "$cross_compiling" = yes ||
+-	 test -x conftest$ac_exeext
+-       }; then :
+-  ac_retval=0
+-else
+-  $as_echo "$as_me: failed program was:" >&5
+-sed 's/^/| /' conftest.$ac_ext >&5
+-
+-	ac_retval=1
+-fi
+-  # Delete the IPA/IPO (Inter Procedural Analysis/Optimization) information
+-  # created by the PGI compiler (conftest_ipa8_conftest.oo), as it would
+-  # interfere with the next link command; also delete a directory that is
+-  # left behind by Apple's compiler.  We do this before executing the actions.
+-  rm -rf conftest.dSYM conftest_ipa8_conftest.oo
+-  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
+-  as_fn_set_status $ac_retval
+-
+-} # ac_fn_c_try_link
+-
+ # ac_fn_c_check_func LINENO FUNC VAR
+ # ----------------------------------
+ # Tests whether FUNC exists, setting the cache variable VAR accordingly
+@@ -5054,7 +5054,7 @@
+ else
+ 
+ 
+-    vars="-I$curlprefix/include"
++    vars="`$curlpath/curl-config --cflags`"
+     for i in $vars; do
+ 	PKG_INCLUDES="$PKG_INCLUDES $i"
+     done
+@@ -5065,23 +5065,14 @@
+ fi
+ 
+ 
+-ac_fn_c_check_header_mongrel "$LINENO" "curl/curl.h" "ac_cv_header_curl_curl_h" "$ac_includes_default"
+-if test "x$ac_cv_header_curl_curl_h" = xyes; then :
+-  headercurl=yes
+-else
+-  headercurl=no
+-fi
+-
+-
+-if test "x$headercurl" = xno ; then
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking checking for headers at $curlinclude" >&5
+-$as_echo_n "checking checking for headers at $curlinclude... " >&6; }
+-    if test  ! -r $curlinclude/curl/curl.h  ; then
+-        as_fn_error $? "cURL headers not found, you may need to install a curl-devel package" "$LINENO" 5
+-    fi
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: found" >&5
+-$as_echo "found" >&6; }
+-fi
++#AC_CHECK_HEADER(curl/curl.h,headercurl=yes, headercurl=no)
++#if test "x$headercurl" = xno ; then
++#    AC_MSG_CHECKING([checking for headers at $curlinclude])
++#    if test [ ! -r $curlinclude/curl/curl.h ] ; then
++#        AC_MSG_ERROR([cURL headers not found, you may need to install a curl-devel package])
++#    fi
++#    AC_MSG_RESULT([found])
++#fi
+ 
+ 
+ # Check whether --with-libcurl was given.
+@@ -5130,12 +5121,7 @@
  # See: http://lists.debian.org/debian-devel-announce/2006/09/msg00018.html
  
  
@@ -30,7 +176,7 @@ diff -ru tclcurl/configure tclcurl-patched/configure
      for i in $vars; do
  	if test "${TEA_PLATFORM}" = "windows" -a "$GCC" = "yes" ; then
  	    # Convert foo.lib to -lfoo for GCC.  No-op if not *.lib
-@@ -5145,6 +5140,12 @@
+@@ -5145,6 +5131,12 @@
      done
  
  
@@ -43,9 +189,37 @@ diff -ru tclcurl/configure tclcurl-patched/configure
  
  
  #--------------------------------------------------------------------
-diff -ru tclcurl/configure.in tclcurl-patched/configure.in
+diff -ru tclcurl/configure.in tcp/configure.in
 --- tclcurl/configure.in	2021-03-18 18:28:21.000000000 +0100
-+++ tclcurl-patched/configure.in	2022-05-09 20:43:05.000000000 +0200
++++ tcp/configure.in	2022-12-10 22:34:56.000000000 +0100
+@@ -105,18 +105,18 @@
+     curlinclude=$withval
+  ],
+  [
+-    TEA_ADD_INCLUDES([-I$curlprefix/include])
++    TEA_ADD_INCLUDES([`$curlpath/curl-config --cflags`])
+      curlinclude=$curlprefix/include
+  ])
+ 
+-AC_CHECK_HEADER(curl/curl.h,headercurl=yes, headercurl=no)
+-if test "x$headercurl" = xno ; then
+-    AC_MSG_CHECKING([checking for headers at $curlinclude])
+-    if test [ ! -r $curlinclude/curl/curl.h ] ; then
+-        AC_MSG_ERROR([cURL headers not found, you may need to install a curl-devel package])
+-    fi
+-    AC_MSG_RESULT([found])
+-fi
++#AC_CHECK_HEADER(curl/curl.h,headercurl=yes, headercurl=no)
++#if test "x$headercurl" = xno ; then
++#    AC_MSG_CHECKING([checking for headers at $curlinclude])
++#    if test [ ! -r $curlinclude/curl/curl.h ] ; then
++#        AC_MSG_ERROR([cURL headers not found, you may need to install a curl-devel package])
++#    fi
++#    AC_MSG_RESULT([found])
++#fi
+ 
+ AC_ARG_WITH(libcurl,
+  [  --with-libcurl          directory containing libcurl],[
 @@ -137,12 +137,13 @@
  # We need to modify this original line to strip a few things
  # See: http://lists.debian.org/debian-devel-announce/2006/09/msg00018.html

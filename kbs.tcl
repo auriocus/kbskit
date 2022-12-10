@@ -2703,18 +2703,18 @@ Package libressl-static {
 
 Package tclcurl {
   Require {Use libcurl}
-  Source {Wget https://github.com/flightaware/tclcurl-fa/archive/refs/heads/master.zip}
+  Source {Wget https://github.com/flightaware/tclcurl-fa/archive/ed4856901dee2784ceeb6d2ee0d621fe05aa0134.zip}
   Configure {
 	PatchFile 1 tclcurl.patch
-    if {$::tcl_platform(platform) eq {windows}} {
+    #if {$::tcl_platform(platform) eq {windows}} {
 		# linking to static lib on Windows requires an extra define
 		# from https://curl.se/docs/install.html
-		set EXTRAFLAG {CFLAGS=-DCURL_STATICLIB}
-	} else {
-		set EXTRAFLAG {}
-	}
+	#	set EXTRAFLAG {CFLAGS=-DCURL_STATICLIB}
+	#} else {
+	#	set EXTRAFLAG {}
+	#}
 
-	Config [Get srcdir-sys] {*}$EXTRAFLAG --with-libcurl=[Get builddir-sys]/lib  --with-curlinclude=[Get builddir-sys]/include --with-curlprefix=[Get builddir-sys] }
+	Config [Get srcdir-sys] --with-libcurl=[Get builddir-sys]/lib  --with-curlinclude=[Get builddir-sys]/include --with-curlprefix=[Get builddir-sys] }
 
   Make {Run make}
   Install {
