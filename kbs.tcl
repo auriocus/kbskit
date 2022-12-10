@@ -2714,7 +2714,7 @@ Package tclcurl {
 	#	set EXTRAFLAG {}
 	#}
 
-	Config [Get srcdir-sys] --with-libcurl=[Get builddir-sys]/lib  --with-curlinclude=[Get builddir-sys]/include --with-curlprefix=[Get builddir-sys] }
+	Config [Get srcdir-sys] --with-curlprefix=[Get builddir-sys] }
 
   Make {Run make}
   Install {
