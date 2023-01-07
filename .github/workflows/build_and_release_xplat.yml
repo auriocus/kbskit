@@ -33,7 +33,7 @@ jobs:
                 echo 'FORCE_ARCH="-arch x86_64"' >> $GITHUB_ENV
 
             - name: build application
-              run: ./make-ci.sh ${{ matrix-os }}
+              run: ./make-ci.sh ${{ matrix.os }}
 
             - name: upload result
               uses: actions/upload-artifact@v2
