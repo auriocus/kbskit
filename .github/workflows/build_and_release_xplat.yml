@@ -14,13 +14,13 @@ jobs:
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
-                os: [macos-12, ubuntu-20.04, windows-latest]
+                os: [macos-12, ubuntu-20.04, windows-2022]
         steps:
             - name: checkout repo
               uses: actions/checkout@v2
 
             - name: Install git sdk
-              if: ${{ matrix.os == 'windows-2019' }}
+              if: ${{ matrix.os == 'windows-2022' }}
               uses: git-for-windows/setup-git-for-windows-sdk@v1
               with:
                 flavor: full
@@ -33,7 +33,7 @@ jobs:
                 echo 'FORCE_ARCH="-arch x86_64"' >> $GITHUB_ENV
 
             - name: build application
-              run: ./make-ci.sh
+              run: ./make-ci.sh ${{ matrix-os }}
 
             - name: upload result
               uses: actions/upload-artifact@v2

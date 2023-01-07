@@ -1,13 +1,20 @@
 #!/bin/bash
 # 
 
+os=$1
 machine=$(uname -sm | tr ' ' -)
-PKGS="sdx tclcurl tablelist6.20 img1.4.13 tkdnd2.9 photoresize0.2 tdom0.9.3 vectcl0.3 vectcltk0.2"
+PKGS="sdx tablelist6.20 img1.4.13 tkdnd2.9 photoresize0.2 tdom0.9.3 vectcl0.3 vectcltk0.2 rl_json0.11.1"
 
+if ! [[ "$os" == windows* ]]; then
+	PKGS="$PKGS tclcurl"
+fi
+
+echo "Building with $PKGS"
+#exit -1
 
 # compile kbskit + sdx into build dir
 builddir="kbskit_$machine"
-MAKEFLAGS=-j4 ./kbs.tcl -r -v -builddir="$(pwd)/$builddir" -make=make -tar=tar install kbskit8.6 $PKGS
+MAKEFLAGS=-j4 ./kbs.tcl -r -v -builddir="$(pwd)/$builddir" -make=make -tar=tar install kbskit8.6 $PKGS "$@"
 # explicit -make=make is needed, because otherwise "gmake" is tried first,
 # which is alien under git-sdk on Github Actions Windows
 
