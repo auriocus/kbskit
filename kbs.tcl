@@ -847,27 +847,41 @@ proc ::kbs::config::Source- {type args} {
         }
       }
     } Git {
-      set myDir [file join $maindir sources $package]
-      if {![file exists $myDir]} {
-        puts "=== Source $type $package"
-	if {[catch {Run $_(exec-git) clone {*}$args $package} myMsg]} {
-	  file delete -force $myDir
-          if {$verbose} {puts $myMsg}
-        }
-      } else {
-        puts "=== Source update $type $package"
-        if {[catch {
-	  set myOldpwd [pwd]
-	  cd $package
-	  Run $_(exec-git) pull
-	  cd $myOldpwd
-	} myMsg]} {
-	  catch {cd $myOldpwd}
-	  puts "=== Source update failed $type $package (ignored)"
-	  #file delete -force $myDir
-          if {$verbose} {puts $myMsg}
-        }
-      }
+		set myDir [file join $maindir sources $package]
+		set args [lassign $args op]
+
+		if {$op == "clone"} {
+			if {[file exists $myDir]} {
+				set op pull 
+				set args {}
+			} else { 
+				puts "=== Source $type $package"
+				if {[catch {Run $_(exec-git) clone {*}$args $package} myMsg]} {
+					file delete -force $myDir
+					if {$verbose} {puts $myMsg}
+				}
+			}
+
+			# signal successful git clone 
+			set op {}
+			set args {}
+
+		}
+
+		if {$op ne {}} {
+			puts "=== Source update $type $package git $op {*}$args"
+			if {[catch {
+				set myOldpwd [pwd]
+				cd $package
+				Run $_(exec-git) $op {*}$args
+				cd $myOldpwd
+			} myMsg]} {
+				catch {cd $myOldpwd}
+				puts "=== Source update failed $type $package (ignored)"
+				#file delete -force $myDir
+				if {$verbose} {puts $myMsg}
+			}
+		} 
     } Http - Wget {
       set myDir [file join $maindir sources $package]
       if {![file exists $myDir]} {
@@ -2925,8 +2939,12 @@ Package tclyaml0.4 {
 }
 
 #@verbatim
-Package rl_json0.11.1 {
-  Source {Wget https://github.com/RubyLane/rl_json/archive/refs/tags/0.11.1.tar.gz}
+Package rl_json0.11.5.1 {
+  Source {  Git clone https://github.com/RubyLane/rl_json.git
+	    Git checkout 0.11.5.1
+	    Git submodule init 
+	    Git submodule update
+	}
   Configure {
     Config [Get srcdir-sys]
   }
