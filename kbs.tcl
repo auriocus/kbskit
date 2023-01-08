@@ -2143,8 +2143,12 @@ Package icons1.2 {
 #@verbatim
 
 Package img1.4.14 {
-  Source {Wget https://sourceforge.net/projects/tkimg/files/tkimg/1.4/tkimg%201.4.14/Img-1.4.14-Source.tar.gz/download Img-1.4.14-Source.tar.gz}
+  Source {
+	Wget https://sourceforge.net/projects/tkimg/files/tkimg/1.4/tkimg%201.4.14/Img-1.4.14-Source.tar.gz/download Img-1.4.14-Source.tar.gz
+  }
+  
   Configure {
+	PatchFile 1 img1.4.14.patch 
     Config [Get srcdir-sys]
   }
   Make {Run make collate}

@@ -1,0 +1,22 @@
+Only in img1.4.14-patched/base: .Makefile.in.swp
+diff -ru img1.4.14/base/Makefile.in img1.4.14-patched/base/Makefile.in
+--- img1.4.14/base/Makefile.in	2022-07-20 00:56:34.000000000 +0200
++++ img1.4.14-patched/base/Makefile.in	2023-01-08 13:39:58.000000000 +0100
+@@ -288,7 +288,7 @@
+ .c.@OBJEXT@:
+ 	$(COMPILE) -c `@CYGPATH@ $<` -o $@
+ 
+-tkimg.@OBJEXT@:	tkimgUuid.h
++tkimg.@OBJEXT@:	$(srcdir)/tkimgUuid.h
+ 
+ $(srcdir)/../manifest.uuid:
+ 	printf "git-" >$(srcdir)/../manifest.uuid
+@@ -297,7 +297,7 @@
+ 	    svn info --show-item last-changed-revision >>$(srcdir)/../manifest.uuid) || \
+ 	    printf "unknown" >$(srcdir)/../manifest.uuid)
+ 
+-tkimgUuid.h:	$(srcdir)/../manifest.uuid
++$(srcdir)/tkimgUuid.h:	$(srcdir)/../manifest.uuid
+ 	echo "#define TKIMG_VERSION_UUID \\" >$@
+ 	cat $(srcdir)/../manifest.uuid >>$@
+ 	echo "" >>$@
