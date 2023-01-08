@@ -71,7 +71,7 @@ esac ;\
 if test ! -d sources ; then mkdir sources; fi;\
 if test ! -x ${EXE} ; then \
   if test ! -d sources/bootstraptcl ; then \
-    ( cd sources && curl "$TCLURL" -LJo "$TCLSRC" && tar xvf "$TCLSRC" && rm "$TCLSRC" && mv "$SRCROOT" bootstraptcl ) ; \
+    ( cd sources && curl --retry 5 --retry-all-errors "$TCLURL" -LJo "$TCLSRC" && tar xvf "$TCLSRC" && rm "$TCLSRC" && mv "$SRCROOT" bootstraptcl ) ; \
   fi ;\
   mkdir -p ${PREFIX}/tcl ;\
   ( cd ${PREFIX}/tcl && ../../sources/bootstraptcl/${DIR}/configure --prefix=${PREFIX} --exec-prefix=${PREFIX} && eval $EXTRAMFLAGS make install ) ;\
@@ -888,7 +888,7 @@ proc ::kbs::config::Source- {type args} {
         set myFile [file normalize ./[file tail $args]]
         puts "=== Source $type $package"
         if {[catch {
-          Run $_(exec-curl) -LO $args
+          Run $_(exec-curl)  --retry 5 --retry-all-errors -LO $args
           # unpack if necessary
           switch -glob $myFile {
             *.tgz - *.tar.gz - *.tgz?uuid=* - *.tar.gz?uuid=* {
