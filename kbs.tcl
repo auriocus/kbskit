@@ -2050,7 +2050,7 @@ Package __ {
     lappend my0\
 	bwidget1.9.13\
 	gridplus2.11\
-	icons1.2 img1.4.13\
+	icons1.2 img1.4.14\
 	memchan2.3 mentry3.10\
 	nsf2.1.0\
 	pdf4tcl0.8.4\
@@ -2142,15 +2142,15 @@ Package icons1.2 {
 # @bug #76 at https://sourceforge.net/p/tkimg/bugs/
 #@verbatim
 
-Package img1.4.13 {
-  Source {Wget http://prdownloads.sourceforge.net/tkimg/1.4/tkimg%201.4.13/Img-1.4.13-Source.tar.gz}
+Package img1.4.14 {
+  Source {Wget https://sourceforge.net/projects/tkimg/files/tkimg/1.4/tkimg%201.4.14/Img-1.4.14-Source.tar.gz/download Img-1.4.14-Source.tar.gz}
   Configure {
     Config [Get srcdir-sys]
   }
   Make {Run make collate}
   Install {
     Run make install-libraries
-    Libdir Img1.4.13
+    Libdir Img1.4.14
 	License license.terms tkImg
 	License compat/libjpeg/README libjpeg
 	License compat/libpng/LICENSE libpng
@@ -2463,7 +2463,7 @@ Package tcl8.6-static {
 ## @defgroup tcllib
 #@verbatim
 Package tcllib1.21 {
-  Source {Wget https://core.tcl-lang.org/tcllib/uv/tcllib-1.21.tar.gz}
+  Source {Wget https://github.com/tcltk/tcllib/archive/tcllib_1_21.tar.gz}
   Configure {Config [Get srcdir-sys]}
   Make {}
   Install {Run make install-libraries
@@ -2471,30 +2471,7 @@ Package tcllib1.21 {
   Clean {Run make clean}
   Test {Run make test}
 }
-#@endverbatim
-## @defgroup tcloo
-#@verbatim
-Package tcloo0.6 {
-  Source {Wget http://prdownloads.sourceforge.net/tcl/TclOO1.0.tar.gz}
-  Configure {Config [Get srcdir-sys]}
-  Make {Run make}
-  Install {
-    Run make install install-private-headers
-    Libdir TclOO1.0
-  }
-  Clean {Run make clean}
-  Test {Run make test}
-}
-#@endverbatim
-## @defgroup tclx
-#@verbatim
-Package tclx8.4 {
-  Source {Cvs tclx.cvs.sourceforge.net:/cvsroot/tclx -D 2010-10-28 tclx}
-  Configure {Config [Get srcdir-sys]}
-  Make {Run make binaries}
-  Install {Run make install-binaries}
-  Clean {Run make clean}
-}
+
 #@endverbatim
 ## @defgroup tdom
 #@verbatim
@@ -2511,31 +2488,6 @@ Package tdom0.9.3 {
   }
   Clean {Run make clean}
 }
-#@endverbatim
-## @defgroup tk
-#@verbatim
-Package tk8.5 {
-  Require {Use tcl8.5}
-  Source {Wget http://prdownloads.sourceforge.net/tcl/tk8.5.19-src.tar.gz}
-  Configure {Config [Get srcdir-sys]/[Get sys]}
-  Make {Run make}
-  Install {Run make install install-private-headers}
-  Clean {Run make clean}
-  Test {Run make test}
-}
-#@endverbatim
-## @defgroup tk
-#@verbatim
-Package tk8.5-static {
-  Require {Use tcl8.5-static}
-  Source {Link tk8.5}
-  Configure {Config [Get srcdir-sys]/[Get sys] --disable-shared}
-  Make {Run make}
-  Install {Run make install install-private-headers}
-  Clean {Run make clean}
-  Test {Run make test}
-}
-
 #@endverbatim
 ## @defgroup tk
 #@verbatim
@@ -2610,6 +2562,16 @@ Package tkdnd2.9 {
 #@verbatim
 #TODO  Source {Wget https://github.com/tcltk/tklib/archive/841659f114803b4c9dc186704af6a7f64515c45c.zip}
 Package tklib0.7 {
+  Source {Wget https://github.com/tcltk/tklib/archive/refs/tags/tklib-0.7.tar.gz }
+  Configure {Config [Get srcdir-sys]}
+  Make {}
+  Install {Run make install-libraries
+  License license.terms }
+  Clean {Run make clean}
+  Test {Run make test}
+}
+
+Package tklib-latest {
   Source {Wget https://github.com/tcltk/tklib/archive/master.zip}
   Configure {Config [Get srcdir-sys]}
   Make {}
@@ -2622,12 +2584,12 @@ Package tklib0.7 {
 ## @defgroup tksqlite
 #@verbatim
 Package tksqlite0.5.13 {
-  Require {Use sdx.kit tktable2.10 treectrl2.4.3 img1.4.13}
+  Require {Use sdx.kit tktable2.10 treectrl2.4.3 img1.4.14}
   Source {Wget http://reddog.s35.xrea.com/software/tksqlite-0.5.13.tar.gz}
   Configure {
     Kit {source $::starkit::topdir/tksqlite.tcl} Tk
   }
-  Make {Kit tksqlite tktable2.10 treectrl2.4.3 img1.4.13}
+  Make {Kit tksqlite tktable2.10 treectrl2.4.3 img1.4.14}
   Install {Kit tksqlite -vq-gui}
   Clean {file delete -force tksqlite.vfs}
   Test {Kit tksqlite}
@@ -2854,14 +2816,14 @@ Package xotcl1.6.8 {
 #@endverbatim
 ## @defgroup zlib
 #@verbatim
-Package zlib1.2.8 {
-  Source {Wget http://sourceforge.net/projects/libpng/files/zlib/1.2.8/zlib-1.2.8.tar.gz}
+Package zlib1.2.13 {
+  Source {Wget https://zlib.net/zlib-1.2.13.tar.gz}
 }
 #@endverbatim
 ## @defgroup zlib
 #@verbatim
-Package zlib1.2.8-static {
-  Source {Link zlib1.2.8}
+Package zlib1.2.13-static {
+  Source {Link zlib1.2.13}
   Configure {
     eval file copy [glob [Get srcdir]/*] .
     if {$::tcl_platform(platform) ne {windows}} {
