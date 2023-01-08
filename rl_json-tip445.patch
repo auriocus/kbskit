@@ -1,0 +1,14 @@
+diff -ru rl_json/generic/tip445.h rl_json-patched/generic/tip445.h
+--- rl_json/generic/tip445.h	2023-01-08 14:56:51.000000000 +0100
++++ rl_json-patched/generic/tip445.h	2023-01-08 14:54:07.000000000 +0100
+@@ -39,8 +39,8 @@
+ #else
+ static inline void Tcl_FreeInternalRep(Tcl_Obj* obj)
+ {
+-	if (obj->typePtr && obj->typePtr->freeInternalRepProc)
+-		obj->typePtr->freeInternalRepProc(obj);
++	if (obj->typePtr && obj->typePtr->freeIntRepProc)
++		obj->typePtr->freeIntRepProc(obj);
+ }
+ #endif
+ #endif
