@@ -2049,7 +2049,7 @@ Package __ {
 	nsf2.1.0\
 	pdf4tcl0.8.4\
 	photoresize0.1\
-	ral0.11.7 rl_json0.11.0\
+	ral0.11.7 rl_json\
 	tcllib1.21 tclx8.4 tdom0.9.3\
 	tkcon tklib0.7 tkpath0.3.3 tktable2.10 tcltls trofs0.4.9\
 	udp1.0.11 ukaz0.2\
@@ -2939,9 +2939,9 @@ Package tclyaml0.4 {
 }
 
 #@verbatim
-Package rl_json0.11.5.1 {
+Package rl_json {
   Source {  Git clone https://github.com/RubyLane/rl_json.git
-	    Git checkout 0.11.5.1
+	    Git checkout 0.11.4
 	    Git submodule init 
 	    Git submodule update
 	}
