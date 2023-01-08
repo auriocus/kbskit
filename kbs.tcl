@@ -55,7 +55,7 @@ if test ! -r ./kbs.tcl ; then \
 fi;
 # bootstrap for building tcl.. \
 TCLSRC="tcl-core8.6.13-src.tar.gz" ;\
-TCLURL="https://sourceforge.net/projects/tcl/files/Tcl/8.6.13/$TCLSRC/download" ;\
+TCLURL="http://prdownloads.sourceforge.net/Tcl/8.6.13/$TCLSRC" ;\
 SRCROOT="tcl8.6.13" ;\
 if test "`pwd`" = "/" ; then \
 PREFIX=/`uname` ;\
@@ -2137,7 +2137,7 @@ Package icons1.2 {
 #@verbatim
 
 Package img1.4.13 {
-  Source {Wget https://sourceforge.net/projects/tkimg/files/tkimg/1.4/tkimg%201.4.13/Img-1.4.13-Source.tar.gz/download}
+  Source {Wget http://prdownloads.sourceforge.net/tkimg/1.4/tkimg%201.4.13/Img-1.4.13-Source.tar.gz}
   Configure {
     Config [Get srcdir-sys]
   }
@@ -2403,7 +2403,7 @@ Package tablelist6.20 {
 ## @defgroup tcl
 #@verbatim
 Package tcl8.6 {
-  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.13/tcl8.6.13-src.tar.gz/download }
+  Source {Wget http://prdownloads.sourceforge.net/Tcl/8.6.13/tcl8.6.13-src.tar.gz }
   Configure {Config [Get srcdir-sys]/[Get sys]}
   Make {Run make}
   Install {Run make install install-private-headers
@@ -2533,7 +2533,7 @@ Package tk8.5-static {
 #@verbatim
 Package tk8.6 {
   Require {Use tcl8.6}
-  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.13/tk8.6.13-src.tar.gz/download}
+  Source {Wget http://prdownloads.sourceforge.net/Tcl/8.6.13/tk8.6.13-src.tar.gz}
   
   Configure {
     if {$::tcl_platform(os) == "Darwin"} {
