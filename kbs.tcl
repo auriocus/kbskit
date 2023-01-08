@@ -2403,7 +2403,7 @@ Package tablelist6.20 {
 ## @defgroup tcl
 #@verbatim
 Package tcl8.6 {
-  Source {Wget hhttps://sourceforge.net/projects/tcl/files/Tcl/8.6.13/tcl8.6.13-src.tar.gz/download }
+  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.13/tcl8.6.13-src.tar.gz/download }
   Configure {Config [Get srcdir-sys]/[Get sys]}
   Make {Run make}
   Install {Run make install install-private-headers
