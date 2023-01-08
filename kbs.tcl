@@ -885,10 +885,16 @@ proc ::kbs::config::Source- {type args} {
     } Http - Wget {
       set myDir [file join $maindir sources $package]
       if {![file exists $myDir]} {
-        set myFile [file normalize ./[file tail $args]]
+		if {[llength $args] == 1} {
+			set myFile [file normalize ./[file tail $args]]
+		} else {
+			set myFile [file normalize ./[lindex $args end]]
+			set args [lrange $args 0 end-1]
+		}
+		
         puts "=== Source $type $package"
         if {[catch {
-          Run $_(exec-curl)  --retry 5 --retry-connrefused -LO $args
+          Run $_(exec-curl)  --retry 5 --retry-connrefused -L -o $myFile {*}$args
           # unpack if necessary
           switch -glob $myFile {
             *.tgz - *.tar.gz - *.tgz?uuid=* - *.tar.gz?uuid=* {
@@ -906,7 +912,7 @@ proc ::kbs::config::Source- {type args} {
               }
               if {$myFile ne $myDir} {
                 file mkdir $myDir
-	        file rename $myFile $myDir
+				file rename $myFile $myDir
               }
             }
           }
@@ -2403,7 +2409,9 @@ Package tablelist6.20 {
 ## @defgroup tcl
 #@verbatim
 Package tcl8.6 {
-  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.13/tcl8.6.13-src.tar.gz/download }
+  Source { 
+	Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.13/tcl8.6.13-src.tar.gz/download tcl8.6.13-src.tar.gz
+  }
   Configure {Config [Get srcdir-sys]/[Get sys]}
   Make {Run make}
   Install {Run make install install-private-headers
@@ -2533,7 +2541,7 @@ Package tk8.5-static {
 #@verbatim
 Package tk8.6 {
   Require {Use tcl8.6}
-  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.13/tk8.6.13-src.tar.gz/download}
+  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.13/tk8.6.13-src.tar.gz/download tk8.6.13-src.tar.gz}
   
   Configure {
     if {$::tcl_platform(os) == "Darwin"} {
