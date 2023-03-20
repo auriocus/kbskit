@@ -2785,6 +2785,25 @@ Package vfs1.4-static {
 Package vqtcl4.1 {
   Source {Wget http://prdownloads.sourceforge.net/kbskit/kbs/0.4.9/vqtcl4.1.tgz}
 }
+
+Package mk4tcl2.4.9.7 {
+  Source {
+    Wget https://github.com/jnorthrup/metakit/archive/refs/heads/master.zip
+  }
+}
+
+Package mk4tcl2.4.9.7-static {
+  Source {Link mk4tcl2.4.9.7}
+  Configure {
+    Config [Get srcdir-sys]/unix --disable-shared --with-tcl=[Get builddir-sys]/include
+  }
+  Make {Run make tcl}
+  Install {
+    Run make install
+    Libdir Mk4tcl
+  }
+}
+
 #@endverbatim
 ## @defgroup vqtcl
 # @bug Configure: big endian problem
