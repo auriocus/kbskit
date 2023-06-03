@@ -2404,8 +2404,8 @@ Package snack2.2 {
 #@endverbatim
 ## @defgroup tablelist
 #@verbatim
-Package tablelist6.20 {
-  Source {Wget http://www.nemethi.de/tablelist/tablelist6.20.tar.gz}
+Package tablelist6.21 {
+  Source {Wget http://www.nemethi.de/tablelist/tablelist6.21.tar.gz}
   Configure {}
   Install {Tcl}
 }
