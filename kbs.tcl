@@ -2658,7 +2658,7 @@ Package tcltls {
 
 Package libcurl {
   Require {Use libressl-static}
-  Source {Wget https://curl.se/download/curl-7.86.0.zip}
+  Source {Wget https://curl.se/download/curl-8.1.2.tar.gz}
   Configure {
 	set ::env(PKG_CONFIG_PATH) [Get builddir-sys]/lib/pkgconfig
 	parray env
@@ -2667,16 +2667,16 @@ Package libcurl {
   Make {Run make}
   Install {
 	Run make install
-	Libdir curl-7.86.0
+	Libdir curl-8.1.2
   }
   Clean {Run make clean}
   Test {Run make test}
 }
 
 Package libressl-static {
-  Source {Wget https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.6.1.tar.gz}
+  Source {Wget https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.7.3.tar.gz}
   Configure {
-	PatchFile 1 libressl.3.6.1.patch
+	# PatchFile 1 libressl.3.6.1.patch
 	Config [Get srcdir-sys] --enable-static --disable-shared --with-pic
 	
    }
