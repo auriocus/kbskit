@@ -2661,8 +2661,14 @@ Package libcurl {
   Source {Wget https://curl.se/download/curl-8.1.2.tar.gz}
   Configure {
 	set ::env(PKG_CONFIG_PATH) [Get builddir-sys]/lib/pkgconfig
-	parray env
-	Config [Get srcdir-sys] --with-openssl=[Get builddir-sys] --enable-static --disable-shared --with-pic --without-zstd --without-brotli --without-nghttp2 --without-nghttp3  --without-librtmp --without-libidn2 --without-quiche --without-msh3 --without-schannel
+	#parray env
+	set options {--enable-static --disable-shared --with-pic --without-zstd --without-brotli --without-nghttp2 --without-nghttp3  --without-librtmp --without-libidn2 --without-quiche --without-msh3}
+	if {[Get sys] eq {win}} {
+		lappend options --with-schannel --without-openssl
+	} else {
+		lappend options --without-schannel  --with-openssl=[Get builddir-sys]
+	}
+	Config [Get srcdir-sys] {*}$options
    }
   Make {Run make}
   Install {
