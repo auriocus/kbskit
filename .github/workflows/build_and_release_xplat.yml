@@ -36,7 +36,7 @@ jobs:
               run: ./make-ci.sh ${{ matrix.os }}
 
             - name: upload result
-              uses: actions/upload-artifact@v4.1.7
+              uses: actions/upload-artifact@v4
               with:
                 name: build-${{ matrix.os }}
                 path: dist/*.tar.bz2
@@ -46,7 +46,7 @@ jobs:
         needs: [build]
         steps:
             - name: Download build artifacts
-              uses: actions/download-artifact@v4.1.7
+              uses: actions/download-artifact@v4
               id: download
               with:
                 path: ~/downloads
