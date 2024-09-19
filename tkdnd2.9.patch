@@ -1,0 +1,27 @@
+Nur in tkdnd2.9-patched/: autom4te.cache.
+diff -ru tkdnd2.9/configure tkdnd2.9-patched/configure
+--- tkdnd2.9/configure	2024-01-02 10:45:47.000000000 +0100
++++ tkdnd2.9-patched/configure	2024-09-19 22:59:31.755940721 +0200
+@@ -5968,7 +5968,7 @@
+ 
+ 
+ 
+-    vars="-I generic"
++    vars="-I ${srcdir}/generic"
+     for i in $vars; do
+ 	PKG_INCLUDES="$PKG_INCLUDES $i"
+     done
+diff -ru tkdnd2.9/configure.ac tkdnd2.9-patched/configure.ac
+--- tkdnd2.9/configure.ac	2024-01-02 10:45:47.000000000 +0100
++++ tkdnd2.9-patched/configure.ac	2024-09-18 22:52:30.712020928 +0200
+@@ -74,7 +74,7 @@
+ #TEA_ADD_SOURCES([TkDND_XDND.c])
+ TEA_ADD_SOURCES([generic/TkDND_Cursors.c])
+ TEA_ADD_HEADERS([])
+-TEA_ADD_INCLUDES([-I generic])
++TEA_ADD_INCLUDES([-I ${srcdir}/generic])
+ TEA_ADD_LIBS([])
+ TEA_ADD_CFLAGS([])
+ TEA_ADD_STUB_SOURCES([])
+Nur in tkdnd2.9-patched/: .configure.ac.swp.
+Nur in tkdnd2.9-patched/: tesseract_opencl_profile_devices.dat.

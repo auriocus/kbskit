@@ -1,0 +1,21 @@
+diff -ru img1.4.16/base/Makefile.in img1.4.16-patched/base/Makefile.in
+--- img1.4.16/base/Makefile.in	2023-07-17 14:32:23.000000000 +0200
++++ img1.4.16-patched/base/Makefile.in	2024-09-17 16:37:04.055752410 +0200
+@@ -288,7 +288,7 @@
+ .c.@OBJEXT@:
+ 	$(COMPILE) -c `@CYGPATH@ $<` -o $@
+ 
+-tkimg.@OBJEXT@:	tkimgUuid.h
++tkimg.@OBJEXT@:	$(srcdir)/tkimgUuid.h
+ 
+ TOP_DIR=$(srcdir)/..
+ 
+@@ -299,7 +299,7 @@
+ 	      svn info --show-item last-changed-revision >> manifest.uuid ) || \
+ 	    printf "unknown" > manifest.uuid )
+ 
+-tkimgUuid.h: $(TOP_DIR)/manifest.uuid
++$(srcdir)/tkimgUuid.h: $(TOP_DIR)/manifest.uuid
+ 	echo "#define TKIMG_VERSION_UUID \\" >$@
+ 	cat $(TOP_DIR)/manifest.uuid >>$@
+ 	echo "" >>$@

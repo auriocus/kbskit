@@ -54,9 +54,9 @@ if test ! -r ./kbs.tcl ; then \
   echo "Please start from directory containing the file 'kbs.tcl'"; exit 1 ;\
 fi;
 # bootstrap for building tcl.. \
-TCLSRC="tcl-core8.6.13-src.tar.gz" ;\
-TCLURL="https://sourceforge.net/projects/tcl/files/Tcl/8.6.13/$TCLSRC/download" ;\
-SRCROOT="tcl8.6.13" ;\
+TCLSRC="tcl-core8.6.15-src.tar.gz" ;\
+TCLURL="https://sourceforge.net/projects/tcl/files/Tcl/8.6.15/$TCLSRC/download" ;\
+SRCROOT="tcl8.6.15" ;\
 if test "`pwd`" = "/" ; then \
 PREFIX=/`uname` ;\
 else \
@@ -2050,13 +2050,13 @@ Package __ {
     lappend my0\
 	bwidget1.9.13\
 	gridplus2.11\
-	icons1.2 img1.4.14\
+	icons1.2 img1.4.16\
 	memchan2.3 mentry3.10\
 	nsf2.1.0\
 	pdf4tcl0.8.4\
 	photoresize0.1\
 	ral0.11.7 rl_json\
-	tcllib1.21 tclx8.4 tdom0.9.3\
+	tcllib1.21 tclx8.4 tdom0.9.4\
 	tkcon tklib0.7 tkpath0.3.3 tktable2.10 tcltls trofs0.4.9\
 	udp1.0.11 ukaz0.2\
 	vectcl0.3 vectcltk0.2\
@@ -2142,23 +2142,23 @@ Package icons1.2 {
 # @bug #76 at https://sourceforge.net/p/tkimg/bugs/
 #@verbatim
 
-Package img1.4.14 {
+Package img1.4.16 {
   Source {
-	Wget https://sourceforge.net/projects/tkimg/files/tkimg/1.4/tkimg%201.4.14/Img-1.4.14-Source.tar.gz/download Img-1.4.14-Source.tar.gz
+	Wget https://sourceforge.net/projects/tkimg/files/tkimg/1.4/tkimg%201.4.16/Img-1.4.16-Source.tar.gz/download Img-1.4.16-Source.tar.gz
   }
   
   Configure {
-	PatchFile 1 img1.4.14.patch 
+	PatchFile 1 img1.4.16.patch 
     Config [Get srcdir-sys]
   }
   Make {Run make collate}
   Install {
     Run make install-libraries
-    Libdir Img1.4.14
+    Libdir Img1.4.16
 	License license.terms tkImg
 	License compat/libjpeg/README libjpeg
 	License compat/libpng/LICENSE libpng
-	License compat/libtiff/COPYRIGHT libtiff
+	License compat/libtiff/LICENSE.md libtiff
   }
   Clean {Run make clean}
 }
@@ -2255,12 +2255,12 @@ Package kbskit8.6 {
 
 
     if {[Get -threads] in {--enable-threads --enable-threads=yes {}}} {
-	  set bundledpkgs thread2.8.8
+	  set bundledpkgs thread2.8.10
     } else {
       set bundledpkgs ""
     }
 
-	lappend bundledpkgs itcl4.2.3 sqlite3.40.0 tdbc1.1.5 tdbcmysql1.1.5 tdbcodbc1.1.5 tdbcpostgres1.1.5
+	lappend bundledpkgs itcl4.3.0 sqlite3.45.3 tdbc1.1.9 tdbcmysql1.1.9 tdbcodbc1.1.9 tdbcpostgres1.1.9
 	
 	set MYKITVQ $bundledpkgs
 	set MYKITMK $bundledpkgs
@@ -2404,8 +2404,8 @@ Package snack2.2 {
 #@endverbatim
 ## @defgroup tablelist
 #@verbatim
-Package tablelist6.21 {
-  Source {Wget http://www.nemethi.de/tablelist/tablelist6.21.tar.gz}
+Package tablelist7.3 {
+  Source {Wget http://www.nemethi.de/tablelist/tablelist7.3.tar.gz}
   Configure {}
   Install {Tcl}
 }
@@ -2414,21 +2414,21 @@ Package tablelist6.21 {
 #@verbatim
 Package tcl8.6 {
   Source { 
-	Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.13/tcl8.6.13-src.tar.gz/download tcl8.6.13-src.tar.gz
+	Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.15/tcl8.6.15-src.tar.gz/download tcl8.6.15-src.tar.gz
   }
   Configure {Config [Get srcdir-sys]/[Get sys]}
   Make {Run make}
   Install {Run make install install-private-headers
   License license.terms Tcl8.6
-  License pkgs/itcl4.2.3/license.terms itcl4
-  License pkgs/itcl4.2.3/doc/license.terms itcl4-orig
-  License pkgs/tdbc1.1.5/license.terms tdbc
-  License pkgs/tdbcpostgres1.1.5/license.terms tdbc-postgres
-  License pkgs/thread2.8.8/license.terms Thread
-  License pkgs/tdbcmysql1.1.5/license.terms tdbc-mysql
-  License pkgs/tdbcsqlite3-1.1.5/license.terms tdbc-sqlite3
-  License pkgs/tdbcodbc1.1.5/license.terms tdbc-odbc
-  License pkgs/sqlite3.40.0/license.terms SQLite3
+  License pkgs/itcl4.3.0/license.terms itcl4
+  License pkgs/itcl4.3.0/doc/license.terms itcl4-orig
+  License pkgs/tdbc1.1.9/license.terms tdbc
+  License pkgs/tdbcpostgres1.1.9/license.terms tdbc-postgres
+  License pkgs/thread2.8.10/license.terms Thread
+  License pkgs/tdbcmysql1.1.9/license.terms tdbc-mysql
+  License pkgs/tdbcsqlite3-1.1.9/license.terms tdbc-sqlite3
+  License pkgs/tdbcodbc1.1.9/license.terms tdbc-odbc
+  License pkgs/sqlite3.45.3/license.terms SQLite3
   }
   Clean {Run make clean}
   Test {Run make test}
@@ -2448,15 +2448,15 @@ Package tcl8.6-static {
       file copy -force [Get builddir]/tcl8.6-static/libtcl86.a [Get builddir]/lib/libtcl86s.a
     }
 	License license.terms Tcl8.6
-    License pkgs/itcl4.2.3/license.terms itcl4
-    License pkgs/itcl4.2.3/doc/license.terms itcl4-orig
-    License pkgs/tdbc1.1.5/license.terms tdbc
-    License pkgs/tdbcpostgres1.1.5/license.terms tdbc-postgres
-    License pkgs/thread2.8.8/license.terms Thread
-    License pkgs/tdbcmysql1.1.5/license.terms tdbc-mysql
-    License pkgs/tdbcsqlite3-1.1.5/license.terms tdbc-sqlite3
-    License pkgs/tdbcodbc1.1.5/license.terms tdbc-odbc
-    License pkgs/sqlite3.40.0/license.terms SQLite3
+    License pkgs/itcl4.3.0/license.terms itcl4
+    License pkgs/itcl4.3.0/doc/license.terms itcl4-orig
+    License pkgs/tdbc1.1.9/license.terms tdbc
+    License pkgs/tdbcpostgres1.1.9/license.terms tdbc-postgres
+    License pkgs/thread2.8.10/license.terms Thread
+    License pkgs/tdbcmysql1.1.9/license.terms tdbc-mysql
+    License pkgs/tdbcsqlite3-1.1.9/license.terms tdbc-sqlite3
+    License pkgs/tdbcodbc1.1.9/license.terms tdbc-odbc
+    License pkgs/sqlite3.45.3/license.terms SQLite3
   }
   Clean {Run make clean}
   Test {Run make test}
@@ -2479,9 +2479,9 @@ Package tcllib1.21 {
 #@endverbatim
 ## @defgroup tdom
 #@verbatim
-Package tdom0.9.3 {
+Package tdom0.9.4 {
   Source {
-    Wget https://core.tcl-lang.org/tdom/tarball/e5e9feb0a8/tDOM-e5e9feb0a8.tar.gz
+    Wget http://tdom.org/downloads/tdom-0.9.4-src.tgz
   }
   Configure {Config [Get srcdir-sys]}
   Make {Run make binaries}
@@ -2497,7 +2497,7 @@ Package tdom0.9.3 {
 #@verbatim
 Package tk8.6 {
   Require {Use tcl8.6}
-  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.13/tk8.6.13-src.tar.gz/download tk8.6.13-src.tar.gz}
+  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.15/tk8.6.15-src.tar.gz/download tk8.6.15-src.tar.gz}
   
   Configure {
     if {$::tcl_platform(os) == "Darwin"} {
@@ -2550,9 +2550,10 @@ Package tkcon {
 ## @defgroup tkdnd
 #@verbatim
 Package tkdnd2.9 {
-  Source {Wget https://github.com/petasis/tkdnd/archive/refs/tags/tkdnd-release-test-v2.9.2.tar.gz}
+  Source {Wget https://github.com/petasis/tkdnd/archive/refs/tags/tkdnd-release-test-v2.9.4.tar.gz}
   Configure {
-    # fix bogus garbage collection flag
+    # fix out-of-place building
+    PatchFile 1 tkdnd2.9.patch
     Config [Get srcdir-sys]
   }
   Make {Run make}
@@ -2588,12 +2589,12 @@ Package tklib-latest {
 ## @defgroup tksqlite
 #@verbatim
 Package tksqlite0.5.13 {
-  Require {Use sdx.kit tktable2.10 treectrl2.4.3 img1.4.14}
+  Require {Use sdx.kit tktable2.10 treectrl2.4.3 img1.4.16}
   Source {Wget http://reddog.s35.xrea.com/software/tksqlite-0.5.13.tar.gz}
   Configure {
     Kit {source $::starkit::topdir/tksqlite.tcl} Tk
   }
-  Make {Kit tksqlite tktable2.10 treectrl2.4.3 img1.4.14}
+  Make {Kit tksqlite tktable2.10 treectrl2.4.3 img1.4.16}
   Install {Kit tksqlite -vq-gui}
   Clean {file delete -force tksqlite.vfs}
   Test {Kit tksqlite}
@@ -2658,11 +2659,11 @@ Package tcltls {
 
 Package libcurl {
   Require {Use libressl-static}
-  Source {Wget https://curl.se/download/curl-8.1.2.tar.gz}
+  Source {Wget https://curl.se/download/curl-8.10.0.tar.gz}
   Configure {
 	set ::env(PKG_CONFIG_PATH) [Get builddir-sys]/lib/pkgconfig
 	#parray env
-	set options {--enable-static --disable-shared --with-pic --without-zstd --without-brotli --without-nghttp2 --without-nghttp3  --without-librtmp --without-libidn2 --without-quiche --without-msh3}
+	set options {--enable-static --disable-shared --with-pic --without-zstd --without-brotli --without-nghttp2 --without-nghttp3  --without-librtmp --without-libidn2 --without-quiche --without-msh3 --without-libpsl}
 	if {[Get sys] eq {win}} {
 		lappend options --with-schannel --without-openssl
 	} else {
@@ -2680,7 +2681,7 @@ Package libcurl {
 }
 
 Package libressl-static {
-  Source {Wget https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.7.3.tar.gz}
+  Source {Wget https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.9.2.tar.gz}
   Configure {
 	# PatchFile 1 libressl.3.6.1.patch
 	Config [Get srcdir-sys] --enable-static --disable-shared --with-pic
@@ -2697,7 +2698,7 @@ Package libressl-static {
 
 Package tclcurl {
   Require {Use libcurl}
-  Source {Wget https://github.com/flightaware/tclcurl-fa/archive/ed4856901dee2784ceeb6d2ee0d621fe05aa0134.zip}
+  Source {Wget https://github.com/flightaware/tclcurl-fa/archive/26edf70fb87c46481d94be53e1cd1f302482bfe4.zip}
   Configure {
 	PatchFile 1 tclcurl.patch
     #if {$::tcl_platform(platform) eq {windows}} {
