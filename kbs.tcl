@@ -2670,6 +2670,8 @@ Package libcurl {
 		lappend options --without-schannel  --with-openssl=[Get builddir-sys]
 	}
 	Config [Get srcdir-sys] {*}$options
+	# show configure log for debug
+	puts [read [open [Get makedir]/config.log]]
    }
   Make {Run make}
   Install {
