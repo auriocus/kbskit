@@ -2663,7 +2663,7 @@ Package libcurl {
   Configure {
 	set ::env(PKG_CONFIG_PATH) [Get builddir-sys]/lib/pkgconfig
 	#parray env
-	set options {--enable-static --disable-shared --with-pic --without-zstd --without-brotli --without-nghttp2 --without-nghttp3  --without-librtmp --without-libidn2 --without-quiche --without-msh3 --without-libpsl}
+	set options {--enable-static --disable-shared --with-pic --without-zstd --without-brotli --without-nghttp2 --without-nghttp3  --without-librtmp --without-libidn2 --without-quiche --without-msh3 --without-libpsl --disable-ldap}
 	if {[Get sys] eq {win}} {
 		lappend options --with-schannel --without-openssl
 	} else {
