@@ -2635,7 +2635,7 @@ Package tktable2.10 {
 ## @defgroup tls
 #@verbatim
 Package tcltls {
-  Require {Use libressl-static}
+  Require {Use openssl-static}
   Source {Wget https://core.tcl.tk/tcltls/uv/tcltls-1.7.22.tar.gz}
   Configure {
 	PatchFile 1 tcltls1.7.22.patch
@@ -2645,7 +2645,7 @@ Package tcltls {
 	} else {
 		set extralibs {}
 	}
-	Config [Get srcdir-sys] {*}$extralibs --with-ssl=libressl --with-openssl-dir=[Get builddir] --enable-static-ssl --disable-rpath --enable-threads
+	Config [Get srcdir-sys] {*}$extralibs --with-ssl=openssl --with-openssl-dir=[Get builddir] --enable-static-ssl --disable-rpath --enable-threads
 	
    }
   Make {Run make}
@@ -2658,7 +2658,7 @@ Package tcltls {
 }
 
 Package libcurl {
-  Require {Use libressl-static}
+  Require {Use openssl-static}
   Source {Wget https://curl.se/download/curl-8.10.0.tar.gz}
   Configure {
 	set ::env(PKG_CONFIG_PATH) [Get builddir-sys]/lib/pkgconfig
@@ -2677,6 +2677,21 @@ Package libcurl {
   Install {
 	Run make install
 	Libdir curl-8.1.2
+  }
+  Clean {Run make clean}
+  Test {Run make test}
+}
+
+Package openssl-static {
+  Source {Wget https://github.com/openssl/openssl/releases/download/openssl-3.3.2/openssl-3.3.2.tar.gz}
+  Configure {
+	# OpenSSL uses a Perl based Configure with capital C
+	# doesn't use autoconf Config [Get srcdir-sys] --enable-static --disable-shared --with-pic
+	Run [Get srcdir]/Configure no-shared no-pinshared --prefix=[Get builddir-sys]
+   }
+  Make {Run make}
+  Install {
+	Run make install
   }
   Clean {Run make clean}
   Test {Run make test}
