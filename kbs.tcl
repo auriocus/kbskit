@@ -2054,7 +2054,7 @@ Package __ {
 	memchan2.3 mentry4.5\
 	nsf2.1.0\
 	pdf4tcl0.9.4\
-	photoresize0.1\
+	photoresize0.2\
 	ral0.11.7 rl_json\
 	tcllib2.0 tclx8.4 tdom0.9.4\
 	tkcon tklib0.9 tkpath0.4.2 tktable2.10 trofs0.4.9\
@@ -2978,7 +2978,7 @@ Package rl_json {
 
 #@verbatim
 Package photoresize0.2 {
-  Source {Wget https://github.com/auriocus/PhotoResize/archive/refs/tags/latest.tar.gz}
+  Source {Wget https://github.com/auriocus/PhotoResize/archive/refs/tags/v0.2.tar.gz}
   Configure {
     Config [Get srcdir-sys]
   }
