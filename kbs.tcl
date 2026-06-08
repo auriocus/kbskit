@@ -2048,22 +2048,22 @@ Package __ {
     set my0 {}
 
     lappend my0\
-	bwidget1.9.13\
+	bwidget1.10.1\
 	gridplus2.11\
-	icons1.2 img1.4.16\
-	memchan2.3 mentry3.10\
+	icons1.2 img2.1\
+	memchan2.3 mentry4.5\
 	nsf2.1.0\
-	pdf4tcl0.8.4\
+	pdf4tcl0.9.4\
 	photoresize0.1\
 	ral0.11.7 rl_json\
-	tcllib1.21 tclx8.4 tdom0.9.4\
-	tkcon tklib0.7 tkpath0.3.3 tktable2.10 tcltls trofs0.4.9\
+	tcllib2.0 tclx8.4 tdom0.9.4\
+	tkcon tklib0.9 tkpath0.4.2 tktable2.10 trofs0.4.9\
 	udp1.0.11 ukaz0.2\
 	vectcl0.3 vectcltk0.2\
-	wcb3.5\
+	wcb4.2\
 	xotcl1.6.8 \
 	tkdnd2.9 \
-	treectrl2.4.3
+	treectrl2.5.1
     if {$::tcl_platform(os) != "Darwin"} {lappend my0 rbc0.1}
     # 8.6 kbskit
     Run {*}$MYEXE -builddir=sf86 -v -r -vq install kbskit8.6
@@ -2097,8 +2097,8 @@ if 0 {;# Testfile
 #@endverbatim
 ## @defgroup bwidget
 #@verbatim
-Package bwidget1.9.13 {
-  Source {Wget http://prdownloads.sourceforge.net/tcllib/bwidget-1.9.13.tar.gz}
+Package bwidget1.10.1 {
+  Source {Wget https://github.com/tcltk/bwidget/archive/refs/tags/bwidget-1-10-1.tar.gz}
   Configure {}
   Install {
     file delete -force [Get builddir]/lib/[file tail [Get srcdir]]
@@ -2142,19 +2142,19 @@ Package icons1.2 {
 # @bug #76 at https://sourceforge.net/p/tkimg/bugs/
 #@verbatim
 
-Package img1.4.16 {
+Package img2.1 {
   Source {
-	Wget https://sourceforge.net/projects/tkimg/files/tkimg/1.4/tkimg%201.4.16/Img-1.4.16-Source.tar.gz/download Img-1.4.16-Source.tar.gz
+	Wget https://sourceforge.net/projects/tkimg/files/tkimg/2.1/tkimg%202.1.1/Img-2.1.1.tar.gz/download Img-2.1.1.tar.gz
   }
   
   Configure {
-	PatchFile 1 img1.4.16.patch 
+#	PatchFile 1 img1.4.16.patch 
     Config [Get srcdir-sys]
   }
   Make {Run make collate}
   Install {
     Run make install-libraries
-    Libdir Img1.4.16
+    Libdir Img2.1.1
 	License license.terms tkImg
 	License compat/libjpeg/README libjpeg
 	License compat/libpng/LICENSE libpng
@@ -2255,12 +2255,12 @@ Package kbskit8.6 {
 
 
     if {[Get -threads] in {--enable-threads --enable-threads=yes {}}} {
-	  set bundledpkgs thread2.8.10
+	  set bundledpkgs thread2.8.13
     } else {
       set bundledpkgs ""
     }
 
-	lappend bundledpkgs itcl4.3.0 sqlite3.45.3 tdbc1.1.9 tdbcmysql1.1.9 tdbcodbc1.1.9 tdbcpostgres1.1.9
+	lappend bundledpkgs itcl4.3.7 sqlite3.53.0 tdbc1.1.13 tdbcmysql1.1.13 tdbcodbc1.1.13 tdbcpostgres1.1.13
 	
 	set MYKITVQ $bundledpkgs
 	set MYKITMK $bundledpkgs
@@ -2290,9 +2290,9 @@ Package memchan2.3 {
 #@endverbatim
 ## @defgroup mentry
 #@verbatim
-Package mentry3.10 {
-  Require {Use wcb3.5}
-  Source {Wget http://www.nemethi.de/mentry/mentry3.10.tar.gz}
+Package mentry4.5 {
+  Require {Use wcb4.2}
+  Source {Wget http://www.nemethi.de/mentry/mentry4.5.tar.gz}
   Configure {}
   Install {Tcl}
 }
@@ -2326,8 +2326,8 @@ Package nsf2.1.0 {
 #@endverbatim
 ## @defgroup pdf4tcl
 #@verbatim
-Package pdf4tcl0.8.4 {
-  Source {Wget http://prdownloads.sourceforge.net/pdf4tcl/pdf4tcl084.tar.gz}
+Package pdf4tcl0.9.4 {
+  Source {Wget https://sourceforge.net/projects/pdf4tcl/files/pdf4tcl094.tar.gz/download}
   Configure {}
   Install {Tcl}
 }
@@ -2404,8 +2404,8 @@ Package snack2.2 {
 #@endverbatim
 ## @defgroup tablelist
 #@verbatim
-Package tablelist7.3 {
-  Source {Wget http://www.nemethi.de/tablelist/tablelist7.3.tar.gz}
+Package tablelist7.10 {
+  Source {Wget http://www.nemethi.de/tablelist/tablelist7.10.tar.gz}
   Configure {}
   Install {Tcl}
 }
@@ -2414,21 +2414,21 @@ Package tablelist7.3 {
 #@verbatim
 Package tcl8.6 {
   Source { 
-	Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.15/tcl8.6.15-src.tar.gz/download tcl8.6.15-src.tar.gz
+	Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.18/tcl8.6.18-src.tar.gz/download tcl8.6.18-src.tar.gz
   }
   Configure {Config [Get srcdir-sys]/[Get sys]}
   Make {Run make}
   Install {Run make install install-private-headers
   License license.terms Tcl8.6
-  License pkgs/itcl4.3.0/license.terms itcl4
-  License pkgs/itcl4.3.0/doc/license.terms itcl4-orig
-  License pkgs/tdbc1.1.9/license.terms tdbc
-  License pkgs/tdbcpostgres1.1.9/license.terms tdbc-postgres
-  License pkgs/thread2.8.10/license.terms Thread
-  License pkgs/tdbcmysql1.1.9/license.terms tdbc-mysql
-  License pkgs/tdbcsqlite3-1.1.9/license.terms tdbc-sqlite3
-  License pkgs/tdbcodbc1.1.9/license.terms tdbc-odbc
-  License pkgs/sqlite3.45.3/license.terms SQLite3
+  License pkgs/itcl4.3.7/license.terms itcl4
+  License pkgs/itcl4.3.7/doc/license.terms itcl4-orig
+  License pkgs/tdbc1.1.13/license.terms tdbc
+  License pkgs/tdbcpostgres1.1.13/license.terms tdbc-postgres
+  License pkgs/thread2.8.13/license.terms Thread
+  License pkgs/tdbcmysql1.1.13/license.terms tdbc-mysql
+  License pkgs/tdbcsqlite3-1.1.13/license.terms tdbc-sqlite3
+  License pkgs/tdbcodbc1.1.13/license.terms tdbc-odbc
+  License pkgs/sqlite3.53.0/license.terms SQLite3
   }
   Clean {Run make clean}
   Test {Run make test}
@@ -2448,15 +2448,15 @@ Package tcl8.6-static {
       file copy -force [Get builddir]/tcl8.6-static/libtcl86.a [Get builddir]/lib/libtcl86s.a
     }
 	License license.terms Tcl8.6
-    License pkgs/itcl4.3.0/license.terms itcl4
-    License pkgs/itcl4.3.0/doc/license.terms itcl4-orig
-    License pkgs/tdbc1.1.9/license.terms tdbc
-    License pkgs/tdbcpostgres1.1.9/license.terms tdbc-postgres
-    License pkgs/thread2.8.10/license.terms Thread
-    License pkgs/tdbcmysql1.1.9/license.terms tdbc-mysql
-    License pkgs/tdbcsqlite3-1.1.9/license.terms tdbc-sqlite3
-    License pkgs/tdbcodbc1.1.9/license.terms tdbc-odbc
-    License pkgs/sqlite3.45.3/license.terms SQLite3
+    License pkgs/itcl4.3.7/license.terms itcl4
+    License pkgs/itcl4.3.7/doc/license.terms itcl4-orig
+    License pkgs/tdbc1.1.13/license.terms tdbc
+    License pkgs/tdbcpostgres1.1.13/license.terms tdbc-postgres
+    License pkgs/thread2.8.13/license.terms Thread
+    License pkgs/tdbcmysql1.1.13/license.terms tdbc-mysql
+    License pkgs/tdbcsqlite3-1.1.13/license.terms tdbc-sqlite3
+    License pkgs/tdbcodbc1.1.13/license.terms tdbc-odbc
+    License pkgs/sqlite3.53.0/license.terms SQLite3
   }
   Clean {Run make clean}
   Test {Run make test}
@@ -2466,8 +2466,8 @@ Package tcl8.6-static {
 #@endverbatim
 ## @defgroup tcllib
 #@verbatim
-Package tcllib1.21 {
-  Source {Wget https://github.com/tcltk/tcllib/archive/tcllib_1_21.tar.gz}
+Package tcllib2.0 {
+  Source {Wget https://github.com/tcltk/tcllib/archive/tcllib-2-0.tar.gz}
   Configure {Config [Get srcdir-sys]}
   Make {}
   Install {Run make install-libraries
@@ -2479,9 +2479,9 @@ Package tcllib1.21 {
 #@endverbatim
 ## @defgroup tdom
 #@verbatim
-Package tdom0.9.4 {
+Package tdom0.9.6 {
   Source {
-    Wget http://tdom.org/downloads/tdom-0.9.4-src.tgz
+    Wget http://tdom.org/downloads/tdom-0.9.6-src.tgz
   }
   Configure {Config [Get srcdir-sys]}
   Make {Run make binaries}
@@ -2550,7 +2550,7 @@ Package tkcon {
 ## @defgroup tkdnd
 #@verbatim
 Package tkdnd2.9 {
-  Source {Wget https://github.com/petasis/tkdnd/archive/refs/tags/tkdnd-release-test-v2.9.4.tar.gz}
+  Source {Wget https://github.com/petasis/tkdnd/archive/refs/tags/tkdnd-release-test-v2.9.5.tar.gz}
   Configure {
     # fix out-of-place building
     PatchFile 1 tkdnd2.9.patch
@@ -2566,8 +2566,8 @@ Package tkdnd2.9 {
 # @todo  Source {Wget http://core.tcl.tk/tklib/tarball/tklib-0.6.tar.gz?uuid=tklib-0-6}
 #@verbatim
 #TODO  Source {Wget https://github.com/tcltk/tklib/archive/841659f114803b4c9dc186704af6a7f64515c45c.zip}
-Package tklib0.7 {
-  Source {Wget https://github.com/tcltk/tklib/archive/refs/tags/tklib-0.7.tar.gz }
+Package tklib0.9 {
+  Source {Wget https://github.com/tcltk/tklib/archive/refs/tags/tklib-0.9.tar.gz }
   Configure {Config [Get srcdir-sys]}
   Make {}
   Install {Run make install-libraries
@@ -2602,13 +2602,13 @@ Package tksqlite0.5.13 {
 #@endverbatim
 ## @defgroup tkpath
 #@verbatim
-Package tkpath0.3.3 {
-  Source {Wget http://prdownloads.sourceforge.net/kbskit/kbs/0.4.9/tkpath0.3.3.tgz}
+Package tkpath0.4.2 {
+  Source {Wget https://github.com/tcltk-depot/tkpath/archive/refs/tags/v0.4.2.tar.gz}
   Configure {
-	PatchFile 1 tkpath0.3.3.patch
-	file copy -force [Get srcdir]/../tk8.6/win/tkWinDefault.h [Get builddir]/include
-    file copy -force [Get srcdir]/../tk8.6/unix/tkUnixDefault.h [Get builddir]/include
-    file copy -force [Get srcdir]/../tk8.6/macosx/tkMacOSXDefault.h [Get builddir]/include
+#	PatchFile 1 tkpath0.3.3.patch
+#	file copy -force [Get srcdir]/../tk8.6/win/tkWinDefault.h [Get builddir]/include
+#   file copy -force [Get srcdir]/../tk8.6/unix/tkUnixDefault.h [Get builddir]/include
+#    file copy -force [Get srcdir]/../tk8.6/macosx/tkMacOSXDefault.h [Get builddir]/include
     Config [Get srcdir-sys]
   }
   Make {Run make binaries libraries}
@@ -2741,12 +2741,12 @@ Package tclcurl {
 ## @defgroup treectrl
 # @todo Error in configure: tk header default.h not found
 #@verbatim
-Package treectrl2.4.3 {
-  Source {Wget https://github.com/apnadkarni/tktreectrl/archive/946f5b33b35ebf3c63338f4ec6466a0c082103fb.zip}
+Package treectrl2.5.1 {
+  Source {Wget https://github.com/tcltk-depot/tktreectrl/archive/refs/tags/v2.5.1.tar.gz}
   Configure {
 	# fix bogus garbage collection flag
-	PatchFile 1 treectrl2.4.2.patch
-    file attributes [Get srcdir]/configure -permissions u+x
+#	PatchFile 1 treectrl2.4.2.patch
+#    file attributes [Get srcdir]/configure -permissions u+x
 	# fix wrong detection of Tk private headers
     Config [Get srcdir-sys]
   }
@@ -2845,8 +2845,8 @@ Package vqtcl4.1-static {
 #@endverbatim
 ## @defgroup wcb
 #@verbatim
-Package wcb3.5 {
-  Source {Wget http://www.nemethi.de/wcb/wcb3.5.tar.gz}
+Package wcb4.2 {
+  Source {Wget http://www.nemethi.de/wcb/wcb4.2.tar.gz}
   Configure {}
   Install {Tcl}
 }

@@ -3,7 +3,7 @@
 
 os=$1
 machine=$(uname -sm | tr ' ' -)
-PKGS="sdx tclcurl tablelist7.3 img1.4.16 tkdnd2.9 photoresize0.2 tdom0.9.4 vectcl0.3 vectcltk0.2"
+PKGS="sdx tablelist7.10 img2.1 tkdnd2.9 photoresize0.2 tdom0.9.6 vectcl0.3 vectcltk0.2"
 
 if ! [[ "$os" == windows* ]]; then
 	PKGS="$PKGS rl_json"
