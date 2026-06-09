@@ -14,7 +14,7 @@ jobs:
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
-                os: [macos-15-intel, ubuntu-22.04, windows-2022]
+                os: [macos-15-intel, ubuntu-24.04, windows-2022]
         steps:
             - name: checkout repo
               uses: actions/checkout@v2
@@ -33,10 +33,7 @@ jobs:
             - name: Set CFLAGS for macOS compatibility
               if: runner.os == 'macOS'
               run: |
-                echo "CFLAGS=-mmacosx-version-min=10.13" >> $GITHUB_ENV
-                echo "MACOSX_DEPLOYMENT_TARGET=10.13" >> $GITHUB_ENV
-                echo 'FORCE_ARCH="-arch x86_64"' >> $GITHUB_ENV
-                brew install swig
+                   brew install swig
 
             - name: build application
               run: ./make-ci.sh ${{ matrix.os }}
