@@ -2957,13 +2957,9 @@ Package tclyaml0.4 {
 
 #@verbatim
 Package rl_json {
-  Source {  Git clone https://github.com/RubyLane/rl_json.git
-	    Git checkout 0.11.5.1
-	    Git submodule init 
-	    Git submodule update
-	}
+  Source {  Wget https://github.com/RubyLane/rl_json/releases/download/v0.17.6/rl_json-v0.17.6.tar.gz	}
   Configure {
-	PatchFile 1 rl_json-tip445.patch
+#	PatchFile 1 rl_json-tip445.patch
     Config [Get srcdir-sys]
   }
   Make {Run make}
