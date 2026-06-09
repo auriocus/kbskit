@@ -4,7 +4,7 @@ on:
     push:
         branches: [master]
         tags:
-             - "v*"
+            - "v*"
 defaults:
     run:
         shell: bash
@@ -23,7 +23,12 @@ jobs:
               if: ${{ matrix.os == 'windows-2022' }}
               uses: git-for-windows/setup-git-for-windows-sdk@v1
               with:
-                flavor: full
+                  flavor: full
+
+            - name: Install dependencies on Linux
+              if: ${{ matrix.os == 'ubuntu-22.04' }}
+              run: |
+                apt-get install libxcursor-dev
 
             - name: Set CFLAGS for macOS compatibility
               if: ${{ matrix.os == 'macos-15-intel' }}
@@ -31,6 +36,7 @@ jobs:
                 echo "CFLAGS=-mmacosx-version-min=10.13" >> $GITHUB_ENV
                 echo "MACOSX_DEPLOYMENT_TARGET=10.13" >> $GITHUB_ENV
                 echo 'FORCE_ARCH="-arch x86_64"' >> $GITHUB_ENV
+                brew install swig
 
             - name: build application
               run: ./make-ci.sh ${{ matrix.os }}
@@ -38,8 +44,8 @@ jobs:
             - name: upload result
               uses: actions/upload-artifact@v4
               with:
-                name: build-${{ matrix.os }}
-                path: dist/*.tar.bz2
+                  name: build-${{ matrix.os }}
+                  path: dist/*.tar.bz2
 
     deploy:
         runs-on: ubuntu-latest
@@ -49,7 +55,7 @@ jobs:
               uses: actions/download-artifact@v4
               id: download
               with:
-                path: ~/downloads
+                  path: ~/downloads
 
             - name: Create tarball dir
               run: mkdir tarballs
@@ -72,7 +78,7 @@ jobs:
                     tarballs/*.tar.bz2
 
             - name: Release tagged version
-              if:  ${{ startsWith(github.ref, 'refs/tags/v') }}
+              if: ${{ startsWith(github.ref, 'refs/tags/v') }}
               uses: marvinpinto/action-automatic-releases@v1.2.1
               with:
                   repo_token: "${{ secrets.GITHUB_TOKEN }}"
