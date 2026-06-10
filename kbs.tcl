@@ -54,9 +54,9 @@ if test ! -r ./kbs.tcl ; then \
   echo "Please start from directory containing the file 'kbs.tcl'"; exit 1 ;\
 fi;
 # bootstrap for building tcl.. \
-TCLSRC="tcl-core8.6.15-src.tar.gz" ;\
-TCLURL="https://sourceforge.net/projects/tcl/files/Tcl/8.6.15/$TCLSRC/download" ;\
-SRCROOT="tcl8.6.15" ;\
+TCLSRC="tcl-core8.6.18-src.tar.gz" ;\
+TCLURL="https://sourceforge.net/projects/tcl/files/Tcl/8.6.18/$TCLSRC/download" ;\
+SRCROOT="tcl8.6.18" ;\
 if test "`pwd`" = "/" ; then \
 PREFIX=/`uname` ;\
 else \
@@ -2058,7 +2058,7 @@ Package __ {
 	ral0.11.7 rl_json\
 	tcllib2.0 tclx8.4 tdom0.9.4\
 	tkcon tklib0.9 tkpath0.4.2 tktable2.10 trofs0.4.9\
-	udp1.0.11 ukaz0.2\
+	udp1.0.11 ukaz2.1\
 	vectcl0.3 vectcltk0.2\
 	wcb4.2\
 	xotcl1.6.8 \
@@ -2497,7 +2497,7 @@ Package tdom0.9.6 {
 #@verbatim
 Package tk8.6 {
   Require {Use tcl8.6}
-  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.15/tk8.6.15-src.tar.gz/download tk8.6.15-src.tar.gz}
+  Source {Wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.18/tk8.6.18-src.tar.gz/download tk8.6.18-src.tar.gz}
   
   Configure {
     if {$::tcl_platform(os) == "Darwin"} {
@@ -2913,7 +2913,7 @@ Package silkicons1.3 {
 ##@verbatim
 Package vectcl0.3 {
    Require {Use tcl8.6}
-   Source {Wget https://github.com/auriocus/VecTcl/archive/8cce67a4f4d54bcb67b601af6569d13407943d4d.zip}
+   Source {Wget https://github.com/auriocus/VecTcl/archive/refs/tags/v0.3.1.tar.gz}
    Configure {
      Config [Get srcdir-sys]
    }
@@ -2924,8 +2924,8 @@ Package vectcl0.3 {
 }
 #@endverbatim
 #@verbatim
-Package ukaz0.2 {
-   Source {Wget https://github.com/auriocus/ukaz/archive/v0.2.tar.gz}
+Package ukaz2.1 {
+   Source {Wget https://github.com/auriocus/ukaz/archive/v2.1.tar.gz}
    Configure {}
    Install {Tcl}
 }
@@ -2959,7 +2959,7 @@ Package tclyaml0.4 {
 Package rl_json {
   Source {  Wget https://github.com/RubyLane/rl_json/releases/download/v0.17.6/rl_json-v0.17.6.tar.gz	}
   Configure {
-#	PatchFile 1 rl_json-tip445.patch
+	PatchFile 1 rl_json-out-of-tree.patch
     Config [Get srcdir-sys]
   }
   Make {Run make}

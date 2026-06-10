@@ -19,6 +19,9 @@ jobs:
             - name: checkout repo
               uses: actions/checkout@v2
 
+            - name: Install pandoc
+              uses: pandoc/actions/setup@v1
+
             - name: Install git sdk
               if: runner.os == 'Windows'
               uses: git-for-windows/setup-git-for-windows-sdk@v1

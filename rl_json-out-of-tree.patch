@@ -1,0 +1,36 @@
+diff -ru rl_json-v0.17.6/configure rl_json/configure
+--- rl_json-v0.17.6/configure	2026-06-03 15:31:10.000000000 +0200
++++ rl_json/configure	2026-06-10 22:26:18.265369639 +0200
+@@ -5587,7 +5587,7 @@
+ 
+ 
+ 
+-    vars="-Igeneric -Iteabase"
++    vars="-I${srcdir}/generic -I${srcdir}/teabase"
+     for i in $vars; do
+ 	PKG_INCLUDES="$PKG_INCLUDES $i"
+     done
+diff -ru rl_json-v0.17.6/configure.ac rl_json/configure.ac
+--- rl_json-v0.17.6/configure.ac	2026-06-03 15:28:25.000000000 +0200
++++ rl_json/configure.ac	2026-06-10 22:21:21.733347025 +0200
+@@ -81,7 +81,7 @@
+ 
+ TEA_ADD_SOURCES([parser.c rl_json.c json_types.c dedup.c api.c rl_jsonStubInit.c teabase/names.c rl_jsonBuildInfo.c])
+ TEA_ADD_HEADERS([generic/rl_jsonDecls.h generic/rl_json.h])
+-TEA_ADD_INCLUDES([-Igeneric -Iteabase])
++TEA_ADD_INCLUDES([-I${srcdir}/generic -I${srcdir}/teabase])
+ TEA_ADD_LIBS([-lm])
+ TEA_ADD_CFLAGS([-std=c11 -Wall -Werror -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-missing-field-initializers -Wno-error=unused-function])
+ TEA_ADD_STUB_SOURCES([rl_jsonStubLib.c])
+diff -ru rl_json-v0.17.6/Makefile.in rl_json/Makefile.in
+--- rl_json-v0.17.6/Makefile.in	2026-06-03 15:28:25.000000000 +0200
++++ rl_json/Makefile.in	2026-06-10 22:27:35.075233842 +0200
+@@ -218,7 +218,7 @@
+ doc/.build/json.md: $(srcdir)/doc/json.md.in $(top_builddir)/config.status
+ 	cd $(top_builddir) \
+ 	  && mkdir -p doc/.build \
+-	  && ln -sf ../json.md.in doc/.build/json.md.in \
++	  && ln -sf $(srcdir)/doc/json.md.in doc/.build/json.md.in \
+ 	  && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
+ 
+ doc/json.n: doc/.build/json.md
