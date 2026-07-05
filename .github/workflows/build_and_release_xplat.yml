@@ -31,9 +31,9 @@ jobs:
             - name: Install dependencies on Linux
               if: runner.os == 'Linux'
               run: |
-                sudo apt-get install -y libxcursor-dev
+                sudo apt-get install -y libxcursor-dev libxft-dev libxss-dev
 
-            - name: Set CFLAGS for macOS compatibility
+            - name: Install macOS dependencies
               if: runner.os == 'macOS'
               run: |
                    brew install swig
