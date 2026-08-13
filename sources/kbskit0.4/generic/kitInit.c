@@ -35,9 +35,13 @@
 #include <string.h>
 
 #ifdef _WIN32
+#define UNICODE
+#define _UNICODE
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #undef WIN32_LEAN_AND_MEAN
+#include <tclWinInt.h>
+#include <tkWin.h>
 #endif
 
 /* defined in tclInt.h */
