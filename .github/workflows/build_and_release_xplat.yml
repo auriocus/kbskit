@@ -28,6 +28,17 @@ jobs:
               with:
                   flavor: full
 
+            - name: Fix MinGW binutils prefixes on Windows
+              if: runner.os == 'Windows'
+              shell: bash
+              run: |
+                MINGW_BIN=$(dirname "$(which gcc)")
+                for tool in ar ranlib windres strip dlltool ld nm objcopy objdump; do
+                  if [ -f "$MINGW_BIN/$tool.exe" ] && [ ! -f "$MINGW_BIN/x86_64-w64-mingw32-$tool.exe" ]; then
+                    cp "$MINGW_BIN/$tool.exe" "$MINGW_BIN/x86_64-w64-mingw32-$tool.exe"
+                  fi
+                done
+
             - name: Install dependencies on Linux
               if: runner.os == 'Linux'
               run: |

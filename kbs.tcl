@@ -74,7 +74,7 @@ if test ! -x ${EXE} ; then \
     ( cd sources && curl --retry 5 --retry-connrefused "$TCLURL" -LJo "$TCLSRC" && tar xvf "$TCLSRC" && rm "$TCLSRC" && mv "$SRCROOT" bootstraptcl ) ; \
   fi ;\
   mkdir -p ${PREFIX}/tcl ;\
-  ( cd ${PREFIX}/tcl && ../../sources/bootstraptcl/${DIR}/configure --prefix=${PREFIX} --exec-prefix=${PREFIX} --enable-64bit CC=gcc AR=ar RANLIB=ranlib RC=windres STRIP=strip && eval $EXTRAMFLAGS make install ) ;\
+  ( cd ${PREFIX}/tcl && ../../sources/bootstraptcl/${DIR}/configure --prefix=${PREFIX} --exec-prefix=${PREFIX} --enable-64bit && eval $EXTRAMFLAGS make install ) ;\
   rm -rf ${PREFIX}/tcl ;\
 fi ;\
 exec ${EXE} "$0" ${1+"$@"}
